@@ -1,8 +1,11 @@
 #include <iostream>
-
 #include <SFML/Graphics.hpp>
+#include <vector.h>
 
 int main() {
+
+    alloy::fvec2 v1;
+
     sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);

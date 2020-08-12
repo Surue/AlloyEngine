@@ -3,7 +3,17 @@ project(AlloyEngine)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(AlloyEngine main.cpp)
+#Core
+set(ALLOY_CORE_DIR "${CMAKE_SOURCE_DIR}/engine/core/" CACHE INTERNAL "")
+add_subdirectory(${ALLOY_CORE_DIR})
+
+#Common
+set(ALLOY_COMMON_DIR "${CMAKE_SOURCE_DIR}/engine/common/" CACHE INTERNAL "")
+add_subdirectory(${ALLOY_COMMON_DIR})
+
+#Modules
+set(ALLOY_MODULES_DIR "${CMAKE_SOURCE_DIR}/engine/modules/" CACHE INTERNAL "")
+add_subdirectory(${ALLOY_MODULES_DIR})
 
 #SFML
 
@@ -15,4 +25,6 @@ set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
 
 find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
 
-target_link_libraries(AlloyEngine sfml-system sfml-window sfml-graphics sfml-audio)
+add_executable(AlloyEngine main.cpp)
+
+target_link_libraries(AlloyEngine PRIVATE sfml-system sfml-window sfml-graphics sfml-audio PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
