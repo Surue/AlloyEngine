@@ -1,28 +1,51 @@
 #include <iostream>
-#include <SFML/Graphics.hpp>
 #include <vector.h>
+
+#define SDL_MAIN_HANDLED
+#include <SDL.h>
 
 int main() {
 
-    alloy::fvec2 v1;
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+		std::cout << "SDL_Init Error: " << SDL_GetError() << std::endl;
+		return 1;
+	}
+	
+	SDL_Window* window = SDL_CreateWindow("Alloy Engine", 100, 100, 640, 720, SDL_WINDOW_SHOWN);
 
-    sf::RenderWindow window(sf::VideoMode(200, 200), "SFML works!");
-    sf::CircleShape shape(100.f);
-    shape.setFillColor(sf::Color::Green);
 
-    while (window.isOpen())
-    {
-        sf::Event event;
-        while (window.pollEvent(event))
-        {
-            if (event.type == sf::Event::Closed)
-                window.close();
-        }
+	if (window == nullptr) {
+		std::cout << "SDL_CreateWindow Error : " << SDL_GetError() << "\n";
+		SDL_Quit();
+		return 1;
+	}
 
-        window.clear();
-        window.draw(shape);
-        window.display();
-    }
+	SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	if (renderer == nullptr) {
+		SDL_DestroyWindow(window);
+		std::cout << "SDL_CreateRenderer Error : " << SDL_GetError() << "\n";
+		SDL_Quit();
+		return 1;
+	}
+	
+	SDL_Event e;
+	bool quit = false;
+	while (!quit) {
+		while (SDL_PollEvent(&e)) {
+			if (e.type == SDL_QUIT) {
+				quit = true;
+			}
+			if (e.type == SDL_KEYDOWN) {
+				quit = true;
+			}
+			if (e.type == SDL_MOUSEBUTTONDOWN) {
+				quit = true;
+			}
+		}
+		//Render the scene
+		SDL_RenderClear(renderer);
+		SDL_RenderPresent(renderer);
+	}
 
     return 0;
 }
