@@ -1,10 +1,13 @@
 #source files
 file(GLOB_RECURSE Alloy_ECS_SRC ecs/src/*.cpp ecs/include/*.h)
+file(GLOB_RECURSE Alloy_ENGINE_SRC engine/src/*.cpp engine/include/*.h)
 
 source_group("ECS" FILES ${Alloy_ECS_SRC})
+source_group("Engine" FILES ${Alloy_ENGINE_SRC})
 
 List(APPEND Alloy_SRC
-        ${Alloy_ECS_SRC})
+        ${Alloy_ECS_SRC}
+        ${Alloy_ENGINE_SRC})
 
 add_library(Alloy_Core STATIC ${Alloy_SRC})
 
@@ -20,6 +23,7 @@ target_compile_definitions(Alloy_Core PUBLIC SOURCE_PATH="${CMAKE_SOURCE_DIR}")
 set_target_properties (Alloy_Core PROPERTIES FOLDER Alloy/Core)
 
 target_include_directories(Alloy_Core PUBLIC "ecs/include/")
+target_include_directories(Alloy_Core PUBLIC "engine/include/")
 
 function(alloy_lib_config library)
     #warning flags
