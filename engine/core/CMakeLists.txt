@@ -20,8 +20,6 @@ target_compile_definitions(Alloy_Core PUBLIC $<$<CONFIG:Debug>:__alloy_dbg__>)
 target_compile_definitions(Alloy_Core PUBLIC $<$<CONFIG:RelWithDebInfo>:__alloy_dbg__>)
 target_compile_definitions(Alloy_Core PUBLIC SOURCE_PATH="${CMAKE_SOURCE_DIR}")
 
-set_target_properties (Alloy_Core PROPERTIES FOLDER Alloy/Core)
-
 target_include_directories(Alloy_Core PUBLIC "ecs/include/")
 target_include_directories(Alloy_Core PUBLIC "engine/include/")
 

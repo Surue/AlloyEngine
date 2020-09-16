@@ -15,14 +15,13 @@ add_subdirectory(${ALLOY_COMMON_DIR})
 set(ALLOY_MODULES_DIR "${CMAKE_SOURCE_DIR}/engine/modules/" CACHE INTERNAL "")
 add_subdirectory(${ALLOY_MODULES_DIR})
 
-#SDL2.0
-find_package(SDL2 REQUIRED)
-include_directories(${SDL2_INCLUDE_DIRS})
+#Wrappers
+set(ALLOY_WRAPPERS_DIR "${CMAKE_SOURCE_DIR}/engine/wrappers/" CACHE INTERNAL "")
+add_subdirectory(${ALLOY_WRAPPERS_DIR})
 
-#Vulkan
+#Find Vulkan sdk
 find_package(Vulkan REQUIRED)
-
 
 add_executable(AlloyEngine main.cpp)
 target_include_directories(AlloyEngine PUBLIC ${VULKAN_INCLUDE_DIRS})
-target_link_libraries(AlloyEngine PRIVATE ${SDL2_LIBRARIES} Vulkan::Vulkan PUBLIC  PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
+target_link_libraries(AlloyEngine PRIVATE Vulkan::Vulkan PUBLIC Alloy_Core Alloy_Common Alloy_Modules SDL_Wrapper Vulkan_Wrapper)

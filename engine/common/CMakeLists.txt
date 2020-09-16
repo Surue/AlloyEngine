@@ -8,8 +8,6 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Common STATIC ${Alloy_SRC})
 
-set_target_properties (Alloy_Common PROPERTIES FOLDER Alloy/Common)
-
 target_include_directories(Alloy_Common PUBLIC "mathematics/include/")
 
 function(alloy_lib_config library)

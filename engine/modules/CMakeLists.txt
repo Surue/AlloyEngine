@@ -1,8 +1,8 @@
 #source files
-file(GLOB_RECURSE Alloy_GRAPHICS_SRC graphics/src/*.cpp graphics/include/*.h)
+file(GLOB_RECURSE Alloy_GRAPHICS_SRC graphics3D/src/*.cpp graphics3D/include/*.h)
 file(GLOB_RECURSE Alloy_PHYSICS_SRC physics/src/*.cpp physics/include/*.h)
 
-source_group("Graphics" FILES ${Alloy_GRAPHICS_SRC})
+source_group("Graphics3D" FILES ${Alloy_GRAPHICS_SRC})
 source_group("Physics" FILES ${Alloy_PHYSICS_SRC})
 
 List(APPEND Alloy_SRC
@@ -11,10 +11,8 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Modules STATIC ${Alloy_SRC})
 
-set_target_properties (Alloy_Modules PROPERTIES FOLDER Alloy/Modules)
-
 target_include_directories(Alloy_Modules PUBLIC "physics/include/")
-target_include_directories(Alloy_Modules PUBLIC "graphics/include/")
+target_include_directories(Alloy_Modules PUBLIC "graphics3D/include/")
 
 function(alloy_lib_config library)
     #warning flags
