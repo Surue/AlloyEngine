@@ -19,6 +19,10 @@ add_subdirectory(${ALLOY_MODULES_DIR})
 find_package(SDL2 REQUIRED)
 include_directories(${SDL2_INCLUDE_DIRS})
 
-add_executable(AlloyEngine main.cpp)
+#Vulkan
+find_package(Vulkan REQUIRED)
 
-target_link_libraries(AlloyEngine PRIVATE ${SDL2_LIBRARIES} PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
+
+add_executable(AlloyEngine main.cpp)
+target_include_directories(AlloyEngine PUBLIC ${VULKAN_INCLUDE_DIRS})
+target_link_libraries(AlloyEngine PRIVATE ${SDL2_LIBRARIES} Vulkan::Vulkan PUBLIC  PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
