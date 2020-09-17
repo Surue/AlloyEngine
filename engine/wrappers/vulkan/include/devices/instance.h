@@ -22,15 +22,17 @@ public:
 	~Instance() = default;
 
 	/**
-	 * \param externalExtensions The required list of extension specific to the window
+	 * \param windowExtensions The required list of extension specific to the window
 	 */
-	void Init(std::vector<const char*> windowExtensions);
+	void Init(const std::vector<const char*>& windowExtensions);
 
 	void Destroy();
-private:
-	void CreateInstance(std::vector<const char*> windowExtensions);
 
-	std::vector<const char*> GetRequiredExtensions(std::vector<const char*> windowExtensions);
+	const VkInstance& GetInstance() const { return instance_; }
+private:
+	void CreateInstance(const std::vector<const char*>& windowExtensions);
+
+	std::vector<const char*> GetRequiredExtensions(const std::vector<const char*>& windowExtensions);
 
 	bool CheckValidationLayerSupport();
 

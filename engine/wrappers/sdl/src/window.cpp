@@ -2,24 +2,24 @@
 
 namespace alloy::sdlwrapper {
 bool Window::Init() {
-		if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-			std::cerr << "SDL_Init Error: " + static_cast<std::string>(SDL_GetError()) << "\n";
-		}
-
-		window_ = SDL_CreateWindow("Alloy Engine", 100, 100, width_, height_, SDL_WINDOW_VULKAN);
-		if (window_ == nullptr) {
-			std::cerr << "SDL_CreateWindow Error : " << SDL_GetError() << "\n";
-			return false;
-		}
-
-		return true;
+	if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+		std::cerr << "SDL_Init Error: " + static_cast<std::string>(SDL_GetError()) << "\n";
 	}
 
-SDL_Window* Window::GetWindow() {
+	window_ = SDL_CreateWindow("Alloy Engine", 100, 100, width_, height_, SDL_WINDOW_VULKAN);
+	if (window_ == nullptr) {
+		std::cerr << "SDL_CreateWindow Error : " << SDL_GetError() << "\n";
+		return false;
+	}
+
+	return true;
+}
+
+SDL_Window* Window::GetWindow() const {
 	return window_;
 }
 
-std::vector<const char*> Window::GetVulkanExtensions() {
+std::vector<const char*> Window::GetVulkanExtensions() const {
 	//SDL extensions
 	uint32_t sdlExtensionCount = 0;
 	SDL_Vulkan_GetInstanceExtensions(window_, &sdlExtensionCount, nullptr);
@@ -28,6 +28,7 @@ std::vector<const char*> Window::GetVulkanExtensions() {
 
 	return sdlExtension;
 }
+
 void Window::Destroy() {
 	SDL_Quit();
 }

@@ -12,7 +12,7 @@ VKAPI_ATTR VkBool32 VKAPI_CALL DebugCallback(
 	return VK_FALSE;
 }
 
-VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
+VkResult CreateDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerCreateInfoEXT* pCreateInfo, const VkAllocationCallbacks* pAllocator, VkDebugUtilsMessengerEXT* pDebugMessenger) {
 	auto func = (PFN_vkCreateDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkCreateDebugUtilsMessengerEXT");
 	if (func != nullptr) {
 		return func(instance, pCreateInfo, pAllocator, pDebugMessenger);
@@ -22,14 +22,14 @@ VkResult CreateDebugUtilsMessengerEXT(VkInstance instance, const VkDebugUtilsMes
 	}
 }
 
-void DestroyDebugUtilsMessengerEXT(VkInstance instance, VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
+void DestroyDebugUtilsMessengerEXT(const VkInstance instance, const VkDebugUtilsMessengerEXT debugMessenger, const VkAllocationCallbacks* pAllocator) {
 	auto func = (PFN_vkDestroyDebugUtilsMessengerEXT)vkGetInstanceProcAddr(instance, "vkDestroyDebugUtilsMessengerEXT");
 	if (func != nullptr) {
 		func(instance, debugMessenger, pAllocator);
 	}
 }
 
-void Instance::Init(std::vector<const char*> windowExtensions) {
+void Instance::Init(const std::vector<const char*>& windowExtensions) {
 	CreateInstance(windowExtensions);
 	SetupDebugMessenger();
 }
@@ -43,8 +43,8 @@ void Instance::Destroy() {
 	vkDestroyInstance(instance_, nullptr);
 }
 
-void Instance::CreateInstance(std::vector<const char*> windowExtensions) {
-	//Application informations
+void Instance::CreateInstance(const std::vector<const char*>& windowExtensions) {
+	//Application information
 	VkApplicationInfo applicationInfo{};
 	applicationInfo.sType = VK_STRUCTURE_TYPE_APPLICATION_INFO;
 	applicationInfo.pApplicationName = "Vulkan Test";
@@ -80,7 +80,7 @@ void Instance::CreateInstance(std::vector<const char*> windowExtensions) {
 	}
 }
 
-std::vector<const char*> Instance::GetRequiredExtensions(std::vector<const char*> windowExtensions) {
+std::vector<const char*> Instance::GetRequiredExtensions(const std::vector<const char*>& windowExtensions) {
 	//Required extensions
 	std::vector<const char*> extensions(windowExtensions.data(), windowExtensions.data() + static_cast<uint32_t>(windowExtensions.size()));
 	//Validation layers extension

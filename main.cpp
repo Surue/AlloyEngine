@@ -1,26 +1,21 @@
-#include <iostream>
-#include <vector>
-#include <vector.h>
-#include <log.h>
-
 #define SDL_MAIN_HANDLED
 
 #include <devices/instance.h>
+#include <devices/logical_device.h>
 #include <window.h>
-
-#include <vulkan/vulkan.h>
 
 namespace alloy {
 class Engine {
 public:
 	void Init() {
 		window_.Init();
-		instance.Init(window_.GetVulkanExtensions());
+		instance_.Init(window_.GetVulkanExtensions());
+		physicalDevice_.Init(instance_);
+		logicalDevice_.Init(physicalDevice_);
 	}
 
-
 	void Destroy() {
-		instance.Destroy();
+		instance_.Destroy();
 		window_.Destroy();
 	}
 
@@ -43,7 +38,9 @@ public:
 	}
 private:
 	sdlwrapper::Window window_;
-	vulkanwrapper::Instance instance;
+	vulkanwrapper::Instance instance_;
+	vulkanwrapper::PhysicalDevice physicalDevice_;
+	vulkanwrapper::LogicalDevice logicalDevice_;
 };
 }
 

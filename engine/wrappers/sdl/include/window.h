@@ -21,9 +21,9 @@ public:
 
 	bool Init();
 
-	SDL_Window* GetWindow();
+	SDL_Window* GetWindow() const;
 
-	std::vector<const char*> GetVulkanExtensions();
+	std::vector<const char*> GetVulkanExtensions() const;
 
 	void Destroy();
 
