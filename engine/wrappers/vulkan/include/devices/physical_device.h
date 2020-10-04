@@ -2,14 +2,16 @@
 #include <optional>
 #include <vulkan/vulkan.h>
 
-#include <devices/instance.h>
-
 namespace alloy::vulkanwrapper {
+class Surface;
+class Instance;
+
 struct QueueFamilyIndices {
 	std::optional<uint32_t> graphicsFamily;
+	std::optional<uint32_t> presentFamily;
 
 	bool IsComplete() {
-		return graphicsFamily.has_value();
+		return graphicsFamily.has_value() && presentFamily.has_value();
 	}
 };
 
@@ -17,16 +19,16 @@ class PhysicalDevice {
 public:
 	PhysicalDevice() = default;
 
-	void Init(const Instance& instance);
+	void Init(const Instance& instance, const Surface& surface);
 
 	void Destroy();
 
 	const VkPhysicalDevice& GetPhysicalDevice() const { return device_; }
 
-	static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& physicalDevice);
+	static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& physicalDevice, const Surface& surface);
 private:
 
-	bool IsDeviceSuitable(const VkPhysicalDevice& physicalDevice);
+	bool IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, const Surface& surface);
 
 	VkPhysicalDevice device_;
 };

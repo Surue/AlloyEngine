@@ -1,7 +1,10 @@
 #include <devices/physical_device.h>
 
+#include <devices/instance.h>
+#include <devices/surface.h>
+
 namespace alloy::vulkanwrapper {
-void PhysicalDevice::Init(const Instance& instance) {
+void PhysicalDevice::Init(const Instance& instance, const Surface& surface) {
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance.GetInstance(), &deviceCount, nullptr);
 
@@ -13,7 +16,7 @@ void PhysicalDevice::Init(const Instance& instance) {
 	vkEnumeratePhysicalDevices(instance.GetInstance(), &deviceCount, devices.data());
 
 	for (const auto& device : devices) {
-		if (IsDeviceSuitable(device)) {
+		if (IsDeviceSuitable(device, surface)) {
 			device_ = device;
 			break;
 		}
@@ -26,19 +29,19 @@ void PhysicalDevice::Init(const Instance& instance) {
 
 void PhysicalDevice::Destroy() { }
 
-bool PhysicalDevice::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice) {
+bool PhysicalDevice::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, const Surface& surface) {
 	VkPhysicalDeviceProperties deviceProperties;
 	vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
 
 	VkPhysicalDeviceFeatures deviceFeatures;
 	vkGetPhysicalDeviceFeatures(physicalDevice, &deviceFeatures);
 
-	QueueFamilyIndices indices = FindQueueFamilies(physicalDevice);
+	QueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
 
 	return indices.IsComplete();
 }
 
-QueueFamilyIndices PhysicalDevice::FindQueueFamilies(const VkPhysicalDevice& physicalDevice) {
+QueueFamilyIndices PhysicalDevice::FindQueueFamilies(const VkPhysicalDevice& physicalDevice, const Surface& surface) {
 	QueueFamilyIndices indices;
 
 	uint32_t queueFamilyCount = 0;
@@ -48,12 +51,21 @@ QueueFamilyIndices PhysicalDevice::FindQueueFamilies(const VkPhysicalDevice& phy
 	vkGetPhysicalDeviceQueueFamilyProperties(physicalDevice, &queueFamilyCount, queueFamilies.data());
 
 	for (uint32_t i = 0; i < queueFamilyCount; i++) {
+		//Check for presentation queue
+		VkBool32 presentationSupport = false;
+		vkGetPhysicalDeviceSurfaceSupportKHR(physicalDevice, i, &surface, &presentationSupport);
+
+		if(presentationSupport) {
+			indices.presentFamily = i;
+		}
+		
+		//Check for drawing queue
 		if (queueFamilies[i].queueFlags & VK_QUEUE_GRAPHICS_BIT) {
 			indices.graphicsFamily = i;
+		}
 
-			if (indices.IsComplete()) {
-				break;
-			}
+		if (indices.IsComplete()) {
+			break;
 		}
 	}
 

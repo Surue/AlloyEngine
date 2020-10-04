@@ -12,17 +12,16 @@ public:
 	void Init() {
 		window_.Init();
 		instance_.Init(window_.GetVulkanExtensions());
-		physicalDevice_.Init(instance_);
-		logicalDevice_.Init(physicalDevice_);
-
-		//TODO(@Nico) Refactor the creation of the surface
-		window_.CreateVulkanSurface(instance_, surface_);
+		surface_.Init(instance_, window_);
+				
+		physicalDevice_.Init(instance_, surface_);
+		logicalDevice_.Init(physicalDevice_, surface_);
 	}
 
 	void Destroy() {
-		surface_.Destroy(&instance_);
 		logicalDevice_.Destroy();
 		physicalDevice_.Destroy();
+		surface_.Destroy(&instance_);
 		instance_.Destroy();
 		window_.Destroy();
 	}
