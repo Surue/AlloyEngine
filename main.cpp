@@ -2,19 +2,27 @@
 
 #include <devices/instance.h>
 #include <devices/logical_device.h>
-#include <window.h>
+
+#include <devices/window.h>
 
 namespace alloy {
 class Engine {
 public:
+
 	void Init() {
 		window_.Init();
 		instance_.Init(window_.GetVulkanExtensions());
 		physicalDevice_.Init(instance_);
 		logicalDevice_.Init(physicalDevice_);
+
+		//TODO(@Nico) Refactor the creation of the surface
+		window_.CreateVulkanSurface(instance_, surface_);
 	}
 
 	void Destroy() {
+		surface_.Destroy(&instance_);
+		logicalDevice_.Destroy();
+		physicalDevice_.Destroy();
 		instance_.Destroy();
 		window_.Destroy();
 	}
@@ -37,10 +45,11 @@ public:
 		}
 	}
 private:
-	sdlwrapper::Window window_;
+	graphics::Window window_;
 	vulkanwrapper::Instance instance_;
 	vulkanwrapper::PhysicalDevice physicalDevice_;
 	vulkanwrapper::LogicalDevice logicalDevice_;
+	vulkanwrapper::Surface surface_;
 };
 }
 

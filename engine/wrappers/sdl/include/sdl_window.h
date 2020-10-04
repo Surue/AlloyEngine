@@ -1,17 +1,14 @@
 #pragma once
 
-#include <vector>
-#include <iostream>
-
 #include <SDL.h>
 #include <SDL_vulkan.h>
 
 namespace alloy::sdlwrapper {
-class Window {
+class SDLWindow {
 public:
-	Window() = default;
+	SDLWindow() = default;
 
-	~Window() {
+	virtual ~SDLWindow() {
 		SDL_DestroyWindow(window_);
 	}
 
@@ -23,11 +20,9 @@ public:
 
 	SDL_Window* GetWindow() const;
 
-	std::vector<const char*> GetVulkanExtensions() const;
-
 	void Destroy();
 
-private:
+protected:
 	SDL_Window* window_ = nullptr;
 
 	int width_ = 720;

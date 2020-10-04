@@ -24,6 +24,8 @@ void PhysicalDevice::Init(const Instance& instance) {
 	}
 }
 
+void PhysicalDevice::Destroy() { }
+
 bool PhysicalDevice::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice) {
 	VkPhysicalDeviceProperties deviceProperties;
 	vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);

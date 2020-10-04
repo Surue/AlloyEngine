@@ -21,6 +21,10 @@ public:
 	Instance() = default;
 	~Instance() = default;
 
+	const VkInstance& operator&() const {
+		return instance_;
+	}
+
 	/**
 	 * \param windowExtensions The required list of extension specific to the window
 	 */

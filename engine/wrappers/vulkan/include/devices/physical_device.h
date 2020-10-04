@@ -19,6 +19,8 @@ public:
 
 	void Init(const Instance& instance);
 
+	void Destroy();
+
 	const VkPhysicalDevice& GetPhysicalDevice() const { return device_; }
 
 	static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& physicalDevice);

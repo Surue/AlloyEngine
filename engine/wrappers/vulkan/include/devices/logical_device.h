@@ -7,11 +7,11 @@ namespace alloy::vulkanwrapper {
 class LogicalDevice {
 public:
 	LogicalDevice() = default;
-	~LogicalDevice() {
-		vkDestroyDevice(device_, nullptr);
-	}
+	~LogicalDevice() = default;
 
 	void Init(const PhysicalDevice& physicalDevice);
+
+	void Destroy() const;
 private:
 
 	VkDevice device_;

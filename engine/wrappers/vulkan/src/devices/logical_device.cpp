@@ -25,6 +25,15 @@ void LogicalDevice::Init(const PhysicalDevice& physicalDevice) {
 	deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
 	deviceCreateInfo.enabledExtensionCount = 0;
 
+	//If validation layers is active => add validation layer extensions
+	if (enableValidationLayers) {
+		deviceCreateInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());
+		deviceCreateInfo.ppEnabledLayerNames = validationLayers.data();
+	}
+	else {
+		deviceCreateInfo.enabledLayerCount = 0;
+	}
+
 	//Create logical device
 	if(vkCreateDevice(physicalDevice.GetPhysicalDevice(), &deviceCreateInfo, nullptr, &device_)) {
 		std::cerr << "Error while creating logical device\n";
@@ -32,5 +41,9 @@ void LogicalDevice::Init(const PhysicalDevice& physicalDevice) {
 
 	//Get graphics queue
 	vkGetDeviceQueue(device_, indices.graphicsFamily.value(), 0, &graphicsQueue_);
+}
+
+void LogicalDevice::Destroy() const {
+	vkDestroyDevice(device_, nullptr);
 }
 }

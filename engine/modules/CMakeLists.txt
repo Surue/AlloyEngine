@@ -11,6 +11,7 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Modules STATIC ${Alloy_SRC})
 
+target_link_libraries(Alloy_Modules PUBLIC SDL_Wrapper Vulkan_Wrapper)
 target_include_directories(Alloy_Modules PUBLIC "physics/include/")
 target_include_directories(Alloy_Modules PUBLIC "graphics3D/include/")
 
