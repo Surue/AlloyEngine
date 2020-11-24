@@ -26,9 +26,15 @@ public:
 	const VkPhysicalDevice& GetPhysicalDevice() const { return device_; }
 
 	static QueueFamilyIndices FindQueueFamilies(const VkPhysicalDevice& physicalDevice, const Surface& surface);
+
+	inline const static std::vector<const char*> deviceExtensions = {
+		VK_KHR_SWAPCHAIN_EXTENSION_NAME
+	};
 private:
 
 	bool IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, const Surface& surface);
+
+	bool CheckDeviceExtensionSupport(const VkPhysicalDevice& device);
 
 	VkPhysicalDevice device_;
 };

@@ -1,9 +1,12 @@
 #include <devices/physical_device.h>
 
+#include <set>
+
 #include <devices/instance.h>
 #include <devices/surface.h>
 
 namespace alloy::vulkanwrapper {
+
 void PhysicalDevice::Init(const Instance& instance, const Surface& surface) {
 	uint32_t deviceCount = 0;
 	vkEnumeratePhysicalDevices(instance.GetInstance(), &deviceCount, nullptr);
@@ -29,6 +32,7 @@ void PhysicalDevice::Init(const Instance& instance, const Surface& surface) {
 
 void PhysicalDevice::Destroy() { }
 
+
 bool PhysicalDevice::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, const Surface& surface) {
 	VkPhysicalDeviceProperties deviceProperties;
 	vkGetPhysicalDeviceProperties(physicalDevice, &deviceProperties);
@@ -38,7 +42,25 @@ bool PhysicalDevice::IsDeviceSuitable(const VkPhysicalDevice& physicalDevice, co
 
 	QueueFamilyIndices indices = FindQueueFamilies(physicalDevice, surface);
 
-	return indices.IsComplete();
+	bool extensionsSupported = CheckDeviceExtensionSupport(physicalDevice);
+
+	return indices.IsComplete() && extensionsSupported;
+}
+
+bool PhysicalDevice::CheckDeviceExtensionSupport(const VkPhysicalDevice& device) {
+	uint32_t extensionCount;
+	vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, nullptr);
+
+	std::vector<VkExtensionProperties> availableExtensions(extensionCount);
+	vkEnumerateDeviceExtensionProperties(device, nullptr, &extensionCount, availableExtensions.data());
+
+	std::set<std::string> requiredExtensions(deviceExtensions.begin(), deviceExtensions.end());
+
+	for (const auto& extension : availableExtensions) {
+		requiredExtensions.erase(extension.extensionName);
+	}
+
+	return requiredExtensions.empty();
 }
 
 QueueFamilyIndices PhysicalDevice::FindQueueFamilies(const VkPhysicalDevice& physicalDevice, const Surface& surface) {

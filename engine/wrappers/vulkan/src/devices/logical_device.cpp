@@ -35,8 +35,9 @@ void LogicalDevice::Init(const PhysicalDevice& physicalDevice, const Surface& su
 	deviceCreateInfo.queueCreateInfoCount = static_cast<uint32_t>(queueCreateInfos.size());
 	deviceCreateInfo.pQueueCreateInfos = queueCreateInfos.data();
 	deviceCreateInfo.pEnabledFeatures = &deviceFeatures;
-	deviceCreateInfo.enabledExtensionCount = 0;
-
+	deviceCreateInfo.enabledExtensionCount = static_cast<uint32_t>(PhysicalDevice::deviceExtensions.size());
+	deviceCreateInfo.ppEnabledExtensionNames = PhysicalDevice::deviceExtensions.data();
+	
 	//If validation layers is active => add validation layer extensions
 	if (enableValidationLayers) {
 		deviceCreateInfo.enabledLayerCount = static_cast<uint32_t>(validationLayers.size());

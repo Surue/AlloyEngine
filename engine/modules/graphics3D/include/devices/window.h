@@ -24,7 +24,7 @@ public:
 
 	void CreateVulkanSurface(const vulkanwrapper::Instance& instance, vulkanwrapper::Surface& surface) const override {
 		if(SDL_Vulkan_CreateSurface(window_, &instance, surface.GetSurface()) != SDL_TRUE) {
-			
+			//TODO add error log
 		}
 	}
 private:
