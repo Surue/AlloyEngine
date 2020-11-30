@@ -21,9 +21,9 @@ add_subdirectory(${ALLOY_MODULES_DIR})
 #set(SFML_STATIC_LIBRARIES TRUE)
 
 # In most cases better set in the CMake cache
-set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
+#set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
 
-find_package(SFML 2.5 COMPONENTS system window graphics audio REQUIRED)
+find_package(SFML 2.5.1 COMPONENTS system window graphics audio REQUIRED)
 
 add_executable(AlloyEngine main.cpp)
 

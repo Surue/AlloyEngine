@@ -1,6 +1,8 @@
-#include <iostream>
+
 #include <SFML/Graphics.hpp>
 #include <vector.h>
+
+#include <log.h>
 
 int main() {
 
@@ -10,6 +12,8 @@ int main() {
     sf::CircleShape shape(100.f);
     shape.setFillColor(sf::Color::Green);
 
+    using namespace alloy;
+
     while (window.isOpen())
     {
         sf::Event event;
@@ -18,6 +22,12 @@ int main() {
             if (event.type == sf::Event::Closed)
                 window.close();
         }
+
+        std::string s = "Salut";
+    	debug::Log("ICI" + std::to_string(3) + " voilà ça marche");
+        debug::LogWarning("Warning");
+        debug::LogError("Error");
+    	debug::Log(s);
 
         window.clear();
         window.draw(shape);

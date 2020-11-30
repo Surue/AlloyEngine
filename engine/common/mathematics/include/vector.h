@@ -3,6 +3,7 @@
 #include <cmath>
 #include <cstdint>
 
+//TODO move into namespace math
 namespace alloy{
 template<typename T>
 struct Vector2 {
