@@ -1,10 +1,10 @@
 #pragma once
 
-#include <memory>
-#include <string_view>
-#include <vector.h>
+#include <window.h>
 
 #include <SFML/Graphics.hpp>
+
+#include <vector.h>
 
 namespace alloy {
 namespace graphics {
@@ -15,41 +15,37 @@ struct GraphicsEngineInitSettings {
 
 class GraphicsEngine {
 public:
-	GraphicsEngine(GraphicsEngineInitSettings initSettings) {
-		windowSize_ = initSettings.windowSize;
-		windowName_ = initSettings.windowName;
+	GraphicsEngine(GraphicsEngineInitSettings initSettings) :
+		window_({initSettings.windowName, initSettings.windowSize}){
 	}
 
 	void Init() {
-		window_ = std::make_unique<sf::RenderWindow>(sf::VideoMode(windowSize_.x, windowSize_.y), &windowName_[0]);
+		window_.Init();
 	}
 
 	void Update() {
 		//Get events
 		//TODO move it outside the graphics engine
-		sf::Event event;
+		/*sf::Event event;
 		while (window_->pollEvent(event))
 		{
 			if (event.type == sf::Event::Closed)
-				window_->close();
-		}
+				window_.Close();
+		}*/
 
 		//Draw everything
 
 		//Clear windows
-		window_->clear();
+		window_.Clear();
 		//Display
-		window_->display();
+		window_.Display();
 	}
 
 	bool IsWindowOpen() {
-		return window_->isOpen();
+		return window_.IsOpen();
 	}
 private:
-	std::unique_ptr<sf::RenderWindow> window_;
-
-	math::ivec2 windowSize_;
-	std::string_view windowName_;
+	Window window_;
 };
 } //namespace graphics
 } //namespace alloy
