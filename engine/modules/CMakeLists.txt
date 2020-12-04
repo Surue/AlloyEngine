@@ -1,12 +1,15 @@
 #source files
 file(GLOB_RECURSE Alloy_GRAPHICS_SRC graphics/src/*.cpp graphics/include/*.h)
+file(GLOB_RECURSE Alloy_INPUTS_SRC inputs/src/*.cpp inputs/include/*.h)
 file(GLOB_RECURSE Alloy_PHYSICS_SRC physics/src/*.cpp physics/include/*.h)
 
 source_group("Graphics" FILES ${Alloy_GRAPHICS_SRC})
+source_group("Inputs" FILES ${Alloy_INPUTS_SRC})
 source_group("Physics" FILES ${Alloy_PHYSICS_SRC})
 
 List(APPEND Alloy_SRC
         ${Alloy_GRAPHICS_SRC}
+		${Alloy_INPUTS_SRC}
         ${Alloy_PHYSICS_SRC})
 
 add_library(Alloy_Modules STATIC ${Alloy_SRC})
@@ -24,9 +27,9 @@ find_package(SFML 2.5.1 COMPONENTS system window graphics audio REQUIRED)
 
 target_link_libraries(Alloy_Modules PUBLIC sfml-system sfml-window sfml-graphics sfml-audio PUBLIC Alloy_Common)
 
-
-target_include_directories(Alloy_Modules PUBLIC "physics/include/")
 target_include_directories(Alloy_Modules PUBLIC "graphics/include/")
+target_include_directories(Alloy_Modules PUBLIC "inputs/include/")
+target_include_directories(Alloy_Modules PUBLIC "physics/include/")
 
 function(alloy_lib_config library)
     #warning flags

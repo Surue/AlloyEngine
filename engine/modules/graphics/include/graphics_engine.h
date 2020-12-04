@@ -1,5 +1,6 @@
 #pragma once
 
+#include <functional>
 #include <window.h>
 
 #include <SFML/Graphics.hpp>
@@ -24,15 +25,6 @@ public:
 	}
 
 	void Update() {
-		//Get events
-		//TODO move it outside the graphics engine
-		/*sf::Event event;
-		while (window_->pollEvent(event))
-		{
-			if (event.type == sf::Event::Closed)
-				window_.Close();
-		}*/
-
 		//Draw everything
 
 		//Clear windows
@@ -43,6 +35,14 @@ public:
 
 	bool IsWindowOpen() {
 		return window_.IsOpen();
+	}
+
+	const Window& GetWindow() const {
+		return window_;
+	}
+
+	const std::function<void()> GetCallbackCloseWindow() const {
+		return [this]() {window_.Close(); };
 	}
 private:
 	Window window_;

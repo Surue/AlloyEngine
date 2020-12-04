@@ -22,20 +22,28 @@ public:
 		window_ = std::make_unique<sf::RenderWindow>(sf::VideoMode(windowSize_.x, windowSize_.y), &windowName_[0]);
 	}
 
-	bool IsOpen() {
+	bool IsOpen() const {
 		return window_->isOpen();
 	}
 
-	void Close() {
+	void Close() const {
 		window_->close();
 	}
 
-	void Clear() {
+	void Clear() const {
 		window_->clear();
 	}
 
-	void Display() {
+	void Display() const {
 		window_->display();
+	}
+
+	const sf::Window& GetSFMLWindow() const {
+		return *window_;
+	}
+
+	const bool PollEvent(sf::Event& event) const {
+		return window_->pollEvent(event);
 	}
 private:
 	std::unique_ptr<sf::RenderWindow> window_;
