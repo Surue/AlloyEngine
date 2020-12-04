@@ -12,6 +12,18 @@ List(APPEND Alloy_SRC
 add_library(Alloy_Modules STATIC ${Alloy_SRC})
 
 set_target_properties (Alloy_Modules PROPERTIES FOLDER Alloy/Modules)
+#SFML
+
+# If must link SFML statically
+set(SFML_STATIC_LIBRARIES TRUE)
+
+# In most cases better set in the CMake cache
+#set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
+
+find_package(SFML 2.5.1 COMPONENTS system window graphics audio REQUIRED)
+
+target_link_libraries(Alloy_Modules PUBLIC sfml-system sfml-window sfml-graphics sfml-audio PUBLIC Alloy_Common)
+
 
 target_include_directories(Alloy_Modules PUBLIC "physics/include/")
 target_include_directories(Alloy_Modules PUBLIC "graphics/include/")

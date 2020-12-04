@@ -3,6 +3,8 @@
 #include <string_view>
 #include <vector.h>
 
+#include <graphics_engine.h>
+
 namespace alloy {
 struct EngineInitSettings {
 	std::string_view windowName;
@@ -11,38 +13,38 @@ struct EngineInitSettings {
 
 class Engine {
 public:
-	Engine(const EngineInitSettings& initSettings) {
-		windowSize_ = initSettings.windowSize;
-		windowName_ = initSettings.windowName;
+	Engine(const EngineInitSettings& initSettings):
+		isRunning_(false),
+		graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}){
 	}
 
 	void Init() {
-		window_ = std::make_unique<sf::RenderWindow>(sf::VideoMode(windowSize_.x, windowSize_.y), &windowName_[0]);
+		graphicsEngine_.Init();
 	}
 
 	void Run() {
-        while (window_->isOpen())
+		isRunning_ = true;
+		
+        while (isRunning_)
         {
-            sf::Event event;
-            while (window_->pollEvent(event))
-            {
-                if (event.type == sf::Event::Closed)
-                    window_->close();
-            }
-        
-            window_->clear();
+			//Update every systems
+			graphicsEngine_.Update();
         	
-            window_->display();
+            if(!graphicsEngine_.IsWindowOpen()) {
+				isRunning_ = false;
+            }
         }
 	}
 
 	void Destroy() {
 		
 	}
-private:
-	std::unique_ptr<sf::RenderWindow> window_;
 
-	math::ivec2 windowSize_;
-	std::string_view windowName_;
+	void Shutdown() {
+		
+	}
+private:
+	bool isRunning_;
+	graphics::GraphicsEngine graphicsEngine_;
 };
 } //namespace alloy

@@ -15,16 +15,6 @@ add_subdirectory(${ALLOY_MODULES_DIR})
 set(ALLOY_CORE_DIR "${CMAKE_SOURCE_DIR}/engine/core/" CACHE INTERNAL "")
 add_subdirectory(${ALLOY_CORE_DIR})
 
-#SFML
-
-# If must link SFML statically
-#set(SFML_STATIC_LIBRARIES TRUE)
-
-# In most cases better set in the CMake cache
-#set(SFML_DIR "<sfml root prefix>/lib/cmake/SFML")
-
-find_package(SFML 2.5.1 COMPONENTS system window graphics audio REQUIRED)
-
 add_executable(AlloyEngine main.cpp)
 
-target_link_libraries(AlloyEngine PRIVATE sfml-system sfml-window sfml-graphics sfml-audio PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
+target_link_libraries(AlloyEngine PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
