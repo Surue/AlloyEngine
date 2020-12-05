@@ -7,6 +7,8 @@
 
 #include <vector.h>
 
+#include "texture.h"
+
 namespace alloy {
 namespace graphics {
 struct GraphicsEngineInitSettings {
@@ -20,15 +22,27 @@ public:
 		window_({initSettings.windowName, initSettings.windowSize}){
 	}
 
+	//TODO remove
+	Texture texture;
+	sf::Sprite sprite;
+	
 	void Init() {
 		window_.Init();
+
+		//TODO remove
+		texture.Load("data/sprites/policeman.png");
+		sprite.setTexture(texture.GetSfTexture());
 	}
 
-	void Update() {
-		//Draw everything
 
+	void Update() {
 		//Clear windows
 		window_.Clear();
+		
+		//Draw everything
+
+		window_.Draw(sprite);
+		
 		//Display
 		window_.Display();
 	}

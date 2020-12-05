@@ -97,7 +97,7 @@ void LogIntern(const char* msg, const LogType type, LogSeverity severity) {
 	default: ;
 	}
 	
-	std::cout << "[" << ltm.tm_hour << ":" << ltm.tm_min << ":" << ltm.tm_sec << "]" << "[" <<  LogTypeToString(type) << "]" << msg;
+	std::cout << "[" << ltm.tm_hour << ":" << ltm.tm_min << ":" << ltm.tm_sec << "]" << "[" <<  LogTypeToString(type) << "] " << msg;
 	std::cout << "\033[0m\n"; //Close color and add return
 }
 

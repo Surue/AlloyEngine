@@ -34,6 +34,10 @@ public:
 		window_->clear();
 	}
 
+	void Draw(const sf::Sprite& sprite) const {
+		window_->draw(sprite);
+	}
+
 	void Display() const {
 		window_->display();
 	}
