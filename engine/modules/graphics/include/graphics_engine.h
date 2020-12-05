@@ -8,6 +8,7 @@
 #include <vector.h>
 
 #include "texture.h"
+#include <tilemap.h>
 
 namespace alloy {
 namespace graphics {
@@ -19,7 +20,8 @@ struct GraphicsEngineInitSettings {
 class GraphicsEngine {
 public:
 	GraphicsEngine(GraphicsEngineInitSettings initSettings) :
-		window_({initSettings.windowName, initSettings.windowSize}){
+		window_({initSettings.windowName, initSettings.windowSize}),
+		tilemap_({10, 10}, {32, 32}){
 	}
 
 	//TODO remove
@@ -28,6 +30,7 @@ public:
 	
 	void Init() {
 		window_.Init();
+		tilemap_.Init();
 
 		//TODO remove
 		texture.Load("data/sprites/policeman.png");
@@ -41,7 +44,8 @@ public:
 		
 		//Draw everything
 
-		window_.Draw(sprite);
+		//window_.Draw(sprite);
+		tilemap_.Draw(window_.GetRenderTarget());
 		
 		//Display
 		window_.Display();
@@ -60,6 +64,8 @@ public:
 	}
 private:
 	Window window_;
+
+	Tilemap tilemap_;
 };
 } //namespace graphics
 } //namespace alloy

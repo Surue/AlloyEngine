@@ -2,10 +2,10 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 
+//TODO the input manager cannot know what is the graphic engine
 #include "graphics_engine.h"
 
-namespace alloy {
-namespace inputs {
+namespace alloy::inputs {
 class InputManager {
 public:
 
@@ -35,5 +35,4 @@ private:
 
 	std::function<void()> callbackCloseWindow_;
 };
-}
 }

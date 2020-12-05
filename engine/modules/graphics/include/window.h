@@ -46,6 +46,10 @@ public:
 		return *window_;
 	}
 
+	sf::RenderTarget& GetRenderTarget() const {
+		return *window_;
+	}
+
 	const bool PollEvent(sf::Event& event) const {
 		return window_->pollEvent(event);
 	}
