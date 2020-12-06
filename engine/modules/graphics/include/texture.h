@@ -7,6 +7,33 @@
 
 namespace alloy {
 namespace graphics {
+
+struct TextureCoordsInPixel {
+
+	union {
+		struct {
+			math::ivec2 topLeft;
+			math::ivec2 topRight;
+			math::ivec2 bottomRight;
+			math::ivec2 bottomLeft;
+
+		};
+
+		math::ivec2 coord[4];
+	};
+
+	TextureCoordsInPixel() :
+		topLeft(math::ivec2::zero),
+		topRight(math::ivec2::zero), 
+		bottomRight(math::ivec2::zero),
+		bottomLeft(math::ivec2::zero) {
+	}
+
+	math::ivec2 operator[](const unsigned int index) const {
+		return coord[index];
+	}
+};
+
 /// <summary>
 /// Define the texture mode:
 /// - SINGLE => One image on the texture
@@ -58,7 +85,7 @@ public:
 		if(mode_ == TextureMode::SINGLE) {
 			const auto size = texture_.getSize();
 			return {size.x, size.y};
-		}else {
+		} else {
 			const auto totalSize = texture_.getSize();
 			return { totalSize.x / tileNb_.x, totalSize.y / tileNb_.y };
 		}
@@ -71,6 +98,25 @@ public:
 	math::uivec2 GetTextureSize() const {
 		const auto size = texture_.getSize();
 		return { size.x, size.y };
+	}
+
+	TextureCoordsInPixel GetTextureCoordInPixel(const int textureIndex) const {
+		const auto totalSize = texture_.getSize();
+		const math::uivec2 size = math::uivec2(totalSize.x, totalSize.y) / tileNb_;
+
+		const auto coordTile = TextureIndexToTileCoords(textureIndex);
+
+		TextureCoordsInPixel coord;
+		coord.topLeft = math::ivec2( coordTile.x * size.x,coordTile.y * size.y);
+		coord.topRight = math::ivec2((coordTile.x + 1) * size.x,coordTile.y * size.y);
+		coord.bottomRight = math::ivec2((coordTile.x + 1) * size.x,(coordTile.y + 1) * size.y);
+		coord.bottomLeft = math::ivec2(coordTile.x * size.x,(coordTile.y + 1) * size.y);
+
+		return coord;
+	}
+
+	math::uivec2 TextureIndexToTileCoords(const int index) const {
+		return { index % tileNb_.x, index / tileNb_.x };
 	}
 
 private:
