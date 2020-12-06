@@ -39,6 +39,7 @@ using i8vec2 = Vector2<int8_t>;
 using i16vec2 = Vector2<int16_t>;
 using i32vec2 = Vector2<int32_t>;
 using i64vec2 = Vector2<int64_t>;
+using uivec2 = Vector2<unsigned int>;
 
 template <typename T> inline Vector2<T> const Vector2<T>::zero = Vector2<T>(0, 0);
 template <typename T> inline Vector2<T> const Vector2<T>::one = Vector2<T>(1, 1);
