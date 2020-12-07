@@ -1,13 +1,17 @@
 #source files
-file(GLOB_RECURSE Alloy_MATH_SRC mathematics/src/*.cpp mathematics/include/*.h)
 file(GLOB_RECURSE Alloy_DEBUG_SRC debug/src/*.cpp debug/include/*.h)
+file(GLOB_RECURSE Alloy_MATH_SRC mathematics/src/*.cpp mathematics/include/*.h)
+file(GLOB_RECURSE Alloy_PATTERN_SRC patterns/src/*.cpp patterns/include/*.h)
 
-source_group("Maths" FILES ${Alloy_MATH_SRC})
 source_group("Debug" FILES ${Alloy_DEBUG_SRC})
+source_group("Maths" FILES ${Alloy_MATH_SRC})
+source_group("Patterns" FILES ${Alloy_PATTERN_SRC})
+
 
 List(APPEND Alloy_SRC
+		${Alloy_DEBUG_SRC}
         ${Alloy_MATH_SRC}
-		${Alloy_DEBUG_SRC})
+		${Alloy_PATTERN_SRC})
 
 add_library(Alloy_Common STATIC ${Alloy_SRC})
 
@@ -15,6 +19,7 @@ set_target_properties (Alloy_Common PROPERTIES FOLDER Alloy/Common)
 
 target_include_directories(Alloy_Common PUBLIC "mathematics/include/")
 target_include_directories(Alloy_Common PUBLIC "debug/include/")
+target_include_directories(Alloy_Common PUBLIC "patterns/include/")
 
 function(alloy_lib_config library)
     #warning flags

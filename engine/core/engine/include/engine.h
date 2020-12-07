@@ -34,6 +34,11 @@ public:
 		
         while (isRunning_)
         {
+
+	        for (auto callbackUpdate : callbackUpdate_) {
+				callbackUpdate();
+	        }
+        	
 			//Update every systems
 			graphicsEngine_.Update();
 			inputManager_.Update();
@@ -51,9 +56,19 @@ public:
 	void Shutdown() {
 		
 	}
+
+	void AddCallbackUpdate(std::function<void()> callback) {
+		if(callbackUpdate_.size() == callbackUpdate_.capacity()) {
+			callbackUpdate_.reserve(callbackUpdate_.size() * 2 + 1);
+		}
+
+		callbackUpdate_.emplace_back(callback);
+	}
 private:
 	bool isRunning_;
 	graphics::GraphicsEngine graphicsEngine_;
 	inputs::InputManager inputManager_;
+
+	std::vector<std::function<void()>> callbackUpdate_;
 };
 } //namespace alloy

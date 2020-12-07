@@ -38,6 +38,7 @@ public:
 				tileQuad[2].position = sf::Vector2f((x + 1) * tileSize_.x, (y + 1) * tileSize_.y);
 				tileQuad[3].position = sf::Vector2f(x * tileSize_.x, (y + 1) * tileSize_.y);
 
+				//TODO remove magic number => 14 == number of tile in tileset
 				const int textureIndex = (x + y * nbTiles_.x) % 14;
 
 
