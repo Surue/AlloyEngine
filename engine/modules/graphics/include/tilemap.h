@@ -24,10 +24,6 @@ public:
 		
 		for(int x = 0; x < nbTiles_.x; x++) {
 
-			int offset = 0;
-			if (x % 2 == 0) {
-				offset = 1;
-			}
 			for(int y = 0; y < nbTiles_.y; y++) {
 				//TODO remove magic number => 4 is equal to the number of vertex for a quad
 				sf::Vertex* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * 4];
@@ -41,40 +37,15 @@ public:
 				//TODO remove magic number => 14 == number of tile in tileset
 				const int textureIndex = (x + y * nbTiles_.x) % 14;
 
-
 				auto texCoords = tileSet_.GetTextureCoordInPixel(textureIndex);
 
 				tileQuad[0].texCoords = sf::Vector2f(texCoords[0].x, texCoords[0].y);
 				tileQuad[1].texCoords = sf::Vector2f(texCoords[1].x, texCoords[1].y);
 				tileQuad[2].texCoords = sf::Vector2f(texCoords[2].x, texCoords[2].y);
 				tileQuad[3].texCoords = sf::Vector2f(texCoords[3].x, texCoords[3].y);
-				
-				//if((y + offset) % 2 == 0) {
-				//	tileQuad[0].color = sf::Color::Red;
-				//	tileQuad[1].color = sf::Color::Black;
-				//	tileQuad[2].color = sf::Color::Black;
-				//	tileQuad[3].color = sf::Color::Black;
-				//}else {
-				//	tileQuad[0].color = sf::Color::White;
-				//	tileQuad[1].color = sf::Color::White;
-				//	tileQuad[2].color = sf::Color::White;
-				//	tileQuad[3].color = sf::Color::White;
-				//}
 			}
 		}
-		
-		const math::uivec2 topLeft = { 1, 1 };
-		const math::uivec2 bottomRight{ 5, 5 };
-
-		const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
-		Tile baseTile = Tile(tileSet_, 0);
-		std::vector<Tile> tiles( nbTiles, baseTile);
-
-		for(auto& tile : tiles) {
-			tile.SetSprite(4);
-		}
-
-		UpdateChunk(tiles, topLeft, bottomRight);
+	
 	}
 
 	void Draw(sf::RenderTarget& target) const {
@@ -102,6 +73,10 @@ public:
 				index++;
 			}
 		}
+	}
+
+	const Texture& GetTileset() const {
+		return tileSet_;
 	}
 	
 private:

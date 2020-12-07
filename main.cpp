@@ -7,6 +7,19 @@ class CellularAutomataSystem {
 public:
     void Init() {
         tiles_.resize(tilemapSize_.x * tilemapSize_.y);
+
+        const alloy::math::uivec2 topLeft = { 1, 1 };
+        const alloy::math::uivec2 bottomRight{ 5, 5 };
+
+        const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
+        alloy::graphics::Tile baseTile = alloy::graphics::Tile(alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
+        std::vector<alloy::graphics::Tile> tiles(nbTiles, baseTile);
+
+        for (auto& tile : tiles) {
+            tile.SetSprite(4);
+        }
+
+        alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tiles, topLeft, bottomRight);
     }
 	
     void OnUpdate() {
@@ -28,6 +41,8 @@ public:
     void Init() {
         engine_.Init();
 
+        cellularAutomataSystem_.Init();
+		
         engine_.AddCallbackUpdate([this]() {cellularAutomataSystem_.OnUpdate(); });
 	}
 

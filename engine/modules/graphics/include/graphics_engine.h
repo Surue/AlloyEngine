@@ -10,6 +10,8 @@
 #include "texture.h"
 #include <tilemap.h>
 
+#include "tilemap_manager.h"
+
 namespace alloy {
 namespace graphics {
 struct GraphicsEngineInitSettings {
@@ -19,9 +21,10 @@ struct GraphicsEngineInitSettings {
 
 class GraphicsEngine {
 public:
-	GraphicsEngine(GraphicsEngineInitSettings initSettings) :
+	GraphicsEngine(const GraphicsEngineInitSettings& initSettings) :
 		window_({initSettings.windowName, initSettings.windowSize}),
-		tilemap_({10, 10}, {32, 32}){
+		tilemapManager_() {
+		ServiceTilemapManager::Assign(&tilemapManager_);
 	}
 
 	//TODO remove
@@ -30,7 +33,7 @@ public:
 	
 	void Init() {
 		window_.Init();
-		tilemap_.Init();
+		tilemapManager_.Init();
 
 		//TODO remove
 		texture.Load("data/sprites/policeman.png");
@@ -45,7 +48,7 @@ public:
 		//Draw everything
 
 		//window_.Draw(sprite);
-		tilemap_.Draw(window_.GetRenderTarget());
+		tilemapManager_.Draw(window_.GetRenderTarget());
 		
 		//Display
 		window_.Display();
@@ -65,7 +68,7 @@ public:
 private:
 	Window window_;
 
-	Tilemap tilemap_;
+	TilemapManager tilemapManager_;
 };
 } //namespace graphics
 } //namespace alloy
