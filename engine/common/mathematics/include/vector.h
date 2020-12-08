@@ -27,6 +27,10 @@ template <typename T> struct Vector2 {
 
 	Vector2(T x, T y) : x(x), y(y) {}
 
+	Vector2 operator + (const Vector2 rhs) const {
+		return { x + rhs.x, y + rhs.y };
+	}
+	
 	Vector2 operator / (const Vector2 rhs) const {
 		return { x / rhs.x, y / rhs.y };
 	}
