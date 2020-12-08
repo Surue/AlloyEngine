@@ -12,7 +12,7 @@ public:
     void Init() {
         std::random_device rd;
         std::mt19937 gen(rd());
-        const std::uniform_int_distribution<> distrib(0, 1);
+        const std::uniform_int_distribution<> distrib01(0, 1);
     	
         tiles_.resize(tilemapSize_.x * tilemapSize_.y);
 
@@ -23,9 +23,13 @@ public:
         alloy::graphics::Tile baseTile = alloy::graphics::Tile(alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
         std::vector<alloy::graphics::Tile> tiles(nbTiles, baseTile);
 
-    	//Generate random
+    	//Generate random solide tiles
         for (int& tile : tiles_) {
-	        tile = distrib(gen);
+        	if(distrib01(gen) == 0) {
+                tile = freeTile_;
+        	} else {
+                tile = solidTile_;
+        	}
         }
 
     	//Cellular automata
@@ -33,6 +37,15 @@ public:
             CellularStep();
     	}
 
+        const std::uniform_int_distribution<> distrib0100(0, 100);
+
+    	////Generate random water
+        for (int& tile : tiles_) {
+            if (tile == freeTile_ && distrib0100(gen) > 66) {
+                tile = waterTile_;
+            }
+        }
+    	
     	//Fill tiles sprites
         for (auto i = 0; i < tiles.size(); i++) {
             tiles[i].SetSprite(tiles_[i]);
@@ -42,7 +55,30 @@ public:
     }
 	
     void OnUpdate() {
-        //alloy::debug::Log("Update");
+        timeBetweenUpdate++;
+
+    	if(timeBetweenUpdate < timeBetweenUpdateInMS_) {
+            return;
+    	}
+    	
+        const alloy::math::uivec2 topLeft = { 0, 0 };
+        const alloy::math::uivec2 bottomRight{ 100, 100 };
+
+        const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
+    	
+        alloy::graphics::Tile baseTile = alloy::graphics::Tile(alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
+        std::vector<alloy::graphics::Tile> tiles(nbTiles, baseTile);
+
+        UpdateWater();
+
+        //Fill tiles sprites
+        for (auto i = 0; i < tiles.size(); i++) {
+            tiles[i].SetSprite(tiles_[i]);
+        }
+
+        alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tiles, topLeft, bottomRight);
+
+        timeBetweenUpdate = 0;
     }
 
 private:
@@ -52,6 +88,55 @@ private:
 
     int CoordsToIndex(const alloy::math::ivec2 coords) const {
         return coords.x * tilemapSize_.x + coords.y;
+    }
+
+	void UpdateWater() {
+        std::vector<int> nextStep;
+        nextStep.reserve(tiles_.size());
+        nextStep.insert(nextStep.begin(), tiles_.begin(), tiles_.end());
+    	
+        for (auto index = 0; index < tiles_.size(); index++) {
+            if(tiles_[index] == waterTile_) {
+                const auto coord = IndexToCoords(index);
+            	
+	            //Check can fall down
+                const auto downCoords = coord + alloy::math::ivec2{ 0, 1 };
+                if (downCoords.y >= 0 && downCoords.y < tilemapSize_.y) {
+                    const int downIndex = CoordsToIndex(downCoords);
+                    if (tiles_[downIndex] == freeTile_) {
+                        nextStep[index] = freeTile_;
+                        nextStep[downIndex] = waterTile_;
+                        continue;
+                    }
+
+                    //Check can go left down
+                    const auto downLeftCoords = coord + alloy::math::ivec2{ -1, 1 };
+                    if (downLeftCoords.x >= 0 && downLeftCoords.x < tilemapSize_.x) {
+                        const int leftIndex = CoordsToIndex(downLeftCoords);
+                        if (tiles_[leftIndex] == freeTile_) {
+                            nextStep[index] = freeTile_;
+                            nextStep[leftIndex] = waterTile_;
+                            continue;
+                        }
+                    }
+
+                    //Check can go right
+                    const auto downRightCoords = coord + alloy::math::ivec2{ 1, 1 };
+                    if (downRightCoords.x >= 0 && downRightCoords.x < tilemapSize_.x) {
+	                    const int rightIndex = CoordsToIndex(downRightCoords);
+                        if (tiles_[rightIndex] == freeTile_) {
+                            nextStep[index] = freeTile_;
+                            nextStep[rightIndex] = waterTile_;
+                            continue;
+                        }
+                    }
+                }
+
+            }
+        }
+
+        tiles_.clear();
+        tiles_.insert(tiles_.begin(), nextStep.begin(), nextStep.end());
     }
 
 	void CellularStep() {
@@ -73,21 +158,21 @@ private:
                     continue;
             	}
 
-            	if(tiles_[CoordsToIndex(neighborCoords)] == 1) {
+            	if(tiles_[CoordsToIndex(neighborCoords)] == freeTile_) {
                     nbAliveNeighbors++;
             	}
             }
 
             const auto currentStatus = tiles_[index];
 
-            if (currentStatus == 1 && (nbAliveNeighbors == 1 || nbAliveNeighbors >= 4)) {
-                nextStep[index] = 1;
+            if (currentStatus == freeTile_ && (nbAliveNeighbors == 1 || nbAliveNeighbors >= 4)) {
+                nextStep[index] = freeTile_;
             }
-            else if (currentStatus == 0 && nbAliveNeighbors >= 5) {
-                nextStep[index] = 1;
+            else if (currentStatus == solidTile_ && nbAliveNeighbors >= 5) {
+                nextStep[index] = freeTile_;
             }
             else {
-                nextStep[index] = 0;
+                nextStep[index] = solidTile_;
             }
     	}
 
@@ -109,6 +194,12 @@ private:
         { 0, 1 },
         { 1, 1 }
     } };
+
+    const int solidTile_ = 10;
+    const int freeTile_ = 13;
+    const int waterTile_ = 6;
+    const int timeBetweenUpdateInMS_ = 10;
+    int timeBetweenUpdate = 0;
 };
 
 class CellularAutomata {

@@ -32,7 +32,7 @@ public:
 class TilemapManager : public TilemapManagerBase{
 public:
 	TilemapManager() :
-		tilemap_({100, 100}, {16, 16}){ //TODO remove magic number
+		tilemap_({100, 100}, {10, 10}){ //TODO remove magic number
 		
 	}
 
