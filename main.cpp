@@ -6,6 +6,10 @@
 
 #include <engine.h>
 
+template <typename T> int sgn(T val) {
+    return (T(0) < val) - (val < T(0));
+}
+
 
 class CellularAutomataSystem {
 public:
@@ -15,6 +19,7 @@ public:
         const std::uniform_int_distribution<> distrib01(0, 1);
     	
         tiles_.resize(tilemapSize_.x * tilemapSize_.y);
+        waterPressure_.resize(tiles_.size());
 
         const alloy::math::uivec2 topLeft = { 0, 0 };
         const alloy::math::uivec2 bottomRight{ 100, 100 };
@@ -40,9 +45,13 @@ public:
         const std::uniform_int_distribution<> distrib0100(0, 100);
 
     	////Generate random water
-        for (int& tile : tiles_) {
-            if (tile == freeTile_ && distrib0100(gen) > 66) {
-                tile = waterTile_;
+        for (int index = 0; index < tiles_.size(); index++) {
+            if (tiles_[index] == freeTile_ && distrib0100(gen) > 66) {
+                waterPressure_[index] = defaultPressure_;
+            }else if(tiles_[index] == freeTile_){
+                waterPressure_[index] = 0;
+            }else {
+                waterPressure_[index] = invalidWaterPressure_; 
             }
         }
     	
@@ -55,9 +64,9 @@ public:
     }
 	
     void OnUpdate() {
-        timeBetweenUpdate++;
+        timeBetweenUpdate_++;
 
-    	if(timeBetweenUpdate < timeBetweenUpdateInMS_) {
+    	if(timeBetweenUpdate_ < timeBetweenUpdateInMS_) {
             return;
     	}
     	
@@ -78,7 +87,7 @@ public:
 
         alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tiles, topLeft, bottomRight);
 
-        timeBetweenUpdate = 0;
+        timeBetweenUpdate_ = 0;
     }
 
 private:
@@ -90,53 +99,261 @@ private:
         return coords.x * tilemapSize_.x + coords.y;
     }
 
+	/// <summary>
+	/// Update take place on a second tileset, then they are swa, tiles updates only themselves 
+	/// 1. Go Down
+	/// 2. Flow Left / Right
+	/// 3. Get from up
+	/// </summary>
 	void UpdateWater() {
-        std::vector<int> nextStep;
-        nextStep.reserve(tiles_.size());
-        nextStep.insert(nextStep.begin(), tiles_.begin(), tiles_.end());
+        std::vector<int> nextStepPressure;
+        nextStepPressure.reserve(waterPressure_.size());
+        nextStepPressure.insert(nextStepPressure.begin(), waterPressure_.begin(), waterPressure_.end());
     	
-        for (auto index = 0; index < tiles_.size(); index++) {
-            if(tiles_[index] == waterTile_) {
-                const auto coord = IndexToCoords(index);
-            	
-	            //Check can fall down
-                const auto downCoords = coord + alloy::math::ivec2{ 0, 1 };
-                if (downCoords.y >= 0 && downCoords.y < tilemapSize_.y) {
-                    const int downIndex = CoordsToIndex(downCoords);
-                    if (tiles_[downIndex] == freeTile_) {
-                        nextStep[index] = freeTile_;
-                        nextStep[downIndex] = waterTile_;
-                        continue;
-                    }
+        for (auto index = 0; index < waterPressure_.size(); index++) {
+        	//TODO optimisation needed, because every tiles is updated
+            if(waterPressure_[index] != invalidWaterPressure_) {
+                const auto coords = IndexToCoords(index);
 
-                    //Check can go left down
-                    const auto downLeftCoords = coord + alloy::math::ivec2{ -1, 1 };
-                    if (downLeftCoords.x >= 0 && downLeftCoords.x < tilemapSize_.x) {
-                        const int leftIndex = CoordsToIndex(downLeftCoords);
-                        if (tiles_[leftIndex] == freeTile_) {
-                            nextStep[index] = freeTile_;
-                            nextStep[leftIndex] = waterTile_;
-                            continue;
-                        }
-                    }
+	            //1. Check can fall down
+                if (waterPressure_[index] > 0) {
+                    const auto downCoords = coords + alloy::math::ivec2{ 0, 1 };
+                    if (downCoords.y < tilemapSize_.y) {
+                        const int downIndex = CoordsToIndex(downCoords);
 
-                    //Check can go right
-                    const auto downRightCoords = coord + alloy::math::ivec2{ 1, 1 };
-                    if (downRightCoords.x >= 0 && downRightCoords.x < tilemapSize_.x) {
-	                    const int rightIndex = CoordsToIndex(downRightCoords);
-                        if (tiles_[rightIndex] == freeTile_) {
-                            nextStep[index] = freeTile_;
-                            nextStep[rightIndex] = waterTile_;
-                            continue;
+                        //Water pressure under bust be less than max and not equal to invalidWaterPressure
+                        if (waterPressure_[downIndex] != invalidWaterPressure_ && waterPressure_[downIndex] < defaultPressure_) {
+                            nextStepPressure[index] -= std::min(waterPressure_[index], defaultPressure_ - waterPressure_[downIndex]);
                         }
                     }
                 }
 
+            	if(nextStepPressure[index] < 0) {
+                    alloy::debug::LogError("negativePressure");
+            	}
+
+				//3. Get water from top
+                //If tile is full, no need to go further
+            	if(waterPressure_[index] == defaultPressure_) {
+                    continue;
+            	}
+
+                const auto upCoords = coords + alloy::math::ivec2{ 0, -1 };
+                if (upCoords.y >= 0) {
+                    const int upIndex = CoordsToIndex(upCoords);
+                    if (waterPressure_[upIndex] > 0) {
+                        nextStepPressure[index] += std::min(waterPressure_[upIndex], defaultPressure_ - waterPressure_[index]);
+                    }
+                }
+
+                if (nextStepPressure[index] > defaultPressure_) {
+                    alloy::debug::LogError("max pressure >");
+                }
             }
         }
 
-        tiles_.clear();
-        tiles_.insert(tiles_.begin(), nextStep.begin(), nextStep.end());
+        waterPressure_.clear();
+        waterPressure_.insert(waterPressure_.begin(), nextStepPressure.begin(), nextStepPressure.end());
+
+        for (auto index = 0; index < nextStepPressure.size(); index++) {
+            //TODO optimisation needed, because every tiles is updated
+            if (nextStepPressure[index] != invalidWaterPressure_) {
+                const auto coords = IndexToCoords(index);
+
+                int diff = 0;
+            	
+            	//Check left
+                const auto leftCoords = coords + alloy::math::ivec2{-1, 0};
+            	if(leftCoords.x >= 0 && leftCoords.x < tilemapSize_.x) {
+                    const int leftIndex = CoordsToIndex(leftCoords);
+                    if (waterPressure_[leftIndex] != invalidWaterPressure_) {
+                        int equilibrium = std::floor((waterPressure_[leftIndex] + waterPressure_[index]) * 0.5f);
+                    	int leftDiff = std::min(std::abs(equilibrium - waterPressure_[index]), std::abs(waterPressure_[leftIndex] - equilibrium)) * sgn(equilibrium - waterPressure_[index]);
+                        //alloy::debug::Log("left[" + std::to_string(waterPressure_[leftIndex]) + "], Index[" + std::to_string(waterPressure_[index]) + "] => equilibrium: " + std::to_string(equilibrium) + ", diff : " + std::to_string(leftDiff));
+
+                    	diff += leftDiff;
+                    }
+            	}
+
+                const auto rightCoords = coords + alloy::math::ivec2{ 1, 0 };
+                if (rightCoords.x >= 0 && rightCoords.x < tilemapSize_.x) {
+                    const int rightIndex = CoordsToIndex(rightCoords);
+                    if (waterPressure_[rightIndex] != invalidWaterPressure_) {
+                        int equilibrium = std::floor((waterPressure_[rightIndex] + waterPressure_[index]) * 0.5f);
+                        int rightDiff = std::min(std::abs(equilibrium - waterPressure_[index]), std::abs(waterPressure_[rightIndex] - equilibrium)) * sgn(equilibrium - waterPressure_[index]);
+                        //alloy::debug::Log("right[" + std::to_string(waterPressure_[rightIndex]) + "], Index[" + std::to_string(waterPressure_[index]) + "] => equilibrium: " + std::to_string(equilibrium) + ", diff : " + std::to_string(rightDiff));
+                        diff += rightDiff;
+                    }
+                }
+
+                nextStepPressure[index] += diff;
+
+                if (nextStepPressure[index] > defaultPressure_) {
+                    alloy::debug::LogError("> default pressure");
+                }
+            }
+        }
+        
+        waterPressure_.clear();
+        waterPressure_.insert(waterPressure_.begin(), nextStepPressure.begin(), nextStepPressure.end());
+
+        std::vector<int> previousTiles;
+        previousTiles.reserve(tiles_.size());
+        previousTiles.insert(previousTiles.begin(), tiles_.begin(), tiles_.end());
+
+        int totalPressure = 0;
+    	for(auto index = 0; index < waterPressure_.size(); index++) {
+            totalPressure += waterPressure_[index];
+    		if(waterPressure_[index] > defaultPressure_) {
+                tiles_[index] = 0;
+    		} else if (waterPressure_[index] <= defaultPressure_ && waterPressure_[index] >= defaultPressure_ * 0.5f) {
+                tiles_[index] = waterTile_;
+    		} else if(waterPressure_[index] < defaultPressure_ * 0.5f && waterPressure_[index] > 0) {
+                tiles_[index] = waterTile_ - 1;
+    		} else if(waterPressure_[index] == invalidWaterPressure_){
+                tiles_[index] = previousTiles[index];
+    		}else {
+                tiles_[index] = freeTile_;
+    		}
+    	}
+        alloy::debug::Log(std::to_string(totalPressure));
+    }
+
+	//Update take place on the same tiles
+	//1. Go Down
+	//2. Go Down Left / Down Right
+	//3. Go Left / Right
+	void UpdateWater1() {
+    	//TODO Each cell must handle taking and giving water!!!
+        //std::vector<int> nextStep;
+        //nextStep.reserve(waterPressure_.size());
+        //nextStep.insert(nextStep.begin(), waterPressure_.begin(), waterPressure_.end());
+    	
+    	//Move water following pressure
+        for (auto index = 0; index < waterPressure_.size(); index++) {
+            if(waterPressure_[index] > 0) {
+                const auto coords = IndexToCoords(index);
+            	
+	            //Check can fall down
+                const auto downCoords = coords + alloy::math::ivec2{ 0, 1 };
+                if (downCoords.y >= 0 && downCoords.y < tilemapSize_.y) {
+                    const int downIndex = CoordsToIndex(downCoords);
+                    if (waterPressure_[downIndex] >= 0 && waterPressure_[downIndex] < waterPressure_[index]) {
+                        if (waterPressure_[downIndex] <= defaultPressure_) { //Transfert all the water
+                            const auto diff = std::min(waterPressure_[index], defaultPressure_ - waterPressure_[downIndex]);
+                            waterPressure_[index] = waterPressure_[index] - diff;
+                            waterPressure_[downIndex] = waterPressure_[downIndex] + diff;
+                            continue;
+                        } 
+                    }
+                    
+                    //Check can go left down
+                    const auto downLeftCoords = coords + alloy::math::ivec2{ -1, 1 };
+                   
+                    if (downLeftCoords.x >= 0 ) {
+                        const auto leftIndex = CoordsToIndex(downLeftCoords);
+                        if (waterPressure_[leftIndex] >= 0 && waterPressure_[leftIndex] < waterPressure_[index]) {
+                            if (waterPressure_[leftIndex] <= defaultPressure_) {
+                                const auto diff = std::min(waterPressure_[index], defaultPressure_ - waterPressure_[leftIndex]);
+                                waterPressure_[index] = waterPressure_[index] - diff;
+                                waterPressure_[leftIndex] = waterPressure_[leftIndex] + diff;
+                                continue;
+                            }
+                        }
+                    }
+
+                    ////Check can go right
+                    const auto downRightCoords = coords + alloy::math::ivec2{ 1, 1 };
+                    if (downRightCoords.x < tilemapSize_.x) {
+	                    const auto rightIndex = CoordsToIndex(downRightCoords);
+                        if (waterPressure_[rightIndex] >= 0 && waterPressure_[rightIndex] < waterPressure_[index]) {
+                            if (waterPressure_[rightIndex] <= defaultPressure_) {
+                                const auto diff = std::min(waterPressure_[index], defaultPressure_ - waterPressure_[rightIndex]);
+                                waterPressure_[index] = waterPressure_[index] - diff;
+                                waterPressure_[rightIndex] = waterPressure_[rightIndex] + diff;
+                                continue;
+                            }
+                        }
+                    }
+
+                }
+
+                //Check can go left 
+                const auto leftCoords = coords + alloy::math::ivec2{ -1, 0 };
+                bool transfertLeft = false;
+                int leftIndex = 0;
+                if (leftCoords.x >= 0 && leftCoords.x < tilemapSize_.x) {
+                    leftIndex = CoordsToIndex(leftCoords);
+                    if (waterPressure_[leftIndex] >= 0 && waterPressure_[leftIndex] < waterPressure_[index]) {
+                        if (waterPressure_[leftIndex] <= defaultPressure_) {
+                            transfertLeft = true;
+                        }
+                    }
+                }
+
+                //Check can go right 
+                const auto rightCoords = coords + alloy::math::ivec2{ 1, 0 };
+                bool transfertRight = false;
+                int rightIndex = 0;
+                if (rightCoords.x >= 0 && rightCoords.x < tilemapSize_.x) {
+                    rightIndex = CoordsToIndex(rightCoords);
+                    if (waterPressure_[rightIndex] >= 0 && waterPressure_[rightIndex] < waterPressure_[index]) {
+                        if (waterPressure_[rightIndex] <= defaultPressure_) {
+                            transfertRight = true;
+                        }
+                    }
+                }
+
+                if (transfertLeft && transfertRight) {
+                    const int total = waterPressure_[leftIndex] + waterPressure_[index] + waterPressure_[rightIndex];
+                    const int third = std::floor(total / 3.0f);
+                    const int remaining = total - third * 3;
+
+                    waterPressure_[index] = third + remaining;
+                    waterPressure_[leftIndex] = third;
+                    waterPressure_[rightIndex] = third;
+                }
+                else if (transfertLeft) {
+                    const int total = waterPressure_[leftIndex] + waterPressure_[index];
+                    const int half = std::floor(total * 0.5f);
+                    const int remaining = total - half * 2;
+
+                    waterPressure_[index] = half + remaining;
+                    waterPressure_[leftIndex] = half;
+                }
+                else if (transfertRight) {
+                    const int total = waterPressure_[rightIndex] + waterPressure_[index];
+                    const int half = std::floor(total * 0.5f);
+                    const int remaining = total - half * 2;
+
+                    waterPressure_[index] = half + remaining;
+                    waterPressure_[rightIndex] = half;
+                }
+            }
+        }
+        
+    std::vector<int> previousTiles;
+    previousTiles.reserve(tiles_.size());
+    previousTiles.insert(previousTiles.begin(), tiles_.begin(), tiles_.end());
+
+    for (auto index = 0; index < waterPressure_.size(); index++) {
+        if (waterPressure_[index] > defaultPressure_) {
+            tiles_[index] = 0;
+        }
+        else if (waterPressure_[index] <= defaultPressure_ && waterPressure_[index] >= defaultPressure_ * 0.5f) {
+            tiles_[index] = waterTile_;
+        }
+        else if (waterPressure_[index] < defaultPressure_ * 0.5f && waterPressure_[index] > 0) {
+            tiles_[index] = waterTile_ - 1;
+        }
+        else if (waterPressure_[index] == -1) {
+            tiles_[index] = previousTiles[index];
+        }
+        else {
+            tiles_[index] = freeTile_;
+        }
+    }
+    //tiles_.insert(tiles_.begin(), nextStep.begin(), nextStep.end());
     }
 
 	void CellularStep() {
@@ -182,6 +399,8 @@ private:
 	
     std::vector<int> tiles_;
 
+    std::vector<int> waterPressure_;
+
     alloy::math::ivec2 tilemapSize_ {100, 100};
 
     std::array<alloy::math::ivec2, 8> neighborOffset_{ {
@@ -198,8 +417,10 @@ private:
     const int solidTile_ = 10;
     const int freeTile_ = 13;
     const int waterTile_ = 6;
-    const int timeBetweenUpdateInMS_ = 10;
-    int timeBetweenUpdate = 0;
+    const int timeBetweenUpdateInMS_ = 50;
+    const int defaultPressure_ = 10;
+    const int invalidWaterPressure_ = -1;
+    int timeBetweenUpdate_ = 0;
 };
 
 class CellularAutomata {

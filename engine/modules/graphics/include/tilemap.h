@@ -20,7 +20,7 @@ public:
 
 		//TODO remove magic number => 4 is equal to the number of vertex for a quad
 		tilesVertexArray_.setPrimitiveType(sf::Quads);
-		tilesVertexArray_.resize(nbTiles_.x * nbTiles_.y * 4);
+		tilesVertexArray_.resize(static_cast<std::size_t>(nbTiles_.x) * static_cast<std::size_t>(nbTiles_.y) * 4);
 		
 		for(int x = 0; x < nbTiles_.x; x++) {
 
