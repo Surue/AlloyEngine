@@ -119,7 +119,7 @@ private:
 
                 //1. Check can fall down
                 if (waterPressure_[index] > 0) {
-                    const auto downCoords = coords + alloy::math::ivec2{ 0, 1 };
+                    const auto downCoords = coords + alloy::math::ivec2::down;
                     if (downCoords.y < tilemapSize_.y) {
                         const int downIndex = CoordsToIndex(downCoords);
 
@@ -140,7 +140,7 @@ private:
                     continue;
                 }
 
-                const auto upCoords = coords + alloy::math::ivec2{ 0, -1 };
+                const auto upCoords = coords + alloy::math::ivec2::up;
                 if (upCoords.y >= 0) {
                     const int upIndex = CoordsToIndex(upCoords);
                     if (waterPressure_[upIndex] > 0) {
@@ -163,10 +163,10 @@ private:
                 const auto coords = IndexToCoords(index);
 
                 //Check down-left
-                const auto downLeftCoords = coords + alloy::math::ivec2{ -1, 1 };
+                const auto downLeftCoords = coords + alloy::math::ivec2::downLeft;
                 if (downLeftCoords.x >= 0 && downLeftCoords.x < tilemapSize_.x && downLeftCoords.y < tilemapSize_.y) {
-                    const auto leftCoords = coords + alloy::math::ivec2{ -1, 0 };
-                    const auto downCoords = coords + alloy::math::ivec2{ 0, 1 };
+                    const auto leftCoords = coords + alloy::math::ivec2::left;
+                    const auto downCoords = coords + alloy::math::ivec2::down;
                     const int downLeftIndex = CoordsToIndex(downLeftCoords);
                     const int leftIndex = CoordsToIndex(leftCoords);
                     const int downIndex = CoordsToIndex(downCoords);
@@ -181,10 +181,10 @@ private:
                 }
 
                 //Check up-right
-                const auto upRightCoords = coords + alloy::math::ivec2{ 1, -1 };
+                const auto upRightCoords = coords + alloy::math::ivec2::upRight;
                 if (upRightCoords.x >= 0 && upRightCoords.x < tilemapSize_.x && upRightCoords.y >= 0) {
-                    const auto rightCoords = coords + alloy::math::ivec2{ 1, 0 };
-                    const auto upCoords = coords + alloy::math::ivec2{ 0, -1 };
+                    const auto rightCoords = coords + alloy::math::ivec2::right;
+                    const auto upCoords = coords + alloy::math::ivec2::up;
                     const int upRightIndex = CoordsToIndex(upRightCoords);
                     const int rightIndex = CoordsToIndex(rightCoords);
                     const int upIndex = CoordsToIndex(upCoords);
@@ -208,10 +208,10 @@ private:
                 const auto coords = IndexToCoords(index);
 
                 //Check down-right
-                const auto downRightCoords = coords + alloy::math::ivec2{ 1, 1 };
+                const auto downRightCoords = coords + alloy::math::ivec2::downRight;
                 if (downRightCoords.x >= 0 && downRightCoords.x < tilemapSize_.x && downRightCoords.y < tilemapSize_.y) {
-                    const auto rightCoords = coords + alloy::math::ivec2{ 1, 0 };
-                    const auto downCoords = coords + alloy::math::ivec2{ 0, 1 };
+                    const auto rightCoords = coords + alloy::math::ivec2::right;
+                    const auto downCoords = coords + alloy::math::ivec2::down;
                     const int downRightIndex = CoordsToIndex(downRightCoords);
                     const int rightIndex = CoordsToIndex(rightCoords);
                     const int downIndex = CoordsToIndex(downCoords);
@@ -226,10 +226,10 @@ private:
                 }
 
                 //Check up-left
-                const auto upLeftCoords = coords + alloy::math::ivec2{ -1, -1 };
+                const auto upLeftCoords = coords + alloy::math::ivec2::upLeft;
                 if (upLeftCoords.x >= 0 && upLeftCoords.x < tilemapSize_.x && upLeftCoords.y >= 0) {
-                    const auto leftCoords = coords + alloy::math::ivec2{ -1, 0 };
-                    const auto upCoords = coords + alloy::math::ivec2{ 0, -1 };
+                    const auto leftCoords = coords + alloy::math::ivec2::left;
+                    const auto upCoords = coords + alloy::math::ivec2::up;
                     const int upLeftIndex = CoordsToIndex(upLeftCoords);
                     const int leftIndex = CoordsToIndex(leftCoords);
                     const int upIndex = CoordsToIndex(upCoords);
@@ -249,34 +249,32 @@ private:
     	
     	// fourth loop water move left/right
         for (auto index = 0; index < nextStepPressure.size(); index++) {
-            //TODO optimisation needed, because every tiles is updated
             if (nextStepPressure[index] != invalidWaterPressure_) {
                 const auto coords = IndexToCoords(index);
 
                 int diff = 0;
 
                 //Check left
-                const auto leftCoords = coords + alloy::math::ivec2{ -1, 0 };
+                const auto leftCoords = coords + alloy::math::ivec2::left;
                 if (leftCoords.x >= 0 && leftCoords.x < tilemapSize_.x) {
                     const int leftIndex = CoordsToIndex(leftCoords);
                     if (waterPressure_[leftIndex] != invalidWaterPressure_) {
                         int equilibrium = std::floor((waterPressure_[leftIndex] + waterPressure_[index]) * 0.5f);
                         int leftDiff = std::min(std::abs(equilibrium - waterPressure_[index]), std::abs(waterPressure_[leftIndex] - equilibrium)) * sgn(equilibrium - waterPressure_[index]);
-                        //alloy::debug::Log("left[" + std::to_string(waterPressure_[leftIndex]) + "], Index[" + std::to_string(waterPressure_[index]) + "] => equilibrium: " + std::to_string(equilibrium) + ", diff : " + std::to_string(leftDiff));
-
+                        
                         diff += leftDiff;
                     }
                 }
 
             	//Check right
-                const auto rightCoords = coords + alloy::math::ivec2{ 1, 0 };
+                const auto rightCoords = coords + alloy::math::ivec2::right;
                 if (rightCoords.x >= 0 && rightCoords.x < tilemapSize_.x) {
                     const int rightIndex = CoordsToIndex(rightCoords);
                     if (waterPressure_[rightIndex] != invalidWaterPressure_) {
                         int equilibrium = std::floor((waterPressure_[rightIndex] + waterPressure_[index]) * 0.5f);
                         int rightDiff = std::min(std::abs(equilibrium - waterPressure_[index]), std::abs(waterPressure_[rightIndex] - equilibrium)) * sgn(equilibrium - waterPressure_[index]);
-                        //alloy::debug::Log("right[" + std::to_string(waterPressure_[rightIndex]) + "], Index[" + std::to_string(waterPressure_[index]) + "] => equilibrium: " + std::to_string(equilibrium) + ", diff : " + std::to_string(rightDiff));
-                        diff += rightDiff;
+
+                    	diff += rightDiff;
                     }
                 }
 

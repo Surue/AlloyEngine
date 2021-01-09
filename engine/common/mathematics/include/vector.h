@@ -22,6 +22,10 @@ template <typename T> struct Vector2 {
 	const static Vector2 down;
 	const static Vector2 left;
 	const static Vector2 right;
+	const static Vector2 downRight;
+	const static Vector2 downLeft;
+	const static Vector2 upRight;
+	const static Vector2 upLeft;
 
 	Vector2() : x(0), y(0) {}
 
@@ -50,9 +54,13 @@ using uivec2 = Vector2<unsigned int>;
 
 template <typename T> inline Vector2<T> const Vector2<T>::zero = Vector2<T>(0, 0);
 template <typename T> inline Vector2<T> const Vector2<T>::one = Vector2<T>(1, 1);
-template <typename T> inline Vector2<T> const Vector2<T>::up = Vector2<T>(0, 1);
-template <typename T> inline Vector2<T> const Vector2<T>::down = Vector2<T>(0, -1);
+template <typename T> inline Vector2<T> const Vector2<T>::up = Vector2<T>(0, -1);
+template <typename T> inline Vector2<T> const Vector2<T>::down = Vector2<T>(0, 1);
 template <typename T> inline Vector2<T> const Vector2<T>::left = Vector2<T>(-1, 0);
 template <typename T> inline Vector2<T> const Vector2<T>::right = Vector2<T>(1, 0);
+template <typename T> inline Vector2<T> const Vector2<T>::downRight = down + right;
+template <typename T> inline Vector2<T> const Vector2<T>::downLeft = down + left;
+template <typename T> inline Vector2<T> const Vector2<T>::upRight = up + right;
+template <typename T> inline Vector2<T> const Vector2<T>::upLeft = up + left;
 } //namespace math
 } //namespace alloy
