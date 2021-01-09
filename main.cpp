@@ -3,6 +3,7 @@
 
 
 #include <vector.h>
+#include <chronometer.h>
 
 #include <engine.h>
 
@@ -78,7 +79,9 @@ public:
         alloy::graphics::Tile baseTile = alloy::graphics::Tile(alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
         std::vector<alloy::graphics::Tile> tiles(nbTiles, baseTile);
 
+        alloy::time::Chronometer chronometer;
         UpdateWater();
+        alloy::debug::Log(std::to_string(chronometer.GetTimeMicro()) + "ms");
 
         //Fill tiles sprites
         for (auto i = 0; i < tiles.size(); i++) {
