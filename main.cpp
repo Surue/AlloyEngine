@@ -174,10 +174,10 @@ private:
 	            }
             }
             
-            /*if (remainingPressure < minPressure_) {
-                diffs[index] -= remainingPressure;
+            if (remainingPressure < minPressure_) {
+                //diffs[index] -= remainingPressure;
                 continue;
-            }*/
+            }
         	
             //2. Equalize left  
         	
@@ -208,10 +208,10 @@ private:
 	            }
             }
 
-            /*if (remainingPressure < minPressure_) {
-                diffs[index] -= remainingPressure;
+            if (remainingPressure < minPressure_) {
+                //diffs[index] -= remainingPressure;
                 continue;
-            }*/
+            }
 
             //2. Equalize right  
 
@@ -242,18 +242,16 @@ private:
                 }
             }
 
-            /*if (remainingPressure < minPressure_) {
-                diffs[index] -= remainingPressure;
+            if (remainingPressure < minPressure_) {
+                //diffs[index] -= remainingPressure;
                 continue;
-            }*/
+            }
 
         	// 4. Flow upwards
 
             const auto upCoords = coords + alloy::math::ivec2::up;
-        	
-            if (upCoords.y <= 0) {
-
-                const int upIndex = CoordsToIndex(rightCoords);
+            if (upCoords.y >= 0) {
+                const int upIndex = CoordsToIndex(upCoords);
 
                 if (tileStates_[upIndex] != TileState::SOLID) {
 
@@ -265,7 +263,7 @@ private:
                     flow = std::max(flow, 0.0f);
                     if (flow > std::min(maxFlow_, remainingPressure))
                         flow = std::min(maxFlow_, remainingPressure);
-
+                	
                     // Adjust values
                     if (flow != 0.0f) {
                         remainingPressure -= flow;
@@ -275,10 +273,10 @@ private:
                 }
             }
 
-            /*if (remainingPressure < minPressure_) {
-                diffs[index] -= remainingPressure;
+            if (remainingPressure < minPressure_) {
+                //diffs[index] -= remainingPressure;
                 continue;
-            }*/
+            }
         }
 
     	//Update diff
