@@ -112,5 +112,4 @@ inline void LogWarning(const std::string_view msg, const LogType type = LogType:
 inline void LogError(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
 	LogIntern(msg.data(), type, LogSeverity::ERROR);
 }
-
 }

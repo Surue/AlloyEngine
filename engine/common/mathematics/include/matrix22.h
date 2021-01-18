@@ -1,8 +1,10 @@
-#include "vector.h"
+#pragma once
 
-namespace alloy{
+#include <vector.h>
+
+namespace alloy::math{
 class Matrix22{
 public:
-    Vector2<float> col1;
+	fvec2 col1;
 };
-} //namespace alloy
+}

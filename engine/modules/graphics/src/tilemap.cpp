@@ -38,4 +38,31 @@ void Tilemap::Init() {
 	}
 
 }
+
+void Tilemap::Draw(sf::RenderTarget& target) const {
+	sf::RenderStates renderStates;
+
+	renderStates.transform = sf::Transform::Identity;
+	renderStates.texture = &tileSet_.GetSfTexture();
+
+	target.draw(tilesVertexArray_, renderStates);
+}
+
+void Tilemap::UpdateChunk(const std::vector<Tile>& tiles, const math::uivec2 topLeft, const math::uivec2 bottomRight) {
+	int index = 0;
+	for (auto x = topLeft.x; x < bottomRight.x; x++) {
+		for (auto y = topLeft.y; y < bottomRight.y; y++) {
+			auto* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * 4];
+
+			const auto& texCoords = tiles[index].GetTextureCoordsInPixel();
+
+			tileQuad[0].texCoords = sf::Vector2f(texCoords[0].x, texCoords[0].y);
+			tileQuad[1].texCoords = sf::Vector2f(texCoords[1].x, texCoords[1].y);
+			tileQuad[2].texCoords = sf::Vector2f(texCoords[2].x, texCoords[2].y);
+			tileQuad[3].texCoords = sf::Vector2f(texCoords[3].x, texCoords[3].y);
+
+			index++;
+		}
+	}
+}
 }

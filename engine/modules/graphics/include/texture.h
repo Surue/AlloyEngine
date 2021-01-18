@@ -4,8 +4,7 @@
 
 #include <vector.h>
 
-namespace alloy {
-namespace graphics {
+namespace alloy::graphics {
 
 struct TextureCoordsInPixel {
 
@@ -58,7 +57,7 @@ public:
 	/// Load the texture with the given filepath
 	/// </summary>
 	/// <param name="filePath"></param>
-	/// <returns>True if the loading was succesfull</returns>
+	/// <returns>True if the loading was successful</returns>
 	bool Load(const std::string_view filePath);
 
 	const sf::Texture& GetSfTexture() const {
@@ -73,39 +72,15 @@ public:
 	/// Return the size of a tile in the texture. If the mode is set to single, return the size of the whole texture
 	/// </summary>
 	/// <returns></returns>
-	math::uivec2 GetTileSize() const {
-		if(mode_ == TextureMode::SINGLE) {
-			const auto size = texture_.getSize();
-			return {size.x, size.y};
-		} else {
-			const auto totalSize = texture_.getSize();
-			return { totalSize.x / tileNb_.x, totalSize.y / tileNb_.y };
-		}
-	}
+	math::uivec2 GetTileSize() const;
 
 	/// <summary>
 	/// Return the size of the texture
 	/// </summary>
 	/// <returns></returns>
-	math::uivec2 GetTextureSize() const {
-		const auto size = texture_.getSize();
-		return { size.x, size.y };
-	}
+	math::uivec2 GetTextureSize() const;
 
-	TextureCoordsInPixel GetTextureCoordInPixel(const int textureIndex) const {
-		const auto totalSize = texture_.getSize();
-		const math::uivec2 size = math::uivec2(totalSize.x, totalSize.y) / tileNb_;
-
-		const auto coordTile = TextureIndexToTileCoords(textureIndex);
-
-		TextureCoordsInPixel coord;
-		coord.topLeft = math::ivec2( coordTile.x * size.x,coordTile.y * size.y);
-		coord.topRight = math::ivec2((coordTile.x + 1) * size.x,coordTile.y * size.y);
-		coord.bottomRight = math::ivec2((coordTile.x + 1) * size.x,(coordTile.y + 1) * size.y);
-		coord.bottomLeft = math::ivec2(coordTile.x * size.x,(coordTile.y + 1) * size.y);
-
-		return coord;
-	}
+	TextureCoordsInPixel GetTextureCoordInPixel(const int textureIndex) const;
 
 	math::uivec2 TextureIndexToTileCoords(const int index) const {
 		return { index % tileNb_.x, index / tileNb_.x };
@@ -118,5 +93,4 @@ private:
 
 	math::uivec2 tileNb_;
 };
-} //namespace graphics
-} //namespace alloy
+}

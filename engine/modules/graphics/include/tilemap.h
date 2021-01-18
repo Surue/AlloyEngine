@@ -15,32 +15,9 @@ public:
 
 	void Init();
 
-	void Draw(sf::RenderTarget& target) const {
-		sf::RenderStates renderStates;
+	void Draw(sf::RenderTarget& target) const;
 
-		renderStates.transform = sf::Transform::Identity;
-		renderStates.texture = &tileSet_.GetSfTexture();
-		
-		target.draw(tilesVertexArray_, renderStates);
-	}
-
-	void UpdateChunk(const std::vector<Tile>& tiles, const math::uivec2 topLeft, const math::uivec2 bottomRight) {
-		int index = 0;
-		for(int x = topLeft.x; x < bottomRight.x; x++) {
-			for(int y = topLeft.y; y < bottomRight.y; y++){
-				sf::Vertex* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * 4];
-
-				const auto& texCoords = tiles[index].GetTextureCoordsInPixel();
-
-				tileQuad[0].texCoords = sf::Vector2f(texCoords[0].x, texCoords[0].y);
-				tileQuad[1].texCoords = sf::Vector2f(texCoords[1].x, texCoords[1].y);
-				tileQuad[2].texCoords = sf::Vector2f(texCoords[2].x, texCoords[2].y);
-				tileQuad[3].texCoords = sf::Vector2f(texCoords[3].x, texCoords[3].y);
-
-				index++;
-			}
-		}
-	}
+	void UpdateChunk(const std::vector<Tile>& tiles, math::uivec2 topLeft, math::uivec2 bottomRight);
 
 	const Texture& GetTileset() const {
 		return tileSet_;

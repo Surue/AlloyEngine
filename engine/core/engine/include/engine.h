@@ -6,7 +6,6 @@
 #include <graphics_engine.h>
 
 #include <input_manager.h>
-#include <iostream>
 
 namespace alloy {
 struct EngineInitSettings {

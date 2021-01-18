@@ -36,21 +36,14 @@ public:
 		
 	}
 
-	void Init() {
-		tilemap_.Init();
-	}
-	
-	const Tilemap& GetTilemap() const override {
-		return tilemap_;
-	}
+	void Init() override;
 
-	void UpdateChunk(const std::vector<Tile>& tiles, const math::uivec2 topLeft, const math::uivec2 bottomRight) {
-		tilemap_.UpdateChunk(tiles, topLeft, bottomRight);
-	}
+	const Tilemap& GetTilemap() const override;
 
-	void Draw(sf::RenderTarget& target) const {
-		tilemap_.Draw(target);
-	}
+	void UpdateChunk(const std::vector<Tile>& tiles, math::uivec2 topLeft,
+	                 math::uivec2 bottomRight) override;
+
+	void Draw(sf::RenderTarget& target) const override;
 private:
 	Tilemap tilemap_;
 };

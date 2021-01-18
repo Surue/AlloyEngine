@@ -2,8 +2,7 @@
 
 #include <texture.h>
 
-namespace alloy {
-namespace graphics {
+namespace alloy::graphics {
 class Tile {
 public:
 	Tile(const Texture& tileset, const int textureIndex) :
@@ -26,5 +25,4 @@ private:
 
 	TextureCoordsInPixel textureCoords_;
 };
-} //namespace graphics
-} //namespace alloy
+} 

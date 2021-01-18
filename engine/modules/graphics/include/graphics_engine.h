@@ -6,9 +6,6 @@
 #include <SFML/Graphics.hpp>
 
 #include <vector.h>
-
-#include <texture.h>
-
 #include <tilemap_manager.h>
 
 namespace alloy {
@@ -26,32 +23,9 @@ public:
 		ServiceTilemapManager::Assign(&tilemapManager_);
 	}
 
-	//TODO remove
-	Texture texture;
-	sf::Sprite sprite;
-	
-	void Init() {
-		window_.Init();
-		tilemapManager_.Init();
+	void Init();
 
-		//TODO remove
-		texture.Load("data/sprites/policeman.png");
-		sprite.setTexture(texture.GetSfTexture());
-	}
-
-
-	void Update() {
-		//Clear windows
-		window_.Clear();
-		
-		//Draw everything
-
-		//window_.Draw(sprite);
-		tilemapManager_.Draw(window_.GetRenderTarget());
-		
-		//Display
-		window_.Display();
-	}
+	void Update();
 
 	bool IsWindowOpen() {
 		return window_.IsOpen();
