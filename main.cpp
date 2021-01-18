@@ -77,6 +77,8 @@ public:
     }
 	
     void OnUpdate() {
+    	
+    	//Update Water
         timeBetweenUpdate_++;
 
     	if(timeBetweenUpdate_ < timeBetweenUpdateInMS_) {
@@ -94,7 +96,7 @@ public:
     	//Update water and compute time
         alloy::time::Chronometer chronometer;
         UpdateWater();
-        alloy::debug::Log(std::to_string(chronometer.GetTimeMicro()) + "ms");
+        //alloy::debug::Log(std::to_string(chronometer.GetTimeMicro()) + "ms");
 
         //Fill tiles sprites
         for (auto i = 0; i < tiles.size(); i++) {
@@ -290,28 +292,31 @@ private:
         	
             totalPressure += waterPressure_[index];
         	
-            if (waterPressure_[index] <= maxPressure_ && waterPressure_[index] >= maxPressure_ * 0.5f) {
-                tiles_[index] = waterTile_;
-                tileStates_[index] = TileState::LIQUID;
-            }
-            else if (waterPressure_[index] < maxPressure_ * 0.5f && waterPressure_[index] > 0) {
-                tiles_[index] = waterTile_ - 1;
-                tileStates_[index] = TileState::LIQUID;
-            }
-            else { //Air
+            if (waterPressure_[index] <= 0) { //Air
                 tiles_[index] = freeTile_;
                 tileStates_[index] = TileState::AIR;
+            }else  if (waterPressure_[index] <= maxPressure_ * 0.5f) {
+                tiles_[index] = waterTile1_;
+                tileStates_[index] = TileState::LIQUID;
             }
-
-            //Error checks
-            if (waterPressure_[index] > maxPressure_) {
-                tiles_[index] = 0; //Error color
+            else if (waterPressure_[index] <= maxPressure_) {
+                tiles_[index] = waterTile2_;
+                tileStates_[index] = TileState::LIQUID;
             }
-            else if (waterPressure_[index] < 0) {
-                tiles_[index] = 1; //Error color
+            else if (waterPressure_[index] <= maxPressure_ + maxCompression_) {
+                tiles_[index] = waterTile3_;
+                tileStates_[index] = TileState::LIQUID;
+            }
+            else if (waterPressure_[index] <= maxPressure_ + 2 * maxCompression_) {
+                tiles_[index] = waterTile4_;
+                tileStates_[index] = TileState::LIQUID;
+            }
+            else if (waterPressure_[index] > maxPressure_ + 2 * maxCompression_) {
+                tiles_[index] = waterTile5_;
+                tileStates_[index] = TileState::LIQUID;
             }
         }
-        alloy::debug::Log(std::to_string(totalPressure));
+        //alloy::debug::Log(std::to_string(totalPressure));
     }
 
     /// <summary>
@@ -485,10 +490,10 @@ private:
                 tiles_[index] = 0; //Error color
             }
             else if (waterPressure_[index] <= maxPressure_ && waterPressure_[index] >= maxPressure_ * 0.5f) {
-                tiles_[index] = waterTile_;
+                tiles_[index] = waterTile1_;
             }
             else if (waterPressure_[index] < maxPressure_ * 0.5f && waterPressure_[index] > 0) {
-                tiles_[index] = waterTile_ - 1;
+                tiles_[index] = waterTile2_;
             }
             else if (waterPressure_[index] == invalidWaterPressure_) {
                 tiles_[index] = nextStepPressure[index];
@@ -497,7 +502,7 @@ private:
                 tiles_[index] = freeTile_;
             }
         }
-        alloy::debug::Log(std::to_string(totalPressure));
+        //alloy::debug::Log(std::to_string(totalPressure));
     }
 
 	/// <summary>
@@ -531,7 +536,7 @@ private:
                 }
 
             	if(nextStepPressure[index] < 0) {
-                    alloy::debug::LogError("negativePressure");
+                    //alloy::debug::LogError("negativePressure");
             	}
 
 				//3. Get water from top
@@ -549,7 +554,7 @@ private:
                 }
 
                 if (nextStepPressure[index] > maxPressure_) {
-                    alloy::debug::LogError("max pressure >");
+                    //alloy::debug::LogError("max pressure >");
                 }
             }
         }
@@ -591,7 +596,7 @@ private:
                 nextStepPressure[index] += diff;
 
                 if (nextStepPressure[index] > maxPressure_) {
-                    alloy::debug::LogError("> default pressure");
+                    //alloy::debug::LogError("> default pressure");
                 }
             }
         }
@@ -609,16 +614,16 @@ private:
     		if(waterPressure_[index] > maxPressure_) {
                 tiles_[index] = 0;
     		} else if (waterPressure_[index] <= maxPressure_ && waterPressure_[index] >= maxPressure_ * 0.5f) {
-                tiles_[index] = waterTile_;
+                tiles_[index] = waterTile1_;
     		} else if(waterPressure_[index] < maxPressure_ * 0.5f && waterPressure_[index] > 0) {
-                tiles_[index] = waterTile_ - 1;
+                tiles_[index] = waterTile2_;
     		} else if(waterPressure_[index] == invalidWaterPressure_){
                 tiles_[index] = previousTiles[index];
     		}else {
                 tiles_[index] = freeTile_;
     		}
     	}
-        alloy::debug::Log(std::to_string(totalPressure));
+        //alloy::debug::Log(std::to_string(totalPressure));
     }
 
 	//Update take place on the same tiles
@@ -744,10 +749,10 @@ private:
             tiles_[index] = 0;
         }
         else if (waterPressure_[index] <= maxPressure_ && waterPressure_[index] >= maxPressure_ * 0.5f) {
-            tiles_[index] = waterTile_;
+            tiles_[index] = waterTile1_;
         }
         else if (waterPressure_[index] < maxPressure_ * 0.5f && waterPressure_[index] > 0) {
-            tiles_[index] = waterTile_ - 1;
+            tiles_[index] = waterTile2_;
         }
         else if (waterPressure_[index] == -1) {
             tiles_[index] = previousTiles[index];
@@ -760,7 +765,7 @@ private:
     }
 
 	void CellularStep() {
-        alloy::debug::Log("Step");
+        //alloy::debug::Log("Step");
         std::vector<int> nextStep;
         nextStep.reserve(tiles_.size());
         nextStep.insert(nextStep.begin(), tiles_.begin(), tiles_.end());
@@ -825,9 +830,16 @@ private:
         { 1, 1 }
     } };
 
+	//Tiles indexs
     const int solidTile_ = 10;
     const int freeTile_ = 13;
-    const int waterTile_ = 6;
+	
+    const int waterTile1_ = 0;
+    const int waterTile2_ = 1;
+    const int waterTile3_ = 2;
+    const int waterTile4_ = 3;
+    const int waterTile5_ = 4;
+	
     const int timeBetweenUpdateInMS_ = 50;
     const float maxPressure_ = 1.0f;
     const float maxCompression_ = 0.25f;
