@@ -7,10 +7,9 @@
 
 #include <vector.h>
 
-#include "texture.h"
-#include <tilemap.h>
+#include <texture.h>
 
-#include "tilemap_manager.h"
+#include <tilemap_manager.h>
 
 namespace alloy {
 namespace graphics {

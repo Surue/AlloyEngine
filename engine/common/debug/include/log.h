@@ -5,8 +5,7 @@
 #include <chrono>
 #include <iomanip>
 
-namespace alloy {
-namespace debug {
+namespace alloy::debug {
 enum class LogSeverity : uint8_t {
 	NORMAL = 0,
 	WARNING,
@@ -44,7 +43,8 @@ inline std::string LogTypeToString(const LogType type) {
 		return "Physics";
 	case LogType::GAMEPLAY:
 		return "Gameplay";
-	default: ;
+	default: 
+		return "";
 	}
 
 	return "";
@@ -113,5 +113,4 @@ inline void LogError(const std::string_view msg, const LogType type = LogType::G
 	LogIntern(msg.data(), type, LogSeverity::ERROR);
 }
 
-} //namespace debug
-} //namespace alloy
+}
