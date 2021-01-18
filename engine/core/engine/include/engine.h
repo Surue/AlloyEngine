@@ -2,11 +2,11 @@
 
 #include <string_view>
 #include <vector.h>
-#include <log.h>
 
 #include <graphics_engine.h>
 
 #include <input_manager.h>
+#include <iostream>
 
 namespace alloy {
 struct EngineInitSettings {
@@ -35,13 +35,26 @@ public:
         while (isRunning_)
         {
 
-	        for (auto callbackUpdate : callbackUpdate_) {
+			//Update every systems
+	        for (const auto& callbackUpdate : callbackUpdate_) {
 				callbackUpdate();
 	        }
         	
 			//Update every systems
 			graphicsEngine_.Update();
 			inputManager_.Update();
+
+        	if(inputManager_.IsKeyDown(inputs::KeyCode::A)) {
+				std::cout << "A is down\n";
+        	}
+
+			if (inputManager_.IsKeyHeld(inputs::KeyCode::A)) {
+				std::cout << "A is held\n";
+			}
+
+			if (inputManager_.IsKeyUp(inputs::KeyCode::A)) {
+				std::cout << "A is up\n";
+			}
         	
             if(!graphicsEngine_.IsWindowOpen()) {
 				isRunning_ = false;
