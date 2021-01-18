@@ -19,7 +19,8 @@ public:
 	Engine(const EngineInitSettings& initSettings):
 		isRunning_(false),
 		graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
-		inputManager_(graphicsEngine_){
+		inputManager_(graphicsEngine_) {
+		inputs::ServiceInputManager::Assign(&inputManager_);
 	}
 
 	void Init() {
@@ -43,18 +44,6 @@ public:
 			//Update every systems
 			graphicsEngine_.Update();
 			inputManager_.Update();
-
-        	if(inputManager_.IsKeyDown(inputs::KeyCode::A)) {
-				std::cout << "A is down\n";
-        	}
-
-			if (inputManager_.IsKeyHeld(inputs::KeyCode::A)) {
-				std::cout << "A is held\n";
-			}
-
-			if (inputManager_.IsKeyUp(inputs::KeyCode::A)) {
-				std::cout << "A is up\n";
-			}
         	
             if(!graphicsEngine_.IsWindowOpen()) {
 				isRunning_ = false;

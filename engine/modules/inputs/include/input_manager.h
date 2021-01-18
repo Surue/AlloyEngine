@@ -2,6 +2,8 @@
 #include <functional>
 #include <SFML/Graphics.hpp>
 
+#include <service_locator.h>
+
 //TODO the input manager cannot know what is the graphic engine
 namespace alloy::graphics {
 	class GraphicsEngine;
@@ -122,7 +124,49 @@ enum class KeyState : uint8_t
 	UP,
 };
 
-class InputManager {
+class InputManagerBase {
+public:
+	virtual void Init() = 0;
+
+	virtual void SetCallbackCloseWindow(const std::function<void()>& callback) = 0;
+
+	virtual void Update() = 0;
+
+	virtual bool IsKeyDown(KeyCode keyCode) const = 0;
+
+	virtual bool IsKeyUp(KeyCode keyCode) const = 0;
+
+	virtual bool IsKeyHeld(KeyCode keyCode) const = 0;
+};
+
+class InputManagerNull : public InputManagerBase {
+public:
+	void Init() override {
+		
+	}
+
+	void SetCallbackCloseWindow(const std::function<void()>& callback) override {
+		
+	}
+
+	void Update() override {
+		
+	}
+
+	bool IsKeyDown(KeyCode keyCode) const override {
+		return false;
+	}
+
+	bool IsKeyUp(KeyCode keyCode) const override {
+		return false;
+	}
+
+	bool IsKeyHeld(KeyCode keyCode) const override {
+		return false;
+	};
+};
+
+class InputManager : public InputManagerBase {
 public:
 
 	InputManager(graphics::GraphicsEngine& graphicsEngine) :
@@ -130,24 +174,24 @@ public:
 		
 	}
 
-	void Init() {
+	void Init() override {
 	}
 
-	void SetCallbackCloseWindow(const std::function<void()>& callback) {
+	void SetCallbackCloseWindow(const std::function<void()>& callback) override {
 		callbackCloseWindow_ = callback;
 	}
 
-	void Update();
+	void Update() override;
 
-	bool IsKeyDown(KeyCode keyCode) const {
+	bool IsKeyDown(KeyCode keyCode) const override {
 		return keyStates_[static_cast<int>(keyCode)] == KeyState::DOWN;
 	}
 
-	bool IsKeyUp(KeyCode keyCode) const {
+	bool IsKeyUp(KeyCode keyCode) const override {
 		return keyStates_[static_cast<int>(keyCode)] == KeyState::UP;
 	}
 
-	bool IsKeyHeld(KeyCode keyCode) const {
+	bool IsKeyHeld(KeyCode keyCode) const override {
 		return keyStates_[static_cast<int>(keyCode)] == KeyState::HELD;
 	}
 private:
@@ -157,4 +201,6 @@ private:
 
 	std::vector<KeyState> keyStates_ = std::vector<KeyState>(static_cast<int>(KeyCode::KEYBOARD_SIZE));
 };
+
+using ServiceInputManager = ServiceLocator<InputManagerBase, InputManagerNull>;
 }

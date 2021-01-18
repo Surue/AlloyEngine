@@ -77,6 +77,17 @@ public:
     }
 	
     void OnUpdate() {
+        if (alloy::inputs::ServiceInputManager::Get().IsKeyDown(alloy::inputs::KeyCode::A)) {
+            std::cout << "A is down\n";
+        }
+
+        if (alloy::inputs::ServiceInputManager::Get().IsKeyHeld(alloy::inputs::KeyCode::A)) {
+            std::cout << "A is held\n";
+        }
+
+        if (alloy::inputs::ServiceInputManager::Get().IsKeyUp(alloy::inputs::KeyCode::A)) {
+            std::cout << "A is up\n";
+        }
     	
     	//Update Water
         timeBetweenUpdate_++;
