@@ -3,8 +3,7 @@
 
 #include <vector.h>
 
-namespace alloy {
-namespace graphics {
+namespace alloy::graphics {
 struct WindowInitSettings {
 	std::string_view windowName;
 	math::ivec2 windowSize;
@@ -59,5 +58,4 @@ private:
 	math::ivec2 windowSize_;
 	std::string_view windowName_;
 };
-} //namespace graphics
-} //namespace alloy
+}

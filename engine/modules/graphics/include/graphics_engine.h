@@ -1,15 +1,15 @@
 #pragma once
 
 #include <functional>
-#include <window.h>
 
 #include <SFML/Graphics.hpp>
 
+#include <window.h>
 #include <vector.h>
 #include <tilemap_manager.h>
+#include <light_manager.h>
 
-namespace alloy {
-namespace graphics {
+namespace alloy::graphics {
 struct GraphicsEngineInitSettings {
 	std::string_view windowName;
 	math::ivec2 windowSize;
@@ -21,6 +21,7 @@ public:
 		window_({initSettings.windowName, initSettings.windowSize}),
 		tilemapManager_() {
 		ServiceTilemapManager::Assign(&tilemapManager_);
+		ServiceLightManager::Assign(&lightManager_);
 	}
 
 	void Init();
@@ -42,6 +43,6 @@ private:
 	Window window_;
 
 	TilemapManager tilemapManager_;
+	LightManager lightManager_;
 };
-} //namespace graphics
-} //namespace alloy
+}

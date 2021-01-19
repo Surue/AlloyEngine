@@ -3,8 +3,7 @@
 #include <cmath>
 #include <cstdint>
 
-namespace alloy {
-namespace math {
+namespace alloy::math {
 template <typename T> struct Vector2 {
 	union {
 		struct {
@@ -62,5 +61,4 @@ template <typename T> inline Vector2<T> const Vector2<T>::downRight = down + rig
 template <typename T> inline Vector2<T> const Vector2<T>::downLeft = down + left;
 template <typename T> inline Vector2<T> const Vector2<T>::upRight = up + right;
 template <typename T> inline Vector2<T> const Vector2<T>::upLeft = up + left;
-} //namespace math
-} //namespace alloy
+}

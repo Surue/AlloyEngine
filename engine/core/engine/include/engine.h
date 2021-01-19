@@ -34,7 +34,6 @@ public:
 		
         while (isRunning_)
         {
-
 			//Update every systems
 	        for (const auto& callbackUpdate : callbackUpdate_) {
 				callbackUpdate();

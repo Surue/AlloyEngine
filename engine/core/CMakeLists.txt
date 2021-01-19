@@ -13,15 +13,6 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Core STATIC ${Alloy_SRC})
 
-target_compile_options(Alloy_Core PRIVATE $<$<OR:$<CXX_COMPILER_ID:Clang>,$<CXX_COMPILER_ID:AppleClang>,$<CXX_COMPILER_ID:GNU>>:
-        -Wall -Wextra>
-        $<$<CXX_COMPILER_ID:MSVC>:
-        /W4>)
-
-target_compile_definitions(Alloy_Core PUBLIC $<$<CONFIG:Debug>:__alloy_dbg__>)
-target_compile_definitions(Alloy_Core PUBLIC $<$<CONFIG:RelWithDebInfo>:__alloy_dbg__>)
-target_compile_definitions(Alloy_Core PUBLIC SOURCE_PATH="${CMAKE_SOURCE_DIR}")
-
 set_target_properties (Alloy_Core PROPERTIES FOLDER Alloy/Core)
 
 target_link_libraries(Alloy_Core PUBLIC Alloy_Common)
