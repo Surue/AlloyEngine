@@ -2,6 +2,7 @@
 #include <SFML/Graphics.hpp>
 
 #include <service_locator.h>
+#include <lights/light_types.h>
 
 namespace alloy::graphics {
 class LightManagerBase {
@@ -31,6 +32,8 @@ public:
 	void Draw(sf::RenderTarget& target) override;
 private:
 	sf::RenderTexture lightMap_;
+
+	AmbientLight ambientLight_{Color::aqua};
 };
 
 using ServiceLightManager = ServiceLocator<LightManagerBase, LightManagerNull>;

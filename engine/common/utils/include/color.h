@@ -1,7 +1,8 @@
 #pragma once
-#include <cassert>
+
 #include <cstdint>
 #include <string>
+#include <istream>
 
 namespace alloy {
 struct Color {
@@ -31,6 +32,13 @@ struct Color {
 	/// <param name="hex">Do not add # at the start</param>
 	/// <param name="alpha"></param>
 	Color(const std::string& hex, uint8_t alpha = 255);
+
+	std::string ToString() const;
+
+	friend std::ostream& operator<<(std::ostream& os, const Color& color) {
+		os << "Color(" << color.r << "," << color.g << ", " << color.b << ", " << color.a << ")";
+		return os;
+	}
 
 	static const Color clear;
 	static const Color black;

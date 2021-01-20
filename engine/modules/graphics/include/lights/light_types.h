@@ -15,8 +15,10 @@ struct Light {
 };
 
 struct AmbientLight : Light {
-	Color color;
+	AmbientLight(const Color& color = Color::white) : color(color) {}
 	
+	Color color;
+
 	LightType GetLightType() override {
 		return LightType::AMBIENT;
 	}
