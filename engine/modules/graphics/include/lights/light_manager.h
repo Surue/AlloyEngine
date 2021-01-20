@@ -33,7 +33,7 @@ public:
 private:
 	sf::RenderTexture lightMap_;
 
-	AmbientLight ambientLight_{Color::aqua};
+	AmbientLight ambientLight_{Color::black};
 };
 
 using ServiceLightManager = ServiceLocator<LightManagerBase, LightManagerNull>;

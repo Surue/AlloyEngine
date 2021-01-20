@@ -1,30 +1,29 @@
 #include <lights/light_manager.h>
 
-#include <sfml_graphics_extension.h>
-
 namespace alloy::graphics {
 
 void LightManager::Draw(sf::RenderTarget& target) {
-	lightMap_.clear(ColorToSfColor(ambientLight_.color));
+	ambientLight_.Draw(lightMap_);
 
-	sf::CircleShape circleShape;
-	circleShape.setRadius(100);
-	sf::Color color = sf::Color(255, 255, 255, 100);
-	circleShape.setFillColor(color);
-	circleShape.setPosition(100, 100);
+	PointLight spotLight1{
+		Color::fuchsia,
+		{100, 100},
+		100
+	};
+	spotLight1.color.a = 120;
+	spotLight1.Draw(lightMap_);
 
-	lightMap_.draw(circleShape, sf::BlendAdd);
+	PointLight spotLight2{
+		Color::red,
+		{200, 100},
+		100
+	};
 
-	sf::CircleShape circleShape2;
-	circleShape2.setRadius(100);
-	sf::Color color2 = sf::Color(255, 255, 255, 100);
-	circleShape2.setFillColor(color2);
-	circleShape2.setPosition(200, 100);
-
-	lightMap_.draw(circleShape2, sf::BlendAdd);
+	spotLight2.color.a = 50;
+	spotLight2.Draw(lightMap_);
 
 	lightMap_.display();
-	sf::Sprite lightmapSprite = sf::Sprite(lightMap_.getTexture());
-	target.draw(lightmapSprite, sf::BlendMultiply);
+	const sf::Sprite lightMapSprite = sf::Sprite(lightMap_.getTexture());
+	target.draw(lightMapSprite, sf::BlendMultiply);
 }
 }
