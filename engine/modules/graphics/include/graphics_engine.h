@@ -7,7 +7,7 @@
 #include <window.h>
 #include <vector.h>
 #include <tilemap_manager.h>
-#include <light_manager.h>
+#include <lights/light_manager.h>
 
 namespace alloy::graphics {
 struct GraphicsEngineInitSettings {
