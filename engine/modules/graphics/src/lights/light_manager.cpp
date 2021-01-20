@@ -1,13 +1,11 @@
 #include <lights/light_manager.h>
 
-#include <log.h>
+#include <sfml_graphics_extension.h>
 
 namespace alloy::graphics {
 
 void LightManager::Draw(sf::RenderTarget& target) {
-	lightMap_.clear(sf::Color(ambientLight_.color.r, ambientLight_.color.g, ambientLight_.color.b, ambientLight_.color.a));
-
-	debug::Log(Color::aqua.ToString());
+	lightMap_.clear(ColorToSfColor(ambientLight_.color));
 
 	sf::CircleShape circleShape;
 	circleShape.setRadius(100);
