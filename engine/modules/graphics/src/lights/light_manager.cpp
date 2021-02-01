@@ -3,24 +3,21 @@
 namespace alloy::graphics {
 
 void LightManager::Draw(sf::RenderTarget& target) {
-	ambientLight_.Draw(lightMap_);
+	ambientLight_.Draw(lightMap_, lightShader_);
 
 	PointLight spotLight1{
 		Color::fuchsia,
-		{100, 100},
-		100
+		{000, 000},
+		300
 	};
-	spotLight1.color.a = 120;
-	spotLight1.Draw(lightMap_);
+	spotLight1.Draw(lightMap_, lightShader_);
 
 	PointLight spotLight2{
 		Color::red,
-		{200, 100},
+		{0, 0},
 		100
 	};
-
-	spotLight2.color.a = 50;
-	spotLight2.Draw(lightMap_);
+	//spotLight2.Draw(lightMap_, lightShader_);
 
 	lightMap_.display();
 	const sf::Sprite lightMapSprite = sf::Sprite(lightMap_.getTexture());
