@@ -37,12 +37,14 @@ struct AmbientLight : Light {
 struct PointLight : Light {
 	Color color;
 	math::fvec2 position;
-	float radius = 1;
+	float radius = 1.0f;
+	float intensity = 1.0f;
 
-	PointLight(const Color& color = Color::white, const math::fvec2 position = math::fvec2::zero, const float radius = 1) :
+	PointLight(const Color& color = Color::white, const math::fvec2 position = math::fvec2::zero, const float radius = 1.0f, const float intensity = 1.0f) :
 		color(color),
 		position(position),
-		radius(radius){
+		radius(radius),
+		intensity(intensity) {
 		
 	}
 
@@ -52,12 +54,16 @@ struct PointLight : Light {
 
 	void Draw(sf::RenderTarget& renderTarget, sf::Shader& shader) override {
 		sf::CircleShape circleShape;
+		circleShape.setOrigin(radius, radius);
 		circleShape.setRadius(radius);
-		circleShape.setFillColor(ColorToSfColor(color));
 		circleShape.setPosition(position.x, position.y);
 
-		//shader.setUniform("lightPos", sf::Glsl::Vec2(position.x, position.y));
-		//shader.setUniform("lightColor", sf::Glsl::Vec4(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f));
+		shader.setUniform("lightColor", sf::Glsl::Vec4(color.r / 255.0f, color.g / 255.0f, color.b / 255.0f, color.a / 255.0f));
+		shader.setUniform("falloff", sf::Glsl::Vec3(0.1f, 3.0f, 100.0f));
+		shader.setUniform("intensity", intensity);
+		shader.setUniform("iResolution", sf::Glsl::Vec2(renderTarget.getSize()));
+		shader.setUniform("lightPos", sf::Glsl::Vec2(position.x, renderTarget.getSize().y - position.y)); //Windows's height - y <= SFML top left, OpenGl bottom left
+		shader.setUniform("radius", radius);
 
 		sf::RenderStates renderState;
 		renderState.blendMode = sf::BlendAdd;

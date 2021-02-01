@@ -22,38 +22,9 @@ public:
 class LightManager : public LightManagerBase {
 public:
 	LightManager() { 
-		lightMap_.create(600, 600); //TODO Remove magic number
-		const std::string fragmentShader = 
-		" \
-		vec4 lightColor = vec4(1, 1, 1, 1); \
-		vec3 falloff = vec3(0.1, 3, 100);\
-		float intensity = 1.0;\
-		float radius = 300;\
-		vec2 iResolution = vec2(600, 600);\
-		vec3 pos = vec3(300, 300, 0);\
-		\
-		void main() \
-		{ \
-			vec2 uv = gl_FragCoord.xy / iResolution.xy;\
-\
-			pos.xy = pos.xy / iResolution.xy;\
-\
-			float dist = distance(uv, pos.xy);\
-\
-			vec3 d = lightColor.rgb * lightColor.a;\
-\
-			float attenuation = intensity / (falloff.x + (falloff.y * dist) + (falloff.z * dist * dist));\
-\
-			vec3 light = d * attenuation;\
-\
-			light = pow(light, vec3(1.0 / 2.2));\
-\
-			vec4 result = vec4(light, attenuation);\
-\
-			gl_FragColor = result;\
-		}";
+		lightMap_.create(600, 600); //TODO Remove magic number => Must be same size as the windows
 		
-		lightShader_.loadFromMemory(fragmentShader, sf::Shader::Fragment);
+		lightShader_.loadFromFile("../data/shaders/lights.frag", sf::Shader::Fragment);
 	}
 
 	void Init() override {
