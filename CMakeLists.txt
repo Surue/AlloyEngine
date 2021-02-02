@@ -3,6 +3,8 @@ project(AlloyEngine)
 
 set(CMAKE_CXX_STANDARD 17)
 
+set_property(GLOBAL PROPERTY USE_FOLDERS On)
+
 #Common
 set(ALLOY_COMMON_DIR "${CMAKE_SOURCE_DIR}/engine/common/" CACHE INTERNAL "")
 add_subdirectory(${ALLOY_COMMON_DIR})
@@ -15,6 +17,21 @@ add_subdirectory(${ALLOY_MODULES_DIR})
 set(ALLOY_CORE_DIR "${CMAKE_SOURCE_DIR}/engine/core/" CACHE INTERNAL "")
 add_subdirectory(${ALLOY_CORE_DIR})
 
+#Test
+enable_testing()
+SET(Alloy_TEST_DIR "${CMAKE_SOURCE_DIR}/test/" CACHE INTERNAL "")
+add_subdirectory(${Alloy_TEST_DIR})
+
+set(GOOGLE_TEST_DIR externals/googletest)
+set(BUILD_GMOCK OFF CACHE INTERNAL "")
+set(INSTALL_GTEST OFF CACHE INTERNAL "")
+add_subdirectory(${GOOGLE_TEST_DIR})
+include_directories(${GOOGLE_TEST_DIR}/include)
+
+set_target_properties (gtest PROPERTIES FOLDER Externals/GTest)
+set_target_properties(gtest_main PROPERTIES FOLDER Externals/GTest)
+
 add_executable(AlloyEngine main.cpp)
 
 target_link_libraries(AlloyEngine PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
+

@@ -19,16 +19,23 @@ public:
 	void Draw(sf::RenderTarget& target) override {}
 };
 
+struct LightManagerInitSettings {
+	LightManagerInitSettings(const math::ivec2 windowSize) : windowSize(windowSize){}
+	
+	math::ivec2 windowSize;
+};
+
 class LightManager : public LightManagerBase {
 public:
-	LightManager() { 
-		lightMap_.create(600, 600); //TODO Remove magic number => Must be same size as the windows
-		
+	LightManager(const LightManagerInitSettings initSettings) {
+		lightMap_.create(initSettings.windowSize.x, initSettings.windowSize.y);
+
+		//TODO Load correctly shaders
 		lightShader_.loadFromFile("../data/shaders/lights.frag", sf::Shader::Fragment);
 	}
 
 	void Init() override {
-		
+		//TODO Use init by registering it
 	}
 
 	void Draw(sf::RenderTarget& target) override;

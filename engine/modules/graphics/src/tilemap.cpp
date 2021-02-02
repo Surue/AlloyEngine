@@ -1,12 +1,8 @@
 #include <tilemap.h>
 
-#include <log.h>
-
 namespace alloy::graphics {
 
 void Tilemap::Init() {
-	debug::Log("Init tilemap");
-
 	tileSet_.Load("data/sprites/color_tileset.png");
 
 	tilesVertexArray_.setPrimitiveType(sf::Quads);
@@ -34,7 +30,6 @@ void Tilemap::Init() {
 			tileQuad[3].texCoords = sf::Vector2f(texCoords[3].x, texCoords[3].y);
 		}
 	}
-
 }
 
 void Tilemap::Draw(sf::RenderTarget& target) const {

@@ -19,7 +19,7 @@ class GraphicsEngine {
 public:
 	GraphicsEngine(const GraphicsEngineInitSettings& initSettings) :
 		window_({initSettings.windowName, initSettings.windowSize}),
-		tilemapManager_() {
+		lightManager_(LightManagerInitSettings{ initSettings.windowSize }){
 		ServiceTilemapManager::Assign(&tilemapManager_);
 		ServiceLightManager::Assign(&lightManager_);
 	}

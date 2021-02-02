@@ -13,7 +13,7 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Core STATIC ${Alloy_SRC})
 
-set_target_properties (Alloy_Core PROPERTIES FOLDER Alloy/Core)
+set_target_properties (Alloy_Core PROPERTIES FOLDER Alloy)
 
 target_link_libraries(Alloy_Core PUBLIC Alloy_Common)
 

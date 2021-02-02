@@ -22,7 +22,7 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Common STATIC ${Alloy_SRC})
 
-set_target_properties (Alloy_Common PROPERTIES FOLDER Alloy/Common)
+set_target_properties (Alloy_Common PROPERTIES FOLDER Alloy)
 
 target_include_directories(Alloy_Common PUBLIC "mathematics/include/")
 target_include_directories(Alloy_Common PUBLIC "debug/include/")

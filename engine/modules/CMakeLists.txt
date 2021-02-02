@@ -10,7 +10,7 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Modules STATIC ${Alloy_SRC})
 
-set_target_properties (Alloy_Modules PROPERTIES FOLDER Alloy/Modules)
+set_target_properties (Alloy_Modules PROPERTIES FOLDER Alloy)
 #SFML
 
 # If must link SFML statically
