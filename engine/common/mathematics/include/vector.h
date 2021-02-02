@@ -68,10 +68,9 @@ template <typename T> struct Vector3 {
 			T x;
 			T y;
 			T z;
-
 		};
 
-		T coord[2];
+		T coord[3];
 	};
 
 	const static Vector3 zero;
@@ -81,11 +80,11 @@ template <typename T> struct Vector3 {
 
 	Vector3(T x, T y, T z) : x(x), y(y), z(z) {}
 
-	Vector3 operator + (const Vector3 rhs) const {
+	Vector3 operator + (const Vector3& rhs) const {
 		return { x + rhs.x, y + rhs.y, z + rhs.z };
 	}
 
-	Vector3 operator / (const Vector3 rhs) const {
+	Vector3 operator / (const Vector3& rhs) const {
 		return { x / rhs.x, y / rhs.y, z / rhs.z };
 	}
 
