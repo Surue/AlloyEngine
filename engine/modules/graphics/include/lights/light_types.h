@@ -38,20 +38,17 @@ struct PointLight : Light {
 	float radius = 1.0f;
 	float intensity = 1.0f;
 
-	PointLight(const Color& color = Color::white, const math::fvec2 position = math::fvec2::zero, const float radius = 1.0f, const float intensity = 1.0f) :
-		color(color),
-		position(position),
-		radius(radius),
-		intensity(intensity) {
-		
-	}
+	PointLight(const Color& color = Color::white, const math::fvec2 position = math::fvec2::zero,
+	           const float radius = 1.0f, const float intensity = 1.0f);
 
 	LightType GetLightType() override {
 		return LightType::POINT;
 	}
 
+	//TODO Remove out parameters => Create class for shader + draw from outside lights
 	void Draw(sf::RenderTarget& renderTarget, sf::Shader& shader) override;
 
 private:
+	const math::fvec3 falloff_ = math::fvec3(0.1f, 3.0f, 100.0f);
 };
 }
