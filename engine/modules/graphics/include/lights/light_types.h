@@ -53,6 +53,5 @@ struct PointLight : Light {
 	void Draw(sf::RenderTarget& renderTarget, sf::Shader& shader) override;
 
 private:
-	const math::Vector2<>
 };
 }
