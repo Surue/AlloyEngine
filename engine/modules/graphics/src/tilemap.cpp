@@ -9,15 +9,13 @@ void Tilemap::Init() {
 
 	tileSet_.Load("data/sprites/color_tileset.png");
 
-	//TODO remove magic number => 4 is equal to the number of vertex for a quad
 	tilesVertexArray_.setPrimitiveType(sf::Quads);
-	tilesVertexArray_.resize(static_cast<std::size_t>(nbTiles_.x) * static_cast<std::size_t>(nbTiles_.y) * 4);
+	tilesVertexArray_.resize(static_cast<std::size_t>(nbTiles_.x) * static_cast<std::size_t>(nbTiles_.y) * vertexPerQuad_);
 
 	for (int x = 0; x < nbTiles_.x; x++) {
 
 		for (int y = 0; y < nbTiles_.y; y++) {
-			//TODO remove magic number => 4 is equal to the number of vertex for a quad
-			sf::Vertex* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * 4];
+			sf::Vertex* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * vertexPerQuad_];
 
 			//Set positions of every tiles
 			tileQuad[0].position = sf::Vector2f(x * tileSize_.x, y * tileSize_.y);
@@ -52,7 +50,7 @@ void Tilemap::UpdateChunk(const std::vector<Tile>& tiles, const math::uivec2 top
 	int index = 0;
 	for (auto x = topLeft.x; x < bottomRight.x; x++) {
 		for (auto y = topLeft.y; y < bottomRight.y; y++) {
-			auto* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * 4];
+			auto* tileQuad = &tilesVertexArray_[(x + y * nbTiles_.x) * vertexPerQuad_];
 
 			const auto& texCoords = tiles[index].GetTextureCoordsInPixel();
 

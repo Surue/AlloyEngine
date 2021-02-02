@@ -7,7 +7,7 @@
 namespace alloy::graphics {
 class Tilemap {
 public:
-	//TODO stop using a given size and cut into chunk
+	//TODO Use a correct loading system for all tilesets
 	Tilemap(const math::ivec2 nbTiles, const math::ivec2 tileSize) :
 		nbTiles_(nbTiles),
 		tileSize_(tileSize),
@@ -30,5 +30,7 @@ private:
 	sf::VertexArray tilesVertexArray_;
 
 	Texture tileSet_;
+
+	const int vertexPerQuad_ = 4;
 };
 } //namespace alloy::graphics
