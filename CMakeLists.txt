@@ -22,7 +22,7 @@ enable_testing()
 SET(Alloy_TEST_DIR "${CMAKE_SOURCE_DIR}/test/" CACHE INTERNAL "")
 add_subdirectory(${Alloy_TEST_DIR})
 
-set(GOOGLE_TEST_DIR externals/googletest)
+set(GOOGLE_TEST_DIR "externals/googletest")
 set(BUILD_GMOCK OFF CACHE INTERNAL "")
 set(INSTALL_GTEST OFF CACHE INTERNAL "")
 add_subdirectory(${GOOGLE_TEST_DIR})
@@ -30,6 +30,17 @@ include_directories(${GOOGLE_TEST_DIR}/include)
 
 set_target_properties (gtest PROPERTIES FOLDER Externals/GTest)
 set_target_properties(gtest_main PROPERTIES FOLDER Externals/GTest)
+
+#Benchmark
+set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "")
+set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "")
+set(GOOGLE_BENCH_DIR "externals/benchmark" CACHE STRING "")
+set(HAVE_STD_REGEX ON CACHE BOOL "")
+add_subdirectory(${GOOGLE_BENCH_DIR})
+add_subdirectory("benchmarks/")
+
+set_target_properties (benchmark PROPERTIES FOLDER Externals/GTest)
+set_target_properties(benchmark_main PROPERTIES FOLDER Externals/GTest)
 
 add_executable(AlloyEngine main.cpp)
 
