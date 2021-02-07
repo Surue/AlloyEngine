@@ -13,7 +13,6 @@ source_group("Patterns" FILES ${Alloy_PATTERN_SRC})
 source_group("Times" FILES ${Alloy_TIME_SRC})
 source_group("Utils" FILES ${Alloy_UTIL_SRC})
 
-
 List(APPEND Alloy_SRC
 		${Alloy_DEBUG_SRC}
 		${Alloy_JOB_SYSTEM_SRC}
@@ -25,6 +24,7 @@ List(APPEND Alloy_SRC
 
 add_library(Alloy_Common STATIC ${Alloy_SRC})
 
+target_link_libraries(Alloy_Common Remotery)
 set_target_properties (Alloy_Common PROPERTIES FOLDER Alloy)
 
 target_include_directories(Alloy_Common PUBLIC "debug/include/")

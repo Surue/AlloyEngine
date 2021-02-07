@@ -5,6 +5,11 @@ set(CMAKE_CXX_STANDARD 17)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS On)
 
+#Remotery
+set(REMOTERY_DIR "externals/Remotery" CACHE STRING "")
+add_subdirectory(${REMOTERY_DIR})
+include_directories(${REMOTERY_DIR})
+
 #Common
 set(ALLOY_COMMON_DIR "${CMAKE_SOURCE_DIR}/engine/common/" CACHE INTERNAL "")
 add_subdirectory(${ALLOY_COMMON_DIR})
@@ -39,13 +44,8 @@ set(HAVE_STD_REGEX ON CACHE BOOL "")
 add_subdirectory(${GOOGLE_BENCH_DIR})
 add_subdirectory("benchmarks/")
 
-#Remotery
-set(REMOTERY_DIR "externals/Remotery" CACHE STRING "")
-add_subdirectory(${REMOTERY_DIR})
-include_directories(${REMOTERY_DIR})
-
-set_target_properties (benchmark PROPERTIES FOLDER Externals/GTest)
-set_target_properties(benchmark_main PROPERTIES FOLDER Externals/GTest)
+set_target_properties (benchmark PROPERTIES FOLDER Externals/Benchmarks)
+set_target_properties(benchmark_main PROPERTIES FOLDER Externals/Benchmarks)
 
 add_executable(AlloyEngine main.cpp)
 
