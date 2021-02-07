@@ -39,6 +39,11 @@ set(HAVE_STD_REGEX ON CACHE BOOL "")
 add_subdirectory(${GOOGLE_BENCH_DIR})
 add_subdirectory("benchmarks/")
 
+#Remotery
+set(REMOTERY_DIR "externals/Remotery" CACHE STRING "")
+add_subdirectory(${REMOTERY_DIR})
+include_directories(${REMOTERY_DIR})
+
 set_target_properties (benchmark PROPERTIES FOLDER Externals/GTest)
 set_target_properties(benchmark_main PROPERTIES FOLDER Externals/GTest)
 

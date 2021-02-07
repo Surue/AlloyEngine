@@ -5,6 +5,7 @@
 #include <chronometer.h>
 
 #include <engine.h>
+#include <lib/Remotery.h>
 
 class CellularAutomataSystem {
 public:
@@ -416,7 +417,8 @@ private:
 };
 
 int main() {
-
+    Remotery* rmt;
+    rmt_CreateGlobalInstance(&rmt);
     alloy::EngineInitSettings engineInitSettings{
         "CellularA Automata",
         alloy::math::ivec2(600, 600)
@@ -428,5 +430,6 @@ int main() {
 
     cellularAutomata.Run();
 
+    rmt_DestroyGlobalInstance(rmt);
     return EXIT_SUCCESS;
 }

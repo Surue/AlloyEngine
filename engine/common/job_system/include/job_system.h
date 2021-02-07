@@ -97,17 +97,6 @@ public:
 	void Destroy() {
 		isRunning = false;
 	}
-
-	bool IsFinish() {
-		bool queueEmpty = true;
-		std::lock_guard<std::mutex> lock(mainJobQueues_.mutex);
-		std::lock_guard<std::mutex> lock2(renderJobQueues_.mutex);
-		std::lock_guard<std::mutex> lock3(workerJobQueues_.mutex);
-		
-		queueEmpty = mainJobQueues_.jobs.empty() && renderJobQueues_.jobs.empty() && workerJobQueues_.jobs.empty();
-
-		return queueEmpty;
-	}
 private:
 	std::vector<std::thread> workers_;
 	JobQueue mainJobQueues_;
