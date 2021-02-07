@@ -1,12 +1,11 @@
 #include "gtest/gtest.h"
 
 #include "job_system.h"
-#include "../externals/Remotery/lib/Remotery.h"
+#include "profiler.h"
 
 TEST(JobSystem, Schedule) {
 
-	Remotery* rmt;
-	rmt_CreateGlobalInstance(&rmt);
+	alloy::Profiler profiler;
 	using namespace alloy;
 	using namespace std::chrono_literals;
 	
@@ -20,8 +19,9 @@ TEST(JobSystem, Schedule) {
 
 	for(int i = 0; i < nbJobs; i++) {
 		jobs[i] = Job([i]() {
-			rmt_ScopedCPUSample(Test, NULL);
+			BeginProfiling(sleepy);
 			std::this_thread::sleep_for((i + 1) * 10ms);
+			EndProfiling();
 		});
 	}
 	
@@ -32,6 +32,4 @@ TEST(JobSystem, Schedule) {
 	while (true) {
 		
 	}
-
-	rmt_DestroyGlobalInstance(rmt);
 }
