@@ -1,12 +1,9 @@
 #include <array>
 #include <random>
 
-#include <vector.h>
-#include <chronometer.h>
-
 #include <lib/Remotery.h>
 
-#include "application.h"
+#include <application.h>
 
 class CellularAutomataSystem {
 public:
@@ -167,7 +164,6 @@ private:
             }
             
             if (remainingPressure < minPressure_) {
-                //diffs[index] -= remainingPressure;
                 continue;
             }
         	
@@ -201,7 +197,6 @@ private:
             }
 
             if (remainingPressure < minPressure_) {
-                //diffs[index] -= remainingPressure;
                 continue;
             }
 
@@ -235,7 +230,6 @@ private:
             }
 
             if (remainingPressure < minPressure_) {
-                //diffs[index] -= remainingPressure;
                 continue;
             }
 
@@ -263,11 +257,6 @@ private:
                         diffs[upIndex] += flow;
                     }
                 }
-            }
-
-            if (remainingPressure < minPressure_) {
-                //diffs[index] -= remainingPressure;
-                continue;
             }
         }
 
@@ -306,7 +295,6 @@ private:
                 tileStates_[index] = TileState::LIQUID;
             }
         }
-        //alloy::debug::Log(std::to_string(totalPressure));
     }
 
 	void CellularStep() {

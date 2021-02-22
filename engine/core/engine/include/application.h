@@ -10,7 +10,7 @@ struct ApplicationInitSettings {
 
 class Application {
 public:
-	Application(const ApplicationInitSettings& applicationInitSettings) : engine_({applicationInitSettings.application_name, applicationInitSettings.window_size}) {}
+	explicit Application(const ApplicationInitSettings& applicationInitSettings) : engine_({applicationInitSettings.application_name, applicationInitSettings.window_size}) {}
 
 	virtual ~Application() {
 		engine_.Destroy();

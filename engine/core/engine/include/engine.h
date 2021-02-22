@@ -1,10 +1,7 @@
 #pragma once
 
-#include <string_view>
 #include <vector.h>
-
 #include <graphics_engine.h>
-
 #include <input_manager.h>
 
 namespace alloy {
@@ -15,39 +12,11 @@ struct EngineInitSettings {
 
 class Engine {
 public:
-	Engine(const EngineInitSettings& initSettings):
-		isRunning_(false),
-		graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
-		inputManager_(graphicsEngine_) {
-		inputs::ServiceInputManager::Assign(&inputManager_);
-	}
+	explicit Engine(const EngineInitSettings& initSettings);
 
-	void Init() {
-		graphicsEngine_.Init();
-		inputManager_.Init();
+	void Init();
 
-		inputManager_.SetCallbackCloseWindow(graphicsEngine_.GetCallbackCloseWindow());
-	}
-
-	void Run() {
-		isRunning_ = true;
-		
-        while (isRunning_)
-        {
-			//Update every systems
-	        for (const auto& callbackUpdate : callbackUpdate_) {
-				callbackUpdate();
-	        }
-        	
-			//Update every systems
-			graphicsEngine_.Update();
-			inputManager_.Update();
-        	
-            if(!graphicsEngine_.IsWindowOpen()) {
-				isRunning_ = false;
-            }
-        }
-	}
+	void Run();
 
 	void Destroy() {
 		
@@ -57,13 +26,7 @@ public:
 		
 	}
 
-	void AddCallbackUpdate(std::function<void()> callback) {
-		if(callbackUpdate_.size() == callbackUpdate_.capacity()) {
-			callbackUpdate_.reserve(callbackUpdate_.size() * 2 + 1);
-		}
-
-		callbackUpdate_.emplace_back(callback);
-	}
+	void AddCallbackUpdate(std::function<void()> callback);
 private:
 	bool isRunning_;
 	graphics::GraphicsEngine graphicsEngine_;
