@@ -1,11 +1,9 @@
-#include "gtest/gtest.h"
+#include <gtest/gtest.h>
 
-#include "job_system.h"
-#include "profiler.h"
+#include <job_system.h>
 
 TEST(JobSystem, Schedule) {
 
-	alloy::Profiler profiler;
 	using namespace alloy;
 	using namespace std::chrono_literals;
 	
@@ -19,9 +17,7 @@ TEST(JobSystem, Schedule) {
 
 	for(int i = 0; i < nbJobs; i++) {
 		jobs[i] = Job([i]() {
-			BeginProfiling(sleepy);
 			std::this_thread::sleep_for((i + 1) * 10ms);
-			EndProfiling();
 		});
 	}
 	
