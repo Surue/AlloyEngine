@@ -4,8 +4,9 @@
 #include <vector.h>
 #include <chronometer.h>
 
-#include <engine.h>
 #include <lib/Remotery.h>
+
+#include "application.h"
 
 class CellularAutomataSystem {
 public:
@@ -394,41 +395,33 @@ private:
     int timeBetweenUpdate_ = 0;
 };
 
-class CellularAutomata {
+class CellularAutomata : public alloy::Application{
 public:
-	CellularAutomata(const alloy::EngineInitSettings& engineInitSettings) :
-        engine_(engineInitSettings){
+	CellularAutomata(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings){
 	}
 
-    void Init() {
-        engine_.Init();
-
+protected:
+    void Init() override {
         cellularAutomataSystem_.Init();
-		
-        engine_.AddCallbackUpdate([this]() {cellularAutomataSystem_.OnUpdate(); });
-	}
 
-	void Run() {
-        engine_.Run();
-	}
+        AddCallbackUpdate([this]() {cellularAutomataSystem_.OnUpdate(); });
+    }
+
 private:
-    alloy::Engine engine_;
     CellularAutomataSystem cellularAutomataSystem_;
 };
 
 int main() {
     Remotery* rmt;
     rmt_CreateGlobalInstance(&rmt);
-    alloy::EngineInitSettings engineInitSettings{
+    alloy::ApplicationInitSettings engineInitSettings{
         "CellularA Automata",
         alloy::math::ivec2(600, 600)
     };
 	
     CellularAutomata cellularAutomata(engineInitSettings);
 
-    cellularAutomata.Init();
-
-    cellularAutomata.Run();
+    cellularAutomata.Start();
 
     rmt_DestroyGlobalInstance(rmt);
     return EXIT_SUCCESS;
