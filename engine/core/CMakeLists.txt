@@ -15,7 +15,7 @@ add_library(Alloy_Core STATIC ${Alloy_SRC})
 
 set_target_properties (Alloy_Core PROPERTIES FOLDER Alloy)
 
-target_link_libraries(Alloy_Core PUBLIC Alloy_Common)
+target_link_libraries(Alloy_Core PUBLIC Alloy_Modules)
 
 target_include_directories(Alloy_Core PUBLIC "ecs/include/")
 target_include_directories(Alloy_Core PUBLIC "engine/include/")

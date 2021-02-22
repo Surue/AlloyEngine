@@ -21,7 +21,7 @@ set(SFML_STATIC_LIBRARIES TRUE)
 
 find_package(SFML 2.5.1 COMPONENTS system window graphics audio REQUIRED)
 
-target_link_libraries(Alloy_Modules PUBLIC sfml-system sfml-window sfml-graphics sfml-audio PUBLIC Alloy_Common)
+target_link_libraries(Alloy_Modules PUBLIC sfml-system sfml-window sfml-graphics PUBLIC Alloy_Common)
 
 target_include_directories(Alloy_Modules PUBLIC "graphics/include/")
 target_include_directories(Alloy_Modules PUBLIC "inputs/include/")

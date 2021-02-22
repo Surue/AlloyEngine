@@ -49,5 +49,5 @@ set_target_properties(benchmark_main PROPERTIES FOLDER Externals/Benchmarks)
 
 add_executable(AlloyEngine main.cpp)
 
-target_link_libraries(AlloyEngine PUBLIC Alloy_Core Alloy_Common Alloy_Modules)
+target_link_libraries(AlloyEngine PRIVATE Alloy_Core)
 

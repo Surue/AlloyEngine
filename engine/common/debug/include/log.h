@@ -3,7 +3,6 @@
 #include <ostream>
 #include <iostream>
 #include <chrono>
-#include <iomanip>
 
 namespace alloy::debug {
 enum class LogSeverity : uint8_t {
