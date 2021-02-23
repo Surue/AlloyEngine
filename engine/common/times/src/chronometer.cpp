@@ -1,6 +1,6 @@
 #include <chronometer.h>
 
-namespace alloy::time
+namespace timer
 {
 Chronometer::Chronometer()
 {

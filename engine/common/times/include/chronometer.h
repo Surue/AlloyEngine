@@ -2,7 +2,7 @@
 
 #include <chrono>
 
-namespace alloy::time
+namespace timer
 {
 /**
  * \brief Use to compute time in nano seconds. Mainly for short code for computing short amount of time and doing some optimization
@@ -41,4 +41,4 @@ public:
 private:
 	std::chrono::steady_clock::time_point startTime_;
 };
-} //namespace alloy::time
+} //namespace time
