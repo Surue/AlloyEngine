@@ -16,8 +16,8 @@ public:
         tileStates_.resize(tiles_.size());
         waterPressure_.resize(tiles_.size());
 
-        const alloy::math::uivec2 topLeft = { 0, 0 };
-        const alloy::math::uivec2 bottomRight{ 100, 100 };
+        const math::uivec2 topLeft = { 0, 0 };
+        const math::uivec2 bottomRight{ 100, 100 };
 
         const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
         alloy::graphics::Tile baseTile = alloy::graphics::Tile(alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
@@ -77,8 +77,8 @@ public:
             return;
     	}
     	
-        const alloy::math::uivec2 topLeft = { 0, 0 };
-        const alloy::math::uivec2 bottomRight{ 100, 100 };
+        const math::uivec2 topLeft = { 0, 0 };
+        const math::uivec2 bottomRight{ 100, 100 };
 
         const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
     	
@@ -99,11 +99,11 @@ public:
     }
 
 private:
-    alloy::math::ivec2 IndexToCoords(const int index) const {
+    math::ivec2 IndexToCoords(const int index) const {
         return { index / tilemapSize_.x, index % tilemapSize_.x };
     }
 
-    int CoordsToIndex(const alloy::math::ivec2 coords) const {
+    int CoordsToIndex(const math::ivec2 coords) const {
         return coords.x * tilemapSize_.x + coords.y;
     }
 
@@ -136,7 +136,7 @@ private:
             float remainingPressure = waterPressure_[index];
             if (remainingPressure <= 0) continue;
         	
-            const auto downCoords = coords + alloy::math::ivec2::down;
+            const auto downCoords = coords + math::ivec2::down;
                 
             //Check valid coords
             if (downCoords.y < tilemapSize_.y) {
@@ -169,7 +169,7 @@ private:
         	
             //2. Equalize left  
         	
-            const auto leftCoords = coords + alloy::math::ivec2::left;
+            const auto leftCoords = coords + math::ivec2::left;
 
             // Check valid coords
             if (leftCoords.x >= 0) {
@@ -202,7 +202,7 @@ private:
 
             //2. Equalize right  
 
-            const auto rightCoords = coords + alloy::math::ivec2::right;
+            const auto rightCoords = coords + math::ivec2::right;
 
             // Check valid coords
             if (rightCoords.x < tilemapSize_.x) {
@@ -235,7 +235,7 @@ private:
 
         	// 4. Flow upwards
 
-            const auto upCoords = coords + alloy::math::ivec2::up;
+            const auto upCoords = coords + math::ivec2::up;
             if (upCoords.y >= 0) {
                 const int upIndex = CoordsToIndex(upCoords);
 
@@ -341,7 +341,7 @@ private:
 
     std::vector<float> waterPressure_;
 
-    alloy::math::ivec2 tilemapSize_ {100, 100};
+    math::ivec2 tilemapSize_ {100, 100};
 
 	enum class TileState : uint8_t {
 		SOLID = 0,
@@ -351,7 +351,7 @@ private:
 
     std::vector<TileState> tileStates_;
 
-    std::array<alloy::math::ivec2, 8> neighborOffset_{ {
+    std::array<math::ivec2, 8> neighborOffset_{ {
         {-1, -1},
         {0, -1},
         { 1, -1 },
@@ -404,7 +404,7 @@ int main() {
     rmt_CreateGlobalInstance(&rmt);
     alloy::ApplicationInitSettings engineInitSettings{
         "CellularA Automata",
-        alloy::math::ivec2(600, 600)
+        math::ivec2(600, 600)
     };
 	
     CellularAutomata cellularAutomata(engineInitSettings);

@@ -1,5 +1,5 @@
 #include <vector.h>
 
-namespace alloy{
+namespace math {
 
-} //namespace alloy
+} //namespace math
