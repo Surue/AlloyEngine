@@ -2,7 +2,7 @@
 
 #include <vector.h>
 
-namespace alloy::math{
+namespace math{
 class Matrix22{
 public:
 	fvec2 col1;
