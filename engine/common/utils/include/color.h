@@ -4,18 +4,14 @@
 #include <string>
 #include <istream>
 
+//Move colors into namespace math
 namespace alloy {
 struct Color {
-	union {
-		struct {
-			uint8_t r;
-			uint8_t g;
-			uint8_t b;
-			uint8_t a;
-		};
 
-		uint8_t coord[4];
-	};
+	uint8_t r;
+	uint8_t g;
+	uint8_t b;
+	uint8_t a;
 
 	/// <summary>
 	/// 
