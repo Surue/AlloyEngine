@@ -132,6 +132,10 @@ template <typename T> struct Vector3 {
 		return std::sqrt(x * x + y * y + z * z);
 	}
 
+	float Dot(const Vector3& other) const {
+		return x * other.x + y * other.y + z * other.z;
+	}
+
 	const static Vector3 zero;
 	const static Vector3 one;
 };
