@@ -3,8 +3,6 @@
 #include <vector.h>
 
 TEST(Math, Vec2_Addition) {
-	using namespace alloy;
-
 	const math::fvec2 a{ 0 ,0 };
 	const math::fvec2 b{ 1 ,0 };
 
