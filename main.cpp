@@ -5,9 +5,16 @@
 
 #include <application.h>
 
-class CellularAutomataSystem {
+#include "system.h"
+
+class CellularAutomataSystem : alloy::ecs::System, alloy::ecs::ISystemInit, alloy::ecs::ISystemUpdate {
 public:
-    void Init() {
+    CellularAutomataSystem() :
+		System(),
+        ISystemInit([this](alloy::ecs::SystemExecutionFlags f) {AddFlag(f); }),
+        ISystemUpdate([this](alloy::ecs::SystemExecutionFlags f) {AddFlag(f); }) {}
+	
+    void OnInit() override {
         std::random_device rd;
         std::mt19937 gen(rd());
         const std::uniform_int_distribution<> distrib01(0, 1);
@@ -69,7 +76,7 @@ public:
         alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tiles, topLeft, bottomRight);
     }
 	
-    void OnUpdate() {
+    void OnUpdate() override {
     	//Update Water
         timeBetweenUpdate_++;
 
@@ -390,7 +397,7 @@ public:
 
 protected:
     void Init() override {
-        cellularAutomataSystem_.Init();
+        cellularAutomataSystem_.OnInit();
 
         AddCallbackUpdate([this]() {cellularAutomataSystem_.OnUpdate(); });
     }
@@ -403,7 +410,7 @@ int main() {
     Remotery* rmt;
     rmt_CreateGlobalInstance(&rmt);
     alloy::ApplicationInitSettings engineInitSettings{
-        "CellularA Automata",
+        "Cellular Automata",
         math::ivec2(600, 600)
     };
 	
