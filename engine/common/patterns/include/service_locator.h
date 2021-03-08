@@ -2,6 +2,7 @@
 
 #include <type_traits>
 
+//TODO Find namespace for pattern
 namespace alloy {
 template<class T, class NullT>
 class ServiceLocator {

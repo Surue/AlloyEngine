@@ -5,6 +5,7 @@
 #include <input_manager.h>
 
 namespace alloy {
+
 struct EngineInitSettings {
 	std::string_view windowName;
 	math::ivec2 windowSize;

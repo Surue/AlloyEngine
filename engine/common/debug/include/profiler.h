@@ -6,6 +6,7 @@
 #define BeginProfiling(name){ rmt_BeginCPUSample(name, 0);}
 #define EndProfiling(name){ rmt_EndCPUSample(); }
 
+//TODO mode profiler in core
 namespace alloy {
 class Profiler {
 public:

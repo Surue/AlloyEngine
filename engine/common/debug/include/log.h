@@ -4,6 +4,7 @@
 #include <iostream>
 #include <chrono>
 
+//TODO Move log in core
 namespace alloy::debug {
 enum class LogSeverity : uint8_t {
 	NORMAL = 0,

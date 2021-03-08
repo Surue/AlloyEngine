@@ -136,6 +136,12 @@ void RandomFill(std::vector<math::fvec3>& numbers, float start = -maxNmb, float 
 //
 //BENCHMARK(BM_Vec2DotRef)->Range(fromRange, 1 << 16);
 
+/*
+ * Conclusion of previous tests
+ * - Vector2 => Using copy or ref is equivalent in time
+ * - Vector3 => Using ref is faster than copy for dot //TODO test for every function to make sure
+ */
+
 int main(int argc, char** argv)
 {
     ::benchmark::Initialize(&argc, argv);
