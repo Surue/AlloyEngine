@@ -17,18 +17,18 @@ public:
 	}
 
 	void Start() {
-		engine_.Init();
-
 		Init();
+		
+		engine_.Init();
 
 		engine_.Run();
 	}
 
 protected:
 	virtual void Init() = 0;
-	
-	void AddCallbackUpdate(const std::function<void()> callback) {
-		engine_.AddCallbackUpdate(callback);
+
+	void AddSystem(ecs::System& system) {
+		engine_.AddSystem(system);
 	}
 
 private:

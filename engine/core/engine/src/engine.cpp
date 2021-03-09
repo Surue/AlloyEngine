@@ -1,4 +1,5 @@
 #include <engine.h>
+#include <iostream>
 
 namespace alloy {
 
@@ -7,13 +8,21 @@ Engine::Engine(const EngineInitSettings& initSettings):
 	graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
 	inputManager_(graphicsEngine_) {
 	inputs::ServiceInputManager::Assign(&inputManager_);
-}
 
-void Engine::Init() {
+	//Move the following function into a another type of execution function
 	graphicsEngine_.Init();
 	inputManager_.Init();
 
 	inputManager_.SetCallbackCloseWindow(graphicsEngine_.GetCallbackCloseWindow());
+}
+
+void Engine::Init() {
+
+	std::cout << "ici\n";
+	//TODO Empty this callback's container to reacte to spawned object in runtime
+	for (auto callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::INIT]) {
+		callback();
+	}
 }
 
 void Engine::Run() {
@@ -21,8 +30,8 @@ void Engine::Run() {
 
 	while (isRunning_) {
 		//Update every systems
-		for (const auto& callbackUpdate : callbackUpdate_) {
-			callbackUpdate();
+		for (auto callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::UPDATE]) {
+			callback();
 		}
 
 		//Update every systems
@@ -35,11 +44,4 @@ void Engine::Run() {
 	}
 }
 
-void Engine::AddCallbackUpdate(std::function<void()> callback) {
-	if (callbackUpdate_.size() == callbackUpdate_.capacity()) {
-		callbackUpdate_.reserve(callbackUpdate_.size() * 2 + 1);
-	}
-
-	callbackUpdate_.emplace_back(callback);
-}
 }

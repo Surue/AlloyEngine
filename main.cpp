@@ -4,17 +4,19 @@
 #include <lib/Remotery.h>
 
 #include <application.h>
+#include <iostream>
+
 
 #include "system.h"
 
-class CellularAutomataSystem : alloy::ecs::System, alloy::ecs::ISystemInit, alloy::ecs::ISystemUpdate {
+class CellularAutomataSystem : public alloy::ecs::System {
 public:
     CellularAutomataSystem() :
-		System(),
-        ISystemInit([this](alloy::ecs::SystemExecutionFlags f) {AddFlag(f); }),
-        ISystemUpdate([this](alloy::ecs::SystemExecutionFlags f) {AddFlag(f); }) {}
+		System({alloy::ecs::SystemExecutionFlags::INIT, alloy::ecs::SystemExecutionFlags::UPDATE }) {}
 	
     void OnInit() override {
+        std::cout << "init system\n";
+    	
         std::random_device rd;
         std::mt19937 gen(rd());
         const std::uniform_int_distribution<> distrib01(0, 1);
@@ -77,6 +79,8 @@ public:
     }
 	
     void OnUpdate() override {
+        std::cout << "Update system\n";
+    	
     	//Update Water
         timeBetweenUpdate_++;
 
@@ -343,7 +347,7 @@ private:
         tiles_.clear();
         tiles_.insert(tiles_.begin(), nextStep.begin(), nextStep.end());
     }
-	
+
     std::vector<int> tiles_;
 
     std::vector<float> waterPressure_;
@@ -393,13 +397,14 @@ private:
 class CellularAutomata : public alloy::Application{
 public:
 	CellularAutomata(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings){
+        //CellularAutomataSystem cellularAutomataSystem_;
+		
+        AddSystem(cellularAutomataSystem_);
 	}
 
 protected:
     void Init() override {
-        cellularAutomataSystem_.OnInit();
-
-        AddCallbackUpdate([this]() {cellularAutomataSystem_.OnUpdate(); });
+        std::cout << "Init application\n";
     }
 
 private:

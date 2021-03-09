@@ -1,10 +1,11 @@
 #pragma once
 #include <bitset>
 #include <functional>
+#include <iostream>
 
 namespace alloy::ecs {
 
-enum class SystemExecutionFlags : uint32_t {
+enum class SystemExecutionFlags : uint32_t { //TODO Use a type
 	INIT = 0,
 	UPDATE,
 	DRAW,
@@ -31,7 +32,7 @@ public:
 		SetFlag(flagUpdaterFunction);
 	}
 	
-	virtual void OnInit() = 0;
+	virtual void OnInit(){}
 };
 
 class ISystemUpdate : ISystemExecutionFunction<SystemExecutionFlags::UPDATE> {
@@ -63,8 +64,27 @@ public:
 
 class System {
 public:
-	System() {
-		
+	System(std::vector<SystemExecutionFlags> vec) {
+		for (const auto systemExecutionFlags : vec) {
+			AddFlag(systemExecutionFlags);
+		}
+	}
+
+	bool HasFlag(SystemExecutionFlags f) const {
+		return systemFlags_.test(static_cast<uint32_t>(f));
+	}
+
+	virtual void OnInit() {
+		std::cout << "Parent Init()\n";
+	}
+	virtual void OnUpdate() {
+		std::cout << "Parent Update()\n";
+	}
+	virtual void OnDraw() {}
+	virtual void OnDestroy() {}
+
+	const std::bitset<static_cast<size_t>(SystemExecutionFlags::LENGTH)>& GetSystemFlag() const {
+		return systemFlags_;
 	}
 
 protected:
@@ -74,10 +94,6 @@ protected:
 
 	void RemoveFlag(SystemExecutionFlags f) {
 		systemFlags_.reset(static_cast<int>(f));
-	}
-
-	const std::bitset<static_cast<size_t>(SystemExecutionFlags::LENGTH)>& GetSystemFlag() const {
-		return systemFlags_;
 	}
 
 private:
