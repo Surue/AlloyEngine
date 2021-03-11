@@ -77,6 +77,7 @@ public:
 	virtual void OnInit() {
 		std::cout << "Parent Init()\n";
 	}
+	
 	virtual void OnUpdate() {
 		std::cout << "Parent Update()\n";
 	}

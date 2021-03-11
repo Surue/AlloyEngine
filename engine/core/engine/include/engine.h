@@ -33,10 +33,8 @@ public:
 		
 	}
 
-	void AddSystem(ecs::System& system) {
-		systems_.push_back(&system);
-
-		const auto& flags = systems_[systems_.size() - 1]->GetSystemFlag();
+	void RegisterSystem(ecs::System& system) {
+		const auto& flags = system.GetSystemFlag();
 
 		for(int i = 0; i < flags.size(); i++) {
 			if(flags.test(i)) {
@@ -48,16 +46,16 @@ public:
 
 				switch (f) {
 				case ecs::SystemExecutionFlags::INIT:
-					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([this]() { systems_[systems_.size() - 1]->OnInit(); });
+					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([&system]() { system.OnInit(); });
 					break;
 				case ecs::SystemExecutionFlags::UPDATE:
-					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([this]() { systems_[systems_.size() - 1]->OnUpdate(); });
+					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([&system]() { system.OnUpdate(); });
 					break;
 				case ecs::SystemExecutionFlags::DRAW:
-					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([this]() { systems_[systems_.size() - 1]->OnDraw(); });
+					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([&system]() { system.OnDraw(); });
 					break;
 				case ecs::SystemExecutionFlags::DESTROY:
-					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([this]() { systems_[systems_.size() - 1]->OnDestroy(); });
+					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([&system]() { system.OnDestroy(); });
 					break;
 				default:
 					callbackContainer_[static_cast<uint32_t>(f)].emplace_back([]() {});
@@ -70,8 +68,6 @@ private:
 	bool isRunning_;
 	graphics::GraphicsEngine graphicsEngine_;
 	inputs::InputManager inputManager_;
-
-	std::vector<ecs::System*> systems_;
 
 	std::array<std::vector<std::function<void()>>, static_cast<size_t>(ecs::SystemExecutionFlags::LENGTH)> callbackContainer_;
 };

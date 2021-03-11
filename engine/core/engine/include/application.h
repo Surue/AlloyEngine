@@ -27,8 +27,8 @@ public:
 protected:
 	virtual void Init() = 0;
 
-	void AddSystem(ecs::System& system) {
-		engine_.AddSystem(system);
+	void RegisterSystem(ecs::System& system) {
+		engine_.RegisterSystem(system);
 	}
 
 private:

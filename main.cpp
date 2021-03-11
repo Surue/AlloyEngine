@@ -397,9 +397,7 @@ private:
 class CellularAutomata : public alloy::Application{
 public:
 	CellularAutomata(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings){
-        //CellularAutomataSystem cellularAutomataSystem_;
-		
-        AddSystem(cellularAutomataSystem_);
+        RegisterSystem(cellularAutomataSystem_);
 	}
 
 protected:
