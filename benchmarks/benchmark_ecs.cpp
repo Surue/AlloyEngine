@@ -4,21 +4,21 @@
 #include <random>
 #include <iostream>
 
-#include <system.h>
+#include <InterfaceSystem.h>
 
 class ISystemTest {
 public:
     virtual int OnTest(int a) = 0;
 };
 
-class SystemTestInheritance : public alloy::ecs::System, public ISystemTest {
+class SystemTestInheritance : public alloy::ecs::InterfaceSystem, public ISystemTest {
 public:
 	int OnTest(int a) override {
         return ++a;
 	}
 };
 
-class SystemTest : public alloy::ecs::System {
+class SystemTest : public alloy::ecs::InterfaceSystem {
 public:
     int OnTest(int a) {
         return ++a;

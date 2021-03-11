@@ -394,7 +394,7 @@ private:
     int timeBetweenUpdate_ = 0;
 };
 
-class CellularAutomata : public alloy::Application{
+class CellularAutomata : public alloy::Application {
 public:
 	CellularAutomata(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings){
         RegisterSystem(cellularAutomataSystem_);

@@ -17,8 +17,6 @@ Engine::Engine(const EngineInitSettings& initSettings):
 }
 
 void Engine::Init() {
-
-	std::cout << "ici\n";
 	//TODO Empty this callback's container to reacte to spawned object in runtime
 	for (auto callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::INIT]) {
 		callback();
