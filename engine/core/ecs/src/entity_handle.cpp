@@ -15,4 +15,12 @@ void EntityHandle::RemoveComponent(const Component component) const {
 bool EntityHandle::HasComponent(const Component component) const {
 	return entityManager_.HasComponent(entityIndex_, component);
 }
+
+Entity EntityHandle::GetEntity() const {
+	return entityManager_.GetEntity(entityIndex_);
+}
+
+EntityIndex EntityHandle::GetEntityIndex() const {
+	return entityIndex_;
+}
 } // namespace alloy::ecs

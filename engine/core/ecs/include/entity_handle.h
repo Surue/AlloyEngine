@@ -19,6 +19,10 @@ public:
 
 	bool HasComponent(Component component) const;
 
+	Entity GetEntity() const;
+
+	EntityIndex GetEntityIndex() const;
+
 private:
 	EntityHandle(EntityManager& entityManager, EntityIndex entityIndex) : entityIndex_(entityIndex), entityManager_(entityManager) {
 
