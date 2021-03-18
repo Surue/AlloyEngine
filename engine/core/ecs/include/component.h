@@ -2,9 +2,13 @@
 #include <cstdint>
 
 namespace alloy::ecs {
+struct IComponentData {};
+
 using Component = uint64_t;
 
 enum class CoreComponent : Component {
-	POSITION = 0,
+	INSTANTIATED_FLAG = 0,
+	POSITION,
+	LENGTH
 };
 }

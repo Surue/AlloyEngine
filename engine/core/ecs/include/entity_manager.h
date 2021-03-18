@@ -7,68 +7,99 @@
 
 namespace alloy::ecs {
 class EntityManagerBase {
-friend class EntityHandle;
 public:
-	virtual EntityHandle CreateEntity() = 0;
+	
+	/**
+	 * \brief Create an entity
+	 * \return 
+	 */
+	virtual EntityIndex CreateEntity() = 0;
+	
+	/**
+	 * \brief Destroy an entity and remove all its components
+	 * \param entityIndex 
+	 */
+	virtual void DestroyEntity(EntityIndex entityIndex) = 0;
 
-	virtual Entity GetEntity(EntityIndex entityIndex) = 0;
+	/**
+	 * \brief Add a component to the given entityIndex
+	 * \param entityIndex 
+	 * \param component 
+	 */
+	virtual void AddComponent(EntityIndex entityIndex, const Component component) = 0;
+	
+	/**
+	 * \brief Add a component and its data to an entity
+	 * \param entityIndex 
+	 * \param component 
+	 * \param componentData 
+	 */
+	virtual void AddComponentData(EntityIndex entityIndex, const Component component, const IComponentData& componentData) = 0;
 
-private:
-	virtual void AddComponent(EntityIndex entityIndex, Component component) = 0;
+	/**
+	 * \brief Remove a component to an entity
+	 * \param entityIndex 
+	 * \param component 
+	 */
+	virtual void RemoveComponent(EntityIndex entityIndex, const Component component) = 0;
 
-	virtual void RemoveComponent(EntityIndex entityIndex, Component component) = 0;
-
-	virtual bool HasComponent(EntityIndex entityIndex, Component component) = 0;
+	/**
+	 * \brief Check if the entity has the given component
+	 * \param entityIndex 
+	 * \param component 
+	 * \return 
+	 */
+	virtual bool HasComponent(EntityIndex entityIndex, const Component component) = 0;
 };
 
 class EntityManagerNull : public EntityManagerBase {
-friend class EntityHandle;
 public:
-	EntityHandle CreateEntity() override {
-		return EntityHandle(*this, 0);
-	}
-	Entity GetEntity(EntityIndex entityIndex) override {
-		return 0;
-	}
+	EntityIndex CreateEntity() override { return -1; }
 
-private:
-	void AddComponent(EntityIndex entityIndex, Component component) override{}
-	void RemoveComponent(EntityIndex entityIndex, Component component) override{}
-	bool HasComponent(EntityIndex entityIndex, Component component) override { return false; }
+	void DestroyEntity(EntityIndex entityIndex) override {}
+	
+	void AddComponent(EntityIndex entityIndex, const Component component) override{}
+	
+	void AddComponentData(EntityIndex entityIndex, const Component component, const IComponentData& componentData) override{}
+	void RemoveComponent(EntityIndex entityIndex, const Component component) override{}
+	bool HasComponent(EntityIndex entityIndex, const Component component) override { return false; }
 };
 
+/*
+ * TODO Archetype is a dynamic thing that are listen by system
+ */
+
 class EntityManager : public EntityManagerBase{
-friend class EntityHandle;
 public:
 	EntityManager() {
-		nextEntity_ = 0;
+		firstNonInstantiatedEntityIndex_ = 0;
 		entities_ = std::vector<Entity>(1);
 	}
 
 	~EntityManager() = default;
 
-	EntityHandle CreateEntity() override {
-		if(nextEntity_ >= entities_.size()) {
-			entities_.resize(entities_.size() * 2);
-		}
+	EntityIndex CreateEntity() override;
 
-		return EntityHandle(*this, nextEntity_++);
-	}
+	void DestroyEntity(const EntityIndex entityIndex) override;
 
-	Entity GetEntity(EntityIndex entityIndex) override {
-		return entities_[entityIndex];
-	}
+	void AddComponent(const EntityIndex entityIndex, const Component component) override;
+
+	void AddComponentData(const EntityIndex entityIndex, const Component component,
+	                      const IComponentData& componentData) override;
+
+	void RemoveComponent(const EntityIndex entityIndex, const Component component) override;
+
+	bool HasComponent(const EntityIndex entityIndex, const Component component) override;
 
 private:
-	void AddComponent(EntityIndex entityIndex, Component component) override;
 
-	void RemoveComponent(EntityIndex entityIndex, Component component) override;
-
-	bool HasComponent(EntityIndex entityIndex, Component component) override;
+	void ClearEntity(const EntityIndex entityIndex) {
+		entities_[entityIndex].reset();
+	}
 	
 	std::vector<Entity> entities_;
 
-	EntityIndex nextEntity_;
+	EntityIndex firstNonInstantiatedEntityIndex_;
 };
 
 using ServiceEntityManager = ServiceLocator<EntityManagerBase, EntityManagerNull>;
