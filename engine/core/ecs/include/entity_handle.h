@@ -7,10 +7,12 @@
 namespace alloy::ecs {
 
 //Prototypes
-class EntityManager;
+class EntityManagerBase;
 
 class EntityHandle {
+friend class EntityManagerBase;
 friend class EntityManager;
+friend class EntityManagerNull;
 public:
 
 	void AddComponent(Component component) const;
@@ -24,12 +26,12 @@ public:
 	EntityIndex GetEntityIndex() const;
 
 private:
-	EntityHandle(EntityManager& entityManager, EntityIndex entityIndex) : entityIndex_(entityIndex), entityManager_(entityManager) {
+	EntityHandle(EntityManagerBase& entityManager, EntityIndex entityIndex) : entityIndex_(entityIndex), entityManager_(entityManager) {
 
 	}
 	
 	EntityIndex entityIndex_;
 	
-	EntityManager& entityManager_;
+	EntityManagerBase& entityManager_;
 };
 } // namespace alloy::ecs

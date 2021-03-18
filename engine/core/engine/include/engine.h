@@ -5,9 +5,8 @@
 #include <vector.h>
 #include <graphics_engine.h>
 #include <input_manager.h>
-
-
-#include "system.h"
+#include <entity_manager.h>
+#include <system.h>
 
 namespace alloy {
 
@@ -69,6 +68,7 @@ private:
 	bool isRunning_;
 	graphics::GraphicsEngine graphicsEngine_;
 	inputs::InputManager inputManager_;
+	ecs::EntityManager entityManager_;
 
 	std::array<std::vector<std::function<void()>>, static_cast<size_t>(ecs::SystemExecutionFlags::LENGTH)> callbackContainer_;
 };

@@ -3,8 +3,41 @@
 
 #include <entity_handle.h>
 
+#include <service_locator.h>
+
 namespace alloy::ecs {
-class EntityManager {
+class EntityManagerBase {
+friend class EntityHandle;
+public:
+	virtual EntityHandle CreateEntity() = 0;
+
+	virtual Entity GetEntity(EntityIndex entityIndex) = 0;
+
+private:
+	virtual void AddComponent(EntityIndex entityIndex, Component component) = 0;
+
+	virtual void RemoveComponent(EntityIndex entityIndex, Component component) = 0;
+
+	virtual bool HasComponent(EntityIndex entityIndex, Component component) = 0;
+};
+
+class EntityManagerNull : public EntityManagerBase {
+friend class EntityHandle;
+public:
+	EntityHandle CreateEntity() override {
+		return EntityHandle(*this, 0);
+	}
+	Entity GetEntity(EntityIndex entityIndex) override {
+		return 0;
+	}
+
+private:
+	void AddComponent(EntityIndex entityIndex, Component component) override{}
+	void RemoveComponent(EntityIndex entityIndex, Component component) override{}
+	bool HasComponent(EntityIndex entityIndex, Component component) override { return false; }
+};
+
+class EntityManager : public EntityManagerBase{
 friend class EntityHandle;
 public:
 	EntityManager() {
@@ -14,7 +47,7 @@ public:
 
 	~EntityManager() = default;
 
-	EntityHandle CreateEntity() {
+	EntityHandle CreateEntity() override {
 		if(nextEntity_ >= entities_.size()) {
 			entities_.resize(entities_.size() * 2);
 		}
@@ -22,19 +55,21 @@ public:
 		return EntityHandle(*this, nextEntity_++);
 	}
 
-	Entity GetEntity(EntityIndex entityIndex) {
+	Entity GetEntity(EntityIndex entityIndex) override {
 		return entities_[entityIndex];
 	}
 
 private:
-	void AddComponent(EntityIndex entityIndex, Component component);
+	void AddComponent(EntityIndex entityIndex, Component component) override;
 
-	void RemoveComponent(EntityIndex entityIndex, Component component);
+	void RemoveComponent(EntityIndex entityIndex, Component component) override;
 
-	bool HasComponent(EntityIndex entityIndex, Component component);
+	bool HasComponent(EntityIndex entityIndex, Component component) override;
 	
 	std::vector<Entity> entities_;
 
 	EntityIndex nextEntity_;
 };
+
+using ServiceEntityManager = ServiceLocator<EntityManagerBase, EntityManagerNull>;
 } // namespace alloy::ecs
