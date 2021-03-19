@@ -1,5 +1,7 @@
 #include <entity_manager.h>
 
+#include <component.h>
+
 namespace alloy::ecs {
 
 EntityIndex EntityManager::CreateEntity() {
@@ -47,7 +49,13 @@ void EntityManager::AddComponentData(const EntityIndex entityIndex, const Compon
                                      const IComponentData& componentData) {
 	entities_[entityIndex].set(component);
 
-	//TODO Set component data
+	//TODO Find a compile time solution
+	switch(component) {
+		case static_cast<Component>(CoreComponent::POSITION) :
+			positionComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Position&>(componentData));
+		break;
+	default: ;
+	}
 
 	//TODO Ping archetype that listen to this component
 }
@@ -60,5 +68,13 @@ void EntityManager::RemoveComponent(const EntityIndex entityIndex, const Compone
 
 bool EntityManager::HasComponent(const EntityIndex entityIndex, const Component component) {
 	return entities_[entityIndex].test(component);
+}
+
+const IComponentData& EntityManager::GetComponentData(EntityIndex entityIndex, Component component) const {
+	switch (component) {
+		case static_cast<Component>(CoreComponent::POSITION) :
+			return reinterpret_cast<const IComponentData&>(positionComponentManager_.GetComponentData(entityIndex));
+		default:;
+	}
 }
 } // namespace alloy::ecs

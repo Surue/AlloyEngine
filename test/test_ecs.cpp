@@ -3,6 +3,8 @@
 #include <entity_manager.h>
 #include <component.h>
 
+#include "position_component_manager.h"
+
 TEST(ECS, EntityManager_CreateEntity) {
 	using namespace alloy;
 
@@ -88,4 +90,27 @@ TEST(ECS, EntityManager_RemoveComponent) {
 	entityManager.RemoveComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION));
 
 	EXPECT_FALSE(entityManager.HasComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION)));
+}
+
+TEST(ECS, Component_Position_SetComponent) {
+	using namespace alloy;
+
+	ecs::EntityManager entityManager;
+
+	const auto entity = entityManager.CreateEntity();
+
+	ecs::Position position;
+
+	position.position.x = 1;
+	position.position.y = 1;
+
+	entityManager.AddComponentData(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION), reinterpret_cast<const ecs::IComponentData&>(position));
+
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION)));
+
+	//TODO Use a dynamic cast => Awefull
+	ecs::Position pos = (ecs::Position&)entityManager.GetComponentData(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION));
+
+	EXPECT_EQ(pos.position.x, 1);
+	EXPECT_EQ(pos.position.y, 1);
 }
