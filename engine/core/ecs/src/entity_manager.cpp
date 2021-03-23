@@ -66,15 +66,7 @@ void EntityManager::RemoveComponent(const EntityIndex entityIndex, const Compone
 	//TODO Ping archetype that listen to this component
 }
 
-bool EntityManager::HasComponent(const EntityIndex entityIndex, const Component component) {
+bool EntityManager::HasComponent(EntityIndex entityIndex, Component component) const {
 	return entities_[entityIndex].test(component);
-}
-
-const IComponentData& EntityManager::GetComponentData(EntityIndex entityIndex, Component component) const {
-	switch (component) {
-		case static_cast<Component>(CoreComponent::POSITION) :
-			return reinterpret_cast<const IComponentData&>(positionComponentManager_.GetComponentData(entityIndex));
-		default:;
-	}
 }
 } // namespace alloy::ecs

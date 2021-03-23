@@ -1,32 +1,36 @@
 #pragma once
 #include <vector>
 
-#include <service_locator.h>
 #include <position_component_manager.h>
 #include <component.h>
 
 namespace alloy::ecs {
-class EntityManagerBase {
+class EntityManager {
 public:
+
+	EntityManager() {
+		firstNonInstantiatedEntityIndex_ = 0;
+	    entities_ = std::vector<Entity>(1);
+	}
 	
 	/**
 	 * \brief Create an entity
 	 * \return 
 	 */
-	virtual EntityIndex CreateEntity() = 0;
+	EntityIndex CreateEntity();
 	
 	/**
 	 * \brief Destroy an entity and remove all its components
 	 * \param entityIndex 
 	 */
-	virtual void DestroyEntity(EntityIndex entityIndex) = 0;
+	void DestroyEntity(EntityIndex entityIndex);
 
 	/**
 	 * \brief Add a component to the given entityIndex
 	 * \param entityIndex 
 	 * \param component 
 	 */
-	virtual void AddComponent(EntityIndex entityIndex, Component component) = 0;
+	void AddComponent(EntityIndex entityIndex, Component component);
 	
 	/**
 	 * \brief Add a component and its data to an entity
@@ -34,14 +38,14 @@ public:
 	 * \param component 
 	 * \param componentData 
 	 */
-	virtual void AddComponentData(EntityIndex entityIndex, Component component, const IComponentData& componentData) = 0;
+	void AddComponentData(EntityIndex entityIndex, Component component, const IComponentData& componentData);
 
 	/**
 	 * \brief Remove a component to an entity
 	 * \param entityIndex 
 	 * \param component 
 	 */
-	virtual void RemoveComponent(EntityIndex entityIndex, Component component) = 0;
+	void RemoveComponent(EntityIndex entityIndex, Component component);
 
 	/**
 	 * \brief Check if the entity has the given component
@@ -49,57 +53,18 @@ public:
 	 * \param component 
 	 * \return 
 	 */
-	virtual bool HasComponent(EntityIndex entityIndex, Component component) = 0;
+	bool HasComponent(EntityIndex entityIndex, Component component) const;
 
-	virtual const IComponentData& GetComponentData(EntityIndex entityIndex, Component component) const = 0;
-};
-
-class EntityManagerNull : public EntityManagerBase {
-public:
-	EntityIndex CreateEntity() override { return -1; }
-
-	void DestroyEntity(EntityIndex entityIndex) override {}
-	
-	void AddComponent(EntityIndex entityIndex, const Component component) override{}
-	
-	void AddComponentData(EntityIndex entityIndex, const Component component, const IComponentData& componentData) override{}
-	void RemoveComponent(EntityIndex entityIndex, const Component component) override{}
-	bool HasComponent(EntityIndex entityIndex, const Component component) override { return false; }
-	const IComponentData& GetComponentData(EntityIndex entityIndex, Component component) const override {
-		IComponentData i;
-		return i;
-	}
-};
-
-/*
- * TODO Archetype is a dynamic thing that are listen by system
- */
-
-class EntityManager : public EntityManagerBase{
-public:
-	EntityManager() {
-		firstNonInstantiatedEntityIndex_ = 0;
-		entities_ = std::vector<Entity>(1);
+	template<typename T>
+	const T& GetComponentData(EntityIndex entityIndex, Component component) const {
+		switch (component) {
+			case static_cast<Component>(CoreComponent::POSITION) :
+				return positionComponentManager_.GetComponentData(entityIndex);
+			default:;
+		}
 	}
 
-	~EntityManager() = default;
-
-	EntityIndex CreateEntity() override;
-
-	void DestroyEntity(EntityIndex entityIndex) override;
-
-	void AddComponent(EntityIndex entityIndex, Component component) override;
-
-	void AddComponentData(EntityIndex entityIndex, Component component,
-	                      const IComponentData& componentData) override;
-
-	void RemoveComponent(EntityIndex entityIndex, Component component) override;
-
-	bool HasComponent(EntityIndex entityIndex, Component component) override;
-
-	const IComponentData& GetComponentData(EntityIndex entityIndex, Component component) const override;
 private:
-
 	void ClearEntity(const EntityIndex entityIndex) {
 		entities_[entityIndex].reset();
 	}
@@ -110,6 +75,4 @@ private:
 
 	PositionComponentManager positionComponentManager_;
 };
-
-using ServiceEntityManager = ServiceLocator<EntityManagerBase, EntityManagerNull>;
 } // namespace alloy::ecs

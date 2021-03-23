@@ -6,7 +6,7 @@
 #include <vector.h>
 
 namespace alloy::ecs {
-struct Position {
+struct Position {	
 	math::fvec2 position;
 };
 
