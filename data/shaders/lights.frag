@@ -11,7 +11,7 @@ void main()
 
 	lightPos.xy = lightPos.xy / iResolution.xy;
 	
-		// Calculate the delta position of the light
+	// Calculate the delta position of the light
 	vec3 delta = vec3(lightPos.xy - uv.xy, 0);
     
     // Ensure a fixed light radius

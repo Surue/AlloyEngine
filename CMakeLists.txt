@@ -47,6 +47,11 @@ add_subdirectory("benchmarks/")
 set_target_properties (benchmark PROPERTIES FOLDER Externals/Benchmarks)
 set_target_properties(benchmark_main PROPERTIES FOLDER Externals/Benchmarks)
 
+#Projects
+set(ALLOY_PROJECT_DIR "${CMAKE_SOURCE_DIR}/projects" CACHE INTERNAL "")
+add_subdirectory(${ALLOY_PROJECT_DIR})
+
+#Engine
 add_executable(AlloyEngine main.cpp)
 
 target_link_libraries(AlloyEngine PRIVATE Alloy_Core)
