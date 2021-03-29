@@ -13,11 +13,18 @@ ENDMACRO()
 
 SUBDIRLIST(SUBDIRS ${PROJECT_DIR})
 foreach(subdir ${SUBDIRS})
-  file(GLOB_RECURSE PROJECT_FILES ${subdir}/*)
+  #Get files
+  file(GLOB_RECURSE PROJECT_FILES ${subdir}/*.cpp ${subdir}/*.h)
+
+  #Get name for project
   string( REPLACE ${PROJECT_DIR} "" project_name ${subdir})
   string( REPLACE "/" "" project_name ${project_name})
+
+  #Setup exe
   add_executable(${project_name} ${PROJECT_FILES})
-  target_link_libraries(${project_name} PUBLIC Alloy_Core Alloy_Common Alloy_Modules )
+  target_link_libraries(${project_name} PUBLIC Alloy_Core)
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /Oi /Ox /fp:fast /FAs /arch:AVX2")
   set_target_properties (${project_name} PROPERTIES FOLDER Projects)
+
+  target_include_directories(${project_name} PUBLIC "${project_name}/include/") 
 endforeach()
