@@ -12,8 +12,6 @@ void GraphicsEngine::Update() {
 	window_.Clear();
 
 	//Draw everything
-
-	//window_.Draw(sprite);
 	tilemapManager_.Draw(window_.GetRenderTarget());
 	lightManager_.Draw(window_.GetRenderTarget());
 

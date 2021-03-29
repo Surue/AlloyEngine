@@ -36,13 +36,13 @@ void EntityManager::DestroyEntity(const EntityIndex entityIndex) {
 		firstNonInstantiatedEntityIndex_ = entityIndex;
 	}
 
-	//TODO Ping archetype that listen to this component
+	//TODO 1.0 Ping archetype that listen to this component
 }
 
 void EntityManager::AddComponent(const EntityIndex entityIndex, const Component component) {
 	entities_[entityIndex].set(component);
 
-	//TODO Ping archetype that listen to this component
+	//TODO 1.0 Ping archetype that listen to this component
 }
 
 void EntityManager::AddComponentData(const EntityIndex entityIndex, const Component component,
@@ -57,13 +57,13 @@ void EntityManager::AddComponentData(const EntityIndex entityIndex, const Compon
 	default: ;
 	}
 
-	//TODO Ping archetype that listen to this component
+	//TODO 1.0 Ping archetype that listen to this component
 }
 
 void EntityManager::RemoveComponent(const EntityIndex entityIndex, const Component component) {
 	entities_[entityIndex].reset(component);
 
-	//TODO Ping archetype that listen to this component
+	//TODO 1.0 Ping archetype that listen to this component
 }
 
 bool EntityManager::HasComponent(EntityIndex entityIndex, Component component) const {

@@ -1,7 +1,3 @@
-#include <array>
-
-#include <lib/Remotery.h>
-
 #include <application.h>
 
 class EmptyApp : public alloy::Application {
@@ -15,7 +11,6 @@ protected:
 };
 
 int main() {
-    Remotery* rmt;
     alloy::ApplicationInitSettings engineInitSettings{
         "Alloy Engine",
         math::ivec2(600, 600)

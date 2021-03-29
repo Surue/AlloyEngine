@@ -1,5 +1,4 @@
 #include <engine.h>
-#include <iostream>
 
 namespace alloy {
 
@@ -8,7 +7,6 @@ Engine::Engine(const EngineInitSettings& initSettings):
 	graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
 	inputManager_(graphicsEngine_) {
 	inputs::ServiceInputManager::Assign(&inputManager_);
-	//ecs::ServiceEntityManager::Assign(&entityManager_);
 
 	//Move the following function into a another type of execution function
 	graphicsEngine_.Init();
@@ -18,8 +16,8 @@ Engine::Engine(const EngineInitSettings& initSettings):
 }
 
 void Engine::Init() {
-	//TODO Empty this callback's container to reacte to spawned object in runtime
-	for (auto callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::INIT]) {
+	//TODO 1.0 Empty this callback's container to react to spawned object in runtime
+	for (const auto& callback : callbackContainer_[static_cast<uint32_t>(ecs::SystemExecutionFlags::INIT)]) {
 		callback();
 	}
 }
@@ -29,7 +27,7 @@ void Engine::Run() {
 
 	while (isRunning_) {
 		//Update every systems
-		for (auto callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::UPDATE]) {
+		for (const auto& callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::UPDATE]) {
 			callback();
 		}
 

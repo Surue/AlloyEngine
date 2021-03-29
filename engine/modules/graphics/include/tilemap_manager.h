@@ -45,7 +45,7 @@ public:
 
 	void Draw(sf::RenderTarget& target) const override;
 private:
-	Tilemap tilemap_;
+	Tilemap tilemap_; //TODO 1.0 Must be a list
 };
 
 using ServiceTilemapManager = ServiceLocator<TilemapManagerBase, TilemapManagerNull>;
