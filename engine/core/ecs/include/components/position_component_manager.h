@@ -2,7 +2,7 @@
 
 #include <vector>
 
-#include <interface_component_manager.h>
+#include <components/interface_component_manager.h>
 #include <vector.h>
 
 namespace alloy::ecs {

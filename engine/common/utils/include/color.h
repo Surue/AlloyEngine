@@ -4,7 +4,7 @@
 #include <string>
 #include <istream>
 
-//Move colors into namespace math
+//TODO Move colors into namespace math
 namespace alloy {
 struct Color {
 

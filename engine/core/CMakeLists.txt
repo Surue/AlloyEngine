@@ -2,7 +2,7 @@
 file(GLOB_RECURSE Alloy_ECS_SRC ecs/src/*.cpp ecs/include/*.h)
 file(GLOB_RECURSE Alloy_ENGINE_SRC engine/src/*.cpp engine/include/*.h)
 
-source_group("ECS" FILES ${Alloy_ECS_SRC})
+source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/ecs" PREFIX "ECS" FILES ${Alloy_ECS_SRC})
 source_group("Engine" FILES ${Alloy_ENGINE_SRC})
 # source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/ecs" PREFIX "ECS" FILES ${Alloy_ECS_SRC})
 # source_group(TREE "${CMAKE_CURRENT_SOURCE_DIR}/engine" PREFIX "Engine" FILES ${Alloy_ENGINE_SRC})
