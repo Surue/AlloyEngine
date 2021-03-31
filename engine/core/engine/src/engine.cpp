@@ -27,7 +27,7 @@ void Engine::Run() {
 
 	while (isRunning_) {
 		//Update every systems
-		for (const auto& callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::UPDATE]) {
+		for (const auto& callback : callbackContainer_[static_cast<uint32_t>(ecs::SystemExecutionFlags::UPDATE)]) {
 			callback();
 		}
 

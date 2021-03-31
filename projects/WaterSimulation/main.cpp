@@ -12,7 +12,7 @@ int main() {
         math::ivec2(600, 600)
     };
 
-    EmptyApp cellularAutomata(engineInitSettings);
+    WaterApplication cellularAutomata(engineInitSettings);
 
     cellularAutomata.Start();
 

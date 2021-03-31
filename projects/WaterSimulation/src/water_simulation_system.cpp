@@ -12,16 +12,13 @@ void WaterSimulationSystem::OnInit() {
 	tileStates_.resize(tiles_.size());
 	waterPressure_.resize(tiles_.size());
 
-	const math::uivec2 topLeft = {0, 0};
-	const math::uivec2 bottomRight{100, 100};
-
-	const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
-	alloy::graphics::Tile baseTile = alloy::graphics::Tile(
-		alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
-	std::vector<alloy::graphics::Tile> tiles(nbTiles, baseTile);
+	const uint32_t nbTiles = (bottomRight_.x - topLeft_.x) * (bottomRight_.y - topLeft_.y);
+	auto& tilemapManager = alloy::graphics::ServiceTilemapManager::Get();
+	const alloy::graphics::Tile baseTile = alloy::graphics::Tile(tilemapManager.GetTilemap().GetTileset(), 0);
+	tilesToUpdate = std::vector<alloy::graphics::Tile>(nbTiles, baseTile);
 
 	//Generate random solide tiles
-	for (int i = 0; i < nbTiles; i++) {
+	for (auto i = 0; i < nbTiles; i++) {
 		if (distrib01(gen) == 0) {
 			tiles_[i] = freeTile_;
 		} else {
@@ -30,11 +27,11 @@ void WaterSimulationSystem::OnInit() {
 	}
 
 	//Cellular automata
-	for (int i = 0; i < 4; i++) {
+	for (auto i = 0; i < 4; i++) {
 		CellularStep();
 	}
 
-	for (int i = 0; i < nbTiles; i++) {
+	for (auto i = 0; i < nbTiles; i++) {
 		if (tiles_[i] == freeTile_) {
 			tileStates_[i] = TileState::AIR;
 		} else {
@@ -44,24 +41,24 @@ void WaterSimulationSystem::OnInit() {
 
 	const std::uniform_int_distribution<> distrib0100(0, 100);
 
-	////Generate random water
+	//Generate random water
 	for (int index = 0; index < tiles_.size(); index++) {
 		if (tileStates_[index] == TileState::AIR && distrib0100(gen) > 66) {
 			waterPressure_[index] = maxPressure_;
 			tileStates_[index] = TileState::LIQUID;
 		} else if (tiles_[index] == freeTile_) {
-			waterPressure_[index] = 0;
+			waterPressure_[index] = 0.0f;
 		} else {
-			waterPressure_[index] = invalidWaterPressure_;
+			waterPressure_[index] = static_cast<float>(invalidWaterPressure_);
 		}
 	}
 
 	//Fill tiles sprites
-	for (auto i = 0; i < tiles.size(); i++) {
-		tiles[i].SetSprite(tiles_[i]);
+	for (size_t i = 0; i < tilesToUpdate.size(); i++) {
+		tilesToUpdate[i].SetSprite(tiles_[i]);
 	}
 
-	alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tiles, topLeft, bottomRight);
+	tilemapManager.UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
 }
 
 void WaterSimulationSystem::OnUpdate() {
@@ -72,26 +69,18 @@ void WaterSimulationSystem::OnUpdate() {
 		return;
 	}
 
-	const math::uivec2 topLeft = {0, 0};
-	const math::uivec2 bottomRight{100, 100};
-
-	const int nbTiles = (bottomRight.x - topLeft.x) * (bottomRight.y - topLeft.y);
-
-	alloy::graphics::Tile baseTile = alloy::graphics::Tile(
-		alloy::graphics::ServiceTilemapManager::Get().GetTilemap().GetTileset(), 0);
-	std::vector<alloy::graphics::Tile> tiles(nbTiles, baseTile);
-
 	//Update water
 	UpdateWater();
 
 	//Fill tiles sprites
-	for (auto i = 0; i < tiles.size(); i++) {
-		tiles[i].SetSprite(tiles_[i]);
+	for (auto i = 0; i < tilesToUpdate.size(); i++) {
+		tilesToUpdate[i].SetSprite(tiles_[i]);
 	}
 
-	alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tiles, topLeft, bottomRight);
+	//TODO Automaticly update chunks when updating tiles
+	alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
 
-	timeBetweenUpdate_ = 0;
+	timeBetweenUpdate_ = 0; //TODO Move it to FixedUpdate
 }
 
 math::ivec2 WaterSimulationSystem::IndexToCoords(const int index) const {
@@ -107,11 +96,13 @@ float WaterSimulationSystem::CalculateVerticalFlowValue(const float remainingLiq
 
 	if (sum <= maxPressure_) {
 		return maxPressure_;
-	} else if (sum < 2.0f * maxPressure_ + maxCompression_) {
-		return (maxPressure_ * maxPressure_ + sum * maxCompression_) / (maxPressure_ + maxCompression_);
-	} else {
-		return (sum + maxCompression_) / 2.0f;
 	}
+
+	if (sum < 2.0f * maxPressure_ + maxCompression_) {
+		return (maxPressure_ * maxPressure_ + sum * maxCompression_) / (maxPressure_ + maxCompression_);
+	}
+	
+	return (sum + maxCompression_) / 2.0f;
 }
 
 void WaterSimulationSystem::UpdateWater() {
@@ -160,7 +151,6 @@ void WaterSimulationSystem::UpdateWater() {
 		}
 
 		//2. Equalize left  
-
 		const auto leftCoords = coords + math::ivec2::left;
 
 		// Check valid coords
@@ -193,7 +183,6 @@ void WaterSimulationSystem::UpdateWater() {
 		}
 
 		//2. Equalize right  
-
 		const auto rightCoords = coords + math::ivec2::right;
 
 		// Check valid coords
@@ -226,7 +215,6 @@ void WaterSimulationSystem::UpdateWater() {
 		}
 
 		// 4. Flow upwards
-
 		const auto upCoords = coords + math::ivec2::up;
 		if (upCoords.y >= 0) {
 			const int upIndex = CoordsToIndex(upCoords);

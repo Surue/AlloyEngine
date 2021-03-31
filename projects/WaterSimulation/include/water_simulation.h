@@ -4,9 +4,9 @@
 
 #include <water_simulation_system.h>
 
-class EmptyApp : public alloy::Application {
+class WaterApplication : public alloy::Application {
 public:
-    EmptyApp(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings) {
+    WaterApplication(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings) {
         RegisterSystem(cellularAutomataSystem_);
     }
 

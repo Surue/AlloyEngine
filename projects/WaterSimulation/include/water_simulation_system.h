@@ -71,4 +71,9 @@ private:
     const float minPressure_ = 0.005f;
     const int invalidWaterPressure_ = -1;
     int timeBetweenUpdate_ = 0;
+
+    const math::uivec2 topLeft_{ 0, 0 };
+    const math::uivec2 bottomRight_{ 100, 100 };
+
+    std::vector<alloy::graphics::Tile> tilesToUpdate;
 };

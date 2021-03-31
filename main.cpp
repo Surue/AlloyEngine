@@ -2,7 +2,7 @@
 
 class EmptyApp : public alloy::Application {
 public:
-	EmptyApp(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings){
+    EmptyApp(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings){
         
 	}
 
