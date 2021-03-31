@@ -1,9 +1,9 @@
 #include <gtest/gtest.h>
 
 #include <entity_manager.h>
-#include <component.h>
+#include <components/component.h>
 
-#include "position_component_manager.h"
+#include "components/position_component_manager.h"
 
 TEST(ECS, EntityManager_CreateEntity) {
 	using namespace alloy;

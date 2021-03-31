@@ -13,6 +13,8 @@ Engine::Engine(const EngineInitSettings& initSettings):
 	inputManager_.Init();
 
 	inputManager_.SetCallbackCloseWindow(graphicsEngine_.GetCallbackCloseWindow());
+
+	RegisterSystem(lightSystem_);
 }
 
 void Engine::Init() {

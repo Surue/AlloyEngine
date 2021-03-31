@@ -2,7 +2,7 @@
 
 #include <entity.h>
 
-#include <component.h>
+#include <components/component.h>
 
 namespace alloy::ecs {
 class EntityHandle {

@@ -1,6 +1,6 @@
 #include <entity_manager.h>
 
-#include <component.h>
+#include <components/component.h>
 
 namespace alloy::ecs {
 
@@ -30,6 +30,7 @@ EntityIndex EntityManager::CreateEntity() {
 
 void EntityManager::DestroyEntity(const EntityIndex entityIndex) {
 	ClearEntity(entityIndex);
+	RemoveComponent(entityIndex, static_cast<Component>(CoreComponent::INSTANTIATED_FLAG));
 
 	//Reset first non instantiated entity index if needed
 	if (entityIndex < firstNonInstantiatedEntityIndex_) {
@@ -53,7 +54,10 @@ void EntityManager::AddComponentData(const EntityIndex entityIndex, const Compon
 	switch(component) {
 		case static_cast<Component>(CoreComponent::POSITION) :
 			positionComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Position&>(componentData));
-		break;
+			break;
+		case static_cast<Component>(CoreComponent::LIGHT) :
+			lightComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Light&>(componentData));
+			break;
 	default: ;
 	}
 

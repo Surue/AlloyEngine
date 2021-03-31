@@ -12,14 +12,14 @@ struct Position {
 
 class PositionComponentManager : public IComponentManager<Position> {
 public:
-	void SetComponentData(EntityIndex entityIndex, const Position& componentData) override {
+	void SetComponentData(const EntityIndex entityIndex, const Position& componentData) override {
 		while(entityIndex >= positions_.size()) {
 			positions_.resize(positions_.size() * 2 + 1);
 		}
 		positions_[entityIndex] = componentData;
 	}
 
-	const Position& GetComponentData(EntityIndex entityIndex) const override {
+	const Position& GetComponentData(const EntityIndex entityIndex) const override {
 		return positions_[entityIndex];
 	}
 

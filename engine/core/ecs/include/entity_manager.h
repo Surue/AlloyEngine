@@ -1,8 +1,9 @@
 #pragma once
 #include <vector>
 
-#include <position_component_manager.h>
-#include <component.h>
+#include <components/component.h>
+#include <components/light_component_manager.h>
+#include <components/position_component_manager.h>
 
 namespace alloy::ecs {
 class EntityManager {
@@ -56,10 +57,12 @@ public:
 	bool HasComponent(EntityIndex entityIndex, Component component) const;
 
 	template<typename T>
-	const T& GetComponentData(EntityIndex entityIndex, Component component) const {
+	const T& GetComponentData(const EntityIndex entityIndex, const Component component) const {
 		switch (component) {
 			case static_cast<Component>(CoreComponent::POSITION) :
 				return positionComponentManager_.GetComponentData(entityIndex);
+			case static_cast<Component>(CoreComponent::LIGHT) :
+				return lightComponentManager_.GetComponentData(entityIndex);
 			default:;
 		}
 	}
@@ -74,5 +77,6 @@ private:
 	EntityIndex firstNonInstantiatedEntityIndex_;
 
 	PositionComponentManager positionComponentManager_;
+	LightComponentManager lightComponentManager_;
 };
 } // namespace alloy::ecs

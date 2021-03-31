@@ -6,7 +6,8 @@
 #include <graphics_engine.h>
 #include <input_manager.h>
 #include <entity_manager.h>
-#include <system.h>
+#include <systems/system.h>
+#include <systems/light_system.h>
 
 namespace alloy {
 
@@ -24,7 +25,7 @@ public:
 	void Run();
 
 	void Destroy() {
-		for (auto callback : callbackContainer_[(uint32_t)ecs::SystemExecutionFlags::DESTROY]) {
+		for (auto callback : callbackContainer_[static_cast<uint32_t>(ecs::SystemExecutionFlags::DESTROY)]) {
 			callback();
 		}
 	}
@@ -69,6 +70,9 @@ private:
 	graphics::GraphicsEngine graphicsEngine_;
 	inputs::InputManager inputManager_;
 	ecs::EntityManager entityManager_;
+	
+	//Core systems //TODO Move it into a specific class
+	LightSystem lightSystem_;
 
 	std::array<std::vector<std::function<void()>>, static_cast<size_t>(ecs::SystemExecutionFlags::LENGTH)> callbackContainer_;
 };
