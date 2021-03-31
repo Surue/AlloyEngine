@@ -3,6 +3,7 @@
 #include <ostream>
 #include <iostream>
 #include <chrono>
+#include <ctime>
 
 //TODO Move log in core
 namespace alloy::debug {
@@ -12,7 +13,7 @@ enum class LogSeverity : uint8_t {
 	ERROR
 };
 
-inline std::string LogSeverityToString(const LogSeverity severity) {
+static std::string LogSeverityToString(const LogSeverity severity) {
 	switch(severity){
 	case LogSeverity::NORMAL:
 		return "Normal";
@@ -32,7 +33,7 @@ enum class LogType : uint8_t {
 	GAMEPLAY
 };
 
-inline std::string LogTypeToString(const LogType type) {
+static std::string LogTypeToString(const LogType type) {
 	switch(type) {
 
 	case LogType::CORE_ENGINE:
@@ -56,7 +57,7 @@ inline std::string LogTypeToString(const LogType type) {
 /// <param name="msg"></param>
 /// <param name="type"></param>
 /// <param name="severity"></param>
-void LogIntern(const char* msg, const LogType type, LogSeverity severity) {
+static void LogIntern(const char* msg, const LogType type, LogSeverity severity) {
 	//Date
 	std::time_t end_time = std::chrono::system_clock::to_time_t(std::chrono::system_clock::now());
 	tm ltm;
@@ -94,22 +95,23 @@ void LogIntern(const char* msg, const LogType type, LogSeverity severity) {
 	case LogSeverity::ERROR:
 		std::cout << "\033[91m"; //red
 		break;
-	default: ;
+	default:
+		break;
 	}
 	
 	std::cout << "[" << ltm.tm_hour << ":" << ltm.tm_min << ":" << ltm.tm_sec << "]" << "[" <<  LogTypeToString(type) << "] " << msg;
 	std::cout << "\033[0m\n"; //Close color and add return
 }
 
-inline void Log(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
+static void Log(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
 	LogIntern(msg.data(), type, LogSeverity::NORMAL);
 }
 
-inline void LogWarning(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
+static void LogWarning(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
 	LogIntern(msg.data(), type, LogSeverity::WARNING);
 }
 
-inline void LogError(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
+static void LogError(const std::string_view msg, const LogType type = LogType::GAMEPLAY) {
 	LogIntern(msg.data(), type, LogSeverity::ERROR);
 }
 }
