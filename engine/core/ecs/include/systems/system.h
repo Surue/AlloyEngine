@@ -12,6 +12,8 @@ enum class SystemExecutionFlags : uint32_t {
 	LENGTH
 };
 
+class EntityManager;
+
 class System {
 public:
 

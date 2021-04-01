@@ -25,7 +25,7 @@ struct LightManagerInitSettings {
 	math::ivec2 windowSize;
 };
 
-class LightManager : public LightManagerBase {
+class LightManager : public LightManagerBase, public IService {
 public:
 	LightManager(const LightManagerInitSettings initSettings) {
 		lightMap_.create(initSettings.windowSize.x, initSettings.windowSize.y);
@@ -46,6 +46,4 @@ private:
 
 	sf::Shader lightShader_;
 };
-
-using ServiceLightManager = ServiceLocator<LightManagerBase, LightManagerNull>;
 }

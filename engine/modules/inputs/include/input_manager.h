@@ -166,7 +166,7 @@ public:
 	};
 };
 
-class InputManager : public InputManagerBase {
+class InputManager : public InputManagerBase, public IService {
 public:
 
 	InputManager(graphics::GraphicsEngine& graphicsEngine) :
@@ -201,6 +201,4 @@ private:
 
 	std::vector<KeyState> keyStates_ = std::vector<KeyState>(static_cast<int>(KeyCode::KEYBOARD_SIZE));
 };
-
-using ServiceInputManager = ServiceLocator<InputManagerBase, InputManagerNull>;
 }

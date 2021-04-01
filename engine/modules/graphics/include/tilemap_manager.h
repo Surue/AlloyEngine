@@ -29,7 +29,7 @@ public:
 	void Draw(sf::RenderTarget& target) const override {}
 };
 
-class TilemapManager : public TilemapManagerBase{
+class TilemapManager : public TilemapManagerBase, public IService{
 public:
 	TilemapManager() :
 		tilemap_({100, 100}, {10, 10}){ //TODO remove magic number
@@ -47,6 +47,4 @@ public:
 private:
 	Tilemap tilemap_; //TODO 1.0 Must be a list
 };
-
-using ServiceTilemapManager = ServiceLocator<TilemapManagerBase, TilemapManagerNull>;
 }

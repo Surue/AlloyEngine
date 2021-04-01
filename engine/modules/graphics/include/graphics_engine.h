@@ -21,8 +21,8 @@ public:
 	GraphicsEngine(const GraphicsEngineInitSettings& initSettings) :
 		window_({initSettings.windowName, initSettings.windowSize}),
 		lightManager_(LightManagerInitSettings{ initSettings.windowSize }){
-		ServiceTilemapManager::Assign(&tilemapManager_);
-		ServiceLightManager::Assign(&lightManager_);
+		ServiceLocator::Provide<TilemapManager>(&tilemapManager_);
+		ServiceLocator::Provide<LightManager>(&lightManager_);
 	}
 
 	void Init();
