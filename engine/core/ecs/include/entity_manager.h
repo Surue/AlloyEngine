@@ -4,9 +4,10 @@
 #include <components/component.h>
 #include <components/light_component_manager.h>
 #include <components/position_component_manager.h>
+#include <service_locator.h>
 
 namespace alloy::ecs {
-class EntityManager {
+class EntityManager : public IService {
 public:
 
 	EntityManager() {

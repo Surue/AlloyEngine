@@ -15,14 +15,12 @@ void LightSystem::OnInit() {
 void LightSystem::OnUpdate() {
 	//debug::Log("OnUpdate");
 	auto& lightManager = ServiceLocator::Get<graphics::LightManager>();
-
-	if(ServiceLocator::Get<inputs::InputManager>().IsKeyDown(inputs::KeyCode::SPACE)) {
-		debug::Log("Space");
-	}
 	/*
 	 * 1. Get all entities with LIGHT & POSITION
 	 * 2. Send them to the LightManager to draw them
 	 */
+
+	//auto entities = entityManager_.GetEntities
 	
 	//graphics::ServiceLightManager::Get().Draw();
 }

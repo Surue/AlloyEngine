@@ -2,6 +2,8 @@
 #include <bitset>
 #include <functional>
 
+#include <service_locator.h>
+
 namespace alloy::ecs {
 
 enum class SystemExecutionFlags : uint32_t { 
@@ -17,7 +19,8 @@ class EntityManager;
 class System {
 public:
 
-	System(const std::vector<SystemExecutionFlags>& flags) {
+	System(const std::vector<SystemExecutionFlags>& flags) :
+		entityManager_(ServiceLocator::Get<EntityManager>()) {
 		for (const auto systemExecutionFlags : flags) {
 			AddFlag(systemExecutionFlags);
 		}
@@ -49,6 +52,8 @@ protected:
 	void RemoveFlag(SystemExecutionFlags f) {
 		systemFlags_.reset(static_cast<int>(f));
 	}
+
+	EntityManager& entityManager_;
 
 private:
 	std::bitset<static_cast<size_t>(SystemExecutionFlags::LENGTH)> systemFlags_;

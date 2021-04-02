@@ -14,7 +14,7 @@ class IService {
  * TODO
  * 1. Should be an object with a life time
  * 2. Store real object to avoid de-referencing
- * 3. as their is inheritance typeid is working in run-time, find a compile time solution
+ * 3. As their is inheritance typeid is working in run-time, find a compile time solution
  */
 class ServiceLocator {
 public:

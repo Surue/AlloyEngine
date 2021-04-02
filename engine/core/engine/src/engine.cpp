@@ -7,6 +7,7 @@ Engine::Engine(const EngineInitSettings& initSettings):
 	graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
 	inputManager_(graphicsEngine_) {
 	ServiceLocator::Provide<inputs::InputManager>(&inputManager_);
+	ServiceLocator::Provide<ecs::EntityManager>(&entityManager_);
 
 	//Move the following function into a another type of execution function
 	graphicsEngine_.Init();
