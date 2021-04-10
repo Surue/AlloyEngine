@@ -4,8 +4,7 @@
 
 namespace alloy::ecs {
 
-System::System(const std::vector<SystemExecutionFlags>& flags):
-	entityManager_(ServiceLocator::Get<EntityManager>()) {
+System::System(const std::vector<SystemExecutionFlags>& flags) {
 	for (const auto systemExecutionFlags : flags) {
 		AddFlag(systemExecutionFlags);
 	}

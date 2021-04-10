@@ -21,9 +21,23 @@ void LightSystem::OnUpdate() {
 	 * 2. Send them to the LightManager to draw them
 	 */
 
-	//auto entities = entityManager_.GetEntities({ static_cast<ecs::Component>(ecs::CoreComponent::POSITION), static_cast<ecs::Component>(ecs::CoreComponent::LIGHT)});
+	auto entities = ServiceLocator::Get<ecs::EntityManager>().GetEntities({ static_cast<ecs::Component>(ecs::CoreComponent::POSITION), static_cast<ecs::Component>(ecs::CoreComponent::LIGHT)});
 
-	//TODO send correct lights
-	lightManager_.AddPointLightsToDraw({});
+	graphics::PointLight spotLight1{
+		Color::fuchsia,
+		{300, 300},
+		300
+	};
+
+	graphics::PointLight spotLight2{
+		Color::red,
+		{300, 150},
+		300
+	};
+	std::vector<graphics::PointLight> pointsLights;
+	pointsLights.push_back(spotLight1);
+	pointsLights.push_back(spotLight2);
+	
+	lightManager_.AddPointLightsToDraw(pointsLights);
 }
 } // namespace alloy

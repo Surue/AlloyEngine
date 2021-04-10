@@ -46,8 +46,6 @@ protected:
 		systemFlags_.reset(static_cast<int>(f));
 	}
 
-	EntityManager& entityManager_;
-
 private:
 	std::bitset<static_cast<size_t>(SystemExecutionFlags::LENGTH)> systemFlags_;
 };
