@@ -21,15 +21,13 @@ public:
 	GraphicsEngine(const GraphicsEngineInitSettings& initSettings) :
 		window_({initSettings.windowName, initSettings.windowSize}),
 		lightManager_(LightManagerInitSettings{ initSettings.windowSize }){
-		ServiceLocator::Provide<TilemapManager>(&tilemapManager_);
-		ServiceLocator::Provide<LightManager>(&lightManager_);
 	}
 
 	void Init();
 
 	void Update();
 
-	bool IsWindowOpen() {
+	bool IsWindowOpen() const {
 		return window_.IsOpen();
 	}
 
@@ -39,6 +37,14 @@ public:
 
 	const std::function<void()> GetCallbackCloseWindow() const {
 		return [this]() {window_.Close(); };
+	}
+
+	LightManager& GetLightManagerRef() {
+		return lightManager_;
+	}
+
+	TilemapManager& GetTilemapManagerRef() {
+		return tilemapManager_;
 	}
 private:
 	Window window_;

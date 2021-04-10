@@ -10,17 +10,23 @@ void LightManager::Draw(sf::RenderTarget& target) {
 		{300, 300},
 		300
 	};
-	spotLight1.Draw(lightMap_, lightShader_);
 
 	PointLight spotLight2{
 		Color::red,
 		{300, 150},
 		300
 	};
-	spotLight2.Draw(lightMap_, lightShader_);
+	pointsLightsToDraw_.push_back(spotLight1);
+	pointsLightsToDraw_.push_back(spotLight2);
+	
+	for (auto& pointsLightsToDraw : pointsLightsToDraw_) {
+		pointsLightsToDraw.Draw(lightMap_, lightShader_);
+	}
+
+	pointsLightsToDraw_.clear();
 
 	lightMap_.display();
 	const sf::Sprite lightMapSprite = sf::Sprite(lightMap_.getTexture());
 	target.draw(lightMapSprite, sf::BlendMultiply);
 }
-}
+} // namespace alloy::graphics

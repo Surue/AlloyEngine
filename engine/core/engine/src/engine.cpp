@@ -5,7 +5,8 @@ namespace alloy {
 Engine::Engine(const EngineInitSettings& initSettings):
 	isRunning_(false),
 	graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
-	inputManager_(graphicsEngine_) {
+	inputManager_(graphicsEngine_),
+	lightSystem_(graphicsEngine_.GetLightManagerRef()) {
 	ServiceLocator::Provide<inputs::InputManager>(&inputManager_);
 	ServiceLocator::Provide<ecs::EntityManager>(&entityManager_);
 

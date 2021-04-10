@@ -65,6 +65,10 @@ public:
 			}
 		}
 	}
+
+	graphics::GraphicsEngine& GetGraphicsEngineRef() {
+		return graphicsEngine_;
+	}
 private:
 	bool isRunning_;
 	graphics::GraphicsEngine graphicsEngine_;

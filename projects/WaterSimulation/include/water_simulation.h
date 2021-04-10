@@ -6,7 +6,9 @@
 
 class WaterApplication : public alloy::Application {
 public:
-    WaterApplication(const alloy::ApplicationInitSettings& applicationInitSettings) : Application(applicationInitSettings) {
+    WaterApplication(const alloy::ApplicationInitSettings& applicationInitSettings) :
+		Application(applicationInitSettings),
+		cellularAutomataSystem_(engine_.GetGraphicsEngineRef().GetTilemapManagerRef()){
         RegisterSystem(cellularAutomataSystem_);
     }
 

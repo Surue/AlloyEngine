@@ -68,6 +68,28 @@ public:
 		}
 	}
 
+	std::vector<Entity> GetEntities(const std::vector<Component>& components) {
+		std::vector<Entity> entities;
+
+		for(size_t i = 0; i < entities_.size(); i++) {
+			//TODO Optimize
+			bool hasAllComponents = true;
+			for(int j = 0; j < components.size(); j++) {
+				if(!HasComponent(i, components[i])) {
+					hasAllComponents = false;
+					break;
+				}
+			}
+
+			//TODO optimize
+			if(hasAllComponents) {
+				entities.push_back(i);
+			}
+		}
+		
+		return entities;
+	}
+
 private:
 	void ClearEntity(const EntityIndex entityIndex) {
 		entities_[entityIndex].reset();

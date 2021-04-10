@@ -13,8 +13,7 @@ void WaterSimulationSystem::OnInit() {
 	waterPressure_.resize(tiles_.size());
 
 	const uint32_t nbTiles = (bottomRight_.x - topLeft_.x) * (bottomRight_.y - topLeft_.y);
-	auto& tilemapManager = alloy::graphics::ServiceTilemapManager::Get();
-	const alloy::graphics::Tile baseTile = alloy::graphics::Tile(tilemapManager.GetTilemap().GetTileset(), 0);
+	const alloy::graphics::Tile baseTile = alloy::graphics::Tile(tilemapManager_.GetTilemap().GetTileset(), 0);
 	tilesToUpdate = std::vector<alloy::graphics::Tile>(nbTiles, baseTile);
 
 	//Generate random solide tiles
@@ -58,7 +57,7 @@ void WaterSimulationSystem::OnInit() {
 		tilesToUpdate[i].SetSprite(tiles_[i]);
 	}
 
-	tilemapManager.UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
+	tilemapManager_.UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
 }
 
 void WaterSimulationSystem::OnUpdate() {
@@ -78,7 +77,7 @@ void WaterSimulationSystem::OnUpdate() {
 	}
 
 	//TODO Automaticly update chunks when updating tiles
-	alloy::graphics::ServiceTilemapManager::Get().UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
+	tilemapManager_.UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
 
 	timeBetweenUpdate_ = 0; //TODO Move it to FixedUpdate
 }

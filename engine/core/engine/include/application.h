@@ -31,8 +31,8 @@ protected:
 		engine_.RegisterSystem(system);
 	}
 
+	Engine engine_;
 private:
 	
-	Engine engine_;
 };
-}
+} // namespace alloy

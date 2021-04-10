@@ -9,8 +9,9 @@
 
 class WaterSimulationSystem : public alloy::ecs::System {
 public:
-    WaterSimulationSystem() :
-        System({ alloy::ecs::SystemExecutionFlags::INIT, alloy::ecs::SystemExecutionFlags::UPDATE }) {}
+    WaterSimulationSystem(alloy::graphics::TilemapManager& tilemapManager) :
+        System({ alloy::ecs::SystemExecutionFlags::INIT, alloy::ecs::SystemExecutionFlags::UPDATE }),
+        tilemapManager_(tilemapManager) {}
 
     void OnInit() override;
 
@@ -76,4 +77,5 @@ private:
     const math::uivec2 bottomRight_{ 100, 100 };
 
     std::vector<alloy::graphics::Tile> tilesToUpdate;
+    alloy::graphics::TilemapManager& tilemapManager_;
 };

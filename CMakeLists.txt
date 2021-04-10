@@ -33,7 +33,7 @@ set(INSTALL_GTEST OFF CACHE INTERNAL "")
 add_subdirectory(${GOOGLE_TEST_DIR})
 include_directories(${GOOGLE_TEST_DIR}/include)
 
-set_target_properties (gtest PROPERTIES FOLDER Externals/GTest)
+set_target_properties(gtest PROPERTIES FOLDER Externals/GTest)
 set_target_properties(gtest_main PROPERTIES FOLDER Externals/GTest)
 
 #Benchmark
