@@ -104,7 +104,7 @@ TEST(ECS, Component_Position_SetComponent) {
 	position.position.x = 1;
 	position.position.y = 1;
 
-	entityManager.AddComponentData(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION), reinterpret_cast<const ecs::IComponentData&>(position));
+	entityManager.AddComponentData<ecs::Position>(entity, position);
 
 	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION)));
 
@@ -126,7 +126,7 @@ TEST(ECS, System_SetComponent) {
 	position.position.x = 1;
 	position.position.y = 1;
 
-	entityManager.AddComponentData(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION), reinterpret_cast<const ecs::IComponentData&>(position));
+	entityManager.AddComponentData<ecs::Position>(entity, position);
 
 	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION)));
 

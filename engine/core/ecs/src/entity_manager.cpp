@@ -46,24 +46,6 @@ void EntityManager::AddComponent(const EntityIndex entityIndex, const Component 
 	//TODO 1.0 Ping archetype that listen to this component
 }
 
-void EntityManager::AddComponentData(const EntityIndex entityIndex, const Component component,
-                                     const IComponentData& componentData) {
-	entities_[entityIndex].set(component);
-
-	//TODO Find a compile time solution
-	switch(component) {
-		case static_cast<Component>(CoreComponent::POSITION) :
-			positionComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Position&>(componentData));
-			break;
-		case static_cast<Component>(CoreComponent::LIGHT) :
-			lightComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Light&>(componentData));
-			break;
-	default: ;
-	}
-
-	//TODO 1.0 Ping archetype that listen to this component
-}
-
 void EntityManager::RemoveComponent(const EntityIndex entityIndex, const Component component) {
 	entities_[entityIndex].reset(component);
 

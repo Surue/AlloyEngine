@@ -53,10 +53,25 @@ public:
 	/**
 	 * \brief Add a component and its data to an entity
 	 * \param entityIndex 
-	 * \param component 
 	 * \param componentData 
 	 */
-	void AddComponentData(EntityIndex entityIndex, Component component, const IComponentData& componentData);
+	template<typename T>
+	void AddComponentData(EntityIndex entityIndex, const T& componentData) {
+		static_assert(HasGetComponentIndex<T>::value, "T has to define a function called GetComponentID");
+		entities_[entityIndex].set(T::GetComponentID());
+
+		switch (T::GetComponentID()) {
+			case static_cast<Component>(CoreComponent::POSITION) :
+				positionComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Position&>(componentData));
+				break;
+			case static_cast<Component>(CoreComponent::LIGHT) :
+				lightComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Light&>(componentData));
+				break;
+			default:;
+		}
+
+		//TODO 1.0 Ping archetype that listen to this component
+	}
 
 	/**
 	 * \brief Remove a component to an entity
