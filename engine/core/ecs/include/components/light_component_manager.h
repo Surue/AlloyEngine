@@ -16,8 +16,8 @@ struct Light {
 	LightType light_type = LightType::POINT_LIGHT;
 	float radius = 1.0f;
 
-	static constexpr Component GetComponentID() {
-		return static_cast<Component>(CoreComponent::LIGHT);
+	static constexpr ComponentID GetComponentID() {
+		return static_cast<ComponentID>(CoreComponent::LIGHT);
 	}
 };
 

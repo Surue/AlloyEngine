@@ -2,15 +2,15 @@
 
 namespace alloy::ecs {
 
-void EntityHandle::AddComponent(const Component component) {
+void EntityHandle::AddComponent(const ComponentID component) {
 	entity_.set(component);
 }
 
-void EntityHandle::RemoveComponent(const Component component) {
+void EntityHandle::RemoveComponent(const ComponentID component) {
 	entity_.reset(component);
 }
 
-bool EntityHandle::HasComponent(const Component component) const {
+bool EntityHandle::HasComponent(const ComponentID component) const {
 	return entity_.test(component);
 }
 

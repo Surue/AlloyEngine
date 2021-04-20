@@ -9,8 +9,8 @@ namespace alloy::ecs {
 struct Position {	
 	math::fvec2 position;
 
-	static constexpr Component GetComponentID() {
-		return static_cast<Component>(CoreComponent::POSITION);
+	static constexpr ComponentID GetComponentID() {
+		return static_cast<ComponentID>(CoreComponent::POSITION);
 	}
 };
 

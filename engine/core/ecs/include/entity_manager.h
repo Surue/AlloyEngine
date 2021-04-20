@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 
-#include <components/component.h>
+#include <components/Component.h>
 #include <components/light_component_manager.h>
 #include <components/position_component_manager.h>
 #include <service_locator.h>
@@ -47,7 +47,7 @@ public:
 	 * \param entityIndex 
 	 * \param component 
 	 */
-	void AddComponent(EntityIndex entityIndex, Component component);
+	void AddComponent(EntityIndex entityIndex, ComponentID component);
 
 	//TODO Not very optimize if the need is just to set the data if the component is already added to the entity
 	/**
@@ -61,10 +61,10 @@ public:
 		entities_[entityIndex].set(T::GetComponentID());
 
 		switch (T::GetComponentID()) {
-			case static_cast<Component>(CoreComponent::POSITION) :
+			case static_cast<ComponentID>(CoreComponent::POSITION) :
 				positionComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Position&>(componentData));
 				break;
-			case static_cast<Component>(CoreComponent::LIGHT) :
+			case static_cast<ComponentID>(CoreComponent::LIGHT) :
 				lightComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Light&>(componentData));
 				break;
 			default:;
@@ -78,7 +78,7 @@ public:
 	 * \param entityIndex 
 	 * \param component 
 	 */
-	void RemoveComponent(EntityIndex entityIndex, Component component);
+	void RemoveComponent(EntityIndex entityIndex, ComponentID component);
 
 	/**
 	 * \brief Check if the entity has the given component
@@ -86,7 +86,7 @@ public:
 	 * \param component 
 	 * \return 
 	 */
-	bool HasComponent(EntityIndex entityIndex, Component component) const;
+	bool HasComponent(EntityIndex entityIndex, ComponentID component) const;
 
 	//TODO Add an index to the typename T to get the correct component manager, thus removing the need of the second parameter
 	template<typename T>
@@ -94,15 +94,15 @@ public:
 		static_assert(HasGetComponentIndex<T>::value, "T has to define a function called GetComponentID");
 		
 		switch (T::GetComponentID()) {
-			case static_cast<Component>(CoreComponent::POSITION) :
+			case static_cast<ComponentID>(CoreComponent::POSITION) :
 				return (T&)positionComponentManager_.GetComponentData(entityIndex);
-			case static_cast<Component>(CoreComponent::LIGHT) :
+			case static_cast<ComponentID>(CoreComponent::LIGHT) :
 				return (T&)lightComponentManager_.GetComponentData(entityIndex);
 			default:;
 		}
 	}
 
-	std::vector<EntityIndex> GetEntities(const std::vector<Component>& components) {
+	std::vector<EntityIndex> GetEntities(const std::vector<ComponentID>& components) {
 		std::vector<EntityIndex> entities;
 
 		for(size_t i = 0; i < entities_.size(); i++) {

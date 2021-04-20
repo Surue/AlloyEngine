@@ -23,7 +23,7 @@ void LightSystem::OnUpdate() {
 
 	//TODO Find a solution to have READ_ONLY components => Some optimization are certainly possible
 	auto& entityManager = ServiceLocator::Get<ecs::EntityManager>();
-	auto entities = entityManager.GetEntities({ static_cast<ecs::Component>(ecs::CoreComponent::POSITION), static_cast<ecs::Component>(ecs::CoreComponent::LIGHT)});
+	auto entities = entityManager.GetEntities({ static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION), static_cast<ecs::ComponentID>(ecs::CoreComponent::LIGHT)});
 
 	std::vector<graphics::PointLight> pointsLights;
 	pointsLights.reserve(entities.size());

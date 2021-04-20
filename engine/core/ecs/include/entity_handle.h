@@ -2,17 +2,17 @@
 
 #include <entity.h>
 
-#include <components/component.h>
+#include <components/Component.h>
 
 namespace alloy::ecs {
 class EntityHandle {
 public:
 
-	void AddComponent(Component component);
+	void AddComponent(ComponentID component);
 
-	void RemoveComponent(Component component);
+	void RemoveComponent(ComponentID component);
 
-	bool HasComponent(Component component)const ;
+	bool HasComponent(ComponentID component)const ;
 
 	Entity GetEntity() const;
 
