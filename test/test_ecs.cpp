@@ -3,7 +3,7 @@
 #include <entity_manager.h>
 #include <components/component.h>
 
-#include "components/position_component_manager.h"
+#include <components/position_component_manager.h>
 
 TEST(ECS, EntityManager_CreateEntity) {
 	using namespace alloy;
@@ -108,7 +108,7 @@ TEST(ECS, Component_Position_SetComponent) {
 
 	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION)));
 
-	ecs::Position pos = entityManager.GetComponentData<ecs::Position>(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION));
+	ecs::Position pos = entityManager.GetComponentData<ecs::Position>(entity);
 
 	EXPECT_EQ(pos.position.x, 1);
 	EXPECT_EQ(pos.position.y, 1);
@@ -130,7 +130,7 @@ TEST(ECS, System_SetComponent) {
 
 	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION)));
 
-	ecs::Position pos = entityManager.GetComponentData<ecs::Position>(entity, static_cast<ecs::Component>(ecs::CoreComponent::POSITION));
+	ecs::Position pos = entityManager.GetComponentData<ecs::Position>(entity);
 
 	EXPECT_EQ(pos.position.x, 1);
 	EXPECT_EQ(pos.position.y, 1);

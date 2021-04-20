@@ -74,7 +74,7 @@ void WaterSimulationSystem::OnInit() {
 
 	const auto entity2Position = alloy::ecs::Position{ math::fvec2{300, 150} };
 	entityManager.AddComponentData(entity2, static_cast<alloy::ecs::Component>(alloy::ecs::CoreComponent::POSITION), reinterpret_cast<const alloy::ecs::IComponentData&>(entity2Position));
-	const auto entity2Light = alloy::ecs::Light{ alloy::Color::fuchsia, alloy::ecs::LightType::POINT_LIGHT, 300 };
+	const auto entity2Light = alloy::ecs::Light{ alloy::Color::red, alloy::ecs::LightType::POINT_LIGHT, 300 };
 	entityManager.AddComponentData(entity2, static_cast<alloy::ecs::Component>(alloy::ecs::CoreComponent::LIGHT), reinterpret_cast<const alloy::ecs::IComponentData&>(entity2Light));
 }
 

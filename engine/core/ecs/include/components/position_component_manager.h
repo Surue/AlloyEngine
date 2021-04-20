@@ -8,6 +8,10 @@
 namespace alloy::ecs {
 struct Position {	
 	math::fvec2 position;
+
+	static constexpr Component GetComponentID() {
+		return static_cast<Component>(CoreComponent::POSITION);
+	}
 };
 
 class PositionComponentManager : public IComponentManager<Position> {

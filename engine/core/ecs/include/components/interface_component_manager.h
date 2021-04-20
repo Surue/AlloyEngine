@@ -3,6 +3,7 @@
 #include <entity.h>
 
 namespace alloy::ecs {
+
 template<typename T>
 class IComponentManager {
 public:

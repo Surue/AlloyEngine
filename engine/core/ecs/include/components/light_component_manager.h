@@ -15,6 +15,10 @@ struct Light {
 	Color color = Color::white;
 	LightType light_type = LightType::POINT_LIGHT;
 	float radius = 1.0f;
+
+	static constexpr Component GetComponentID() {
+		return static_cast<Component>(CoreComponent::LIGHT);
+	}
 };
 
 class LightComponentManager : public IComponentManager<Light> {

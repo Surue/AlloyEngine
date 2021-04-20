@@ -11,7 +11,9 @@ enum class CoreComponent : Component {
 	LENGTH
 };
 
+//TODO this is useless
 struct IComponentData {
 	
 };
-}
+
+} // namespace alloy::ecs

@@ -7,6 +7,21 @@
 #include <service_locator.h>
 
 namespace alloy::ecs {
+	template <typename T>
+	class HasGetComponentIndex
+	{
+	private:
+		typedef char YesType[1];
+		typedef char NoType[2];
+
+		template <typename C> static YesType& test(decltype(&C::GetComponentID));
+		template <typename C> static NoType& test(...);
+
+
+	public:
+		enum { value = sizeof(test<T>(0)) == sizeof(YesType) };
+	};
+
 class EntityManager : public IService {
 public:
 
@@ -60,19 +75,16 @@ public:
 
 	//TODO Add an index to the typename T to get the correct component manager, thus removing the need of the second parameter
 	template<typename T>
-	const T GetComponentData(const EntityIndex entityIndex, const Component component) const {
-
-		IComponentManager<T>* componentManager = nullptr;
-		switch (component) {
+	const T& GetComponentData(const EntityIndex entityIndex) const {
+		static_assert(HasGetComponentIndex<T>::value, "T has to define a function called GetComponentID");
+		
+		switch (T::GetComponentID()) {
 			case static_cast<Component>(CoreComponent::POSITION) :
-				componentManager = (IComponentManager<T>*)&positionComponentManager_;
-				break;
+				return (T&)positionComponentManager_.GetComponentData(entityIndex);
 			case static_cast<Component>(CoreComponent::LIGHT) :
-				componentManager = (IComponentManager<T>*)&lightComponentManager_;
-				break;
+				return (T&)lightComponentManager_.GetComponentData(entityIndex);
 			default:;
 		}
-		return componentManager->GetComponentData(entityIndex);
 	}
 
 	std::vector<EntityIndex> GetEntities(const std::vector<Component>& components) {

@@ -31,13 +31,13 @@ void LightSystem::OnUpdate() {
 	for(int i = 0; i < entities.size(); i++) {
 		const auto entityIndex = entities[i];
 
-		const auto& position = entityManager.GetComponentData<ecs::Position>(entityIndex, static_cast<ecs::Component>(ecs::CoreComponent::POSITION));
-		const auto& light = entityManager.GetComponentData<ecs::Light>(entityIndex, static_cast<ecs::Component>(ecs::CoreComponent::LIGHT));
+		const auto& position = entityManager.GetComponentData<ecs::Position>(entityIndex);
+		const auto& light = entityManager.GetComponentData<ecs::Light>(entityIndex);
 
 		graphics::PointLight spotLight{
-		light.color,
-		position.position,
-		light.radius
+			light.color,
+			position.position,
+			light.radius
 		};
 
 		pointsLights.emplace_back(spotLight);
