@@ -2,6 +2,8 @@
 
 #include <tile.h>
 
+#include "entity_manager.h"
+
 void WaterSimulationSystem::OnInit() {
 
 	std::random_device rd;
@@ -58,6 +60,22 @@ void WaterSimulationSystem::OnInit() {
 	}
 
 	tilemapManager_.UpdateChunk(tilesToUpdate, topLeft_, bottomRight_);
+
+	//Create two lights
+	auto& entityManager = alloy::ServiceLocator::Get<alloy::ecs::EntityManager>();
+	const auto entity1 = entityManager.CreateEntity();
+
+	const auto entity1Position = alloy::ecs::Position{ math::fvec2{300, 300} };
+	entityManager.AddComponentData(entity1, static_cast<alloy::ecs::Component>(alloy::ecs::CoreComponent::POSITION), reinterpret_cast<const alloy::ecs::IComponentData&>(entity1Position));
+	const auto entity1Light = alloy::ecs::Light{ alloy::Color::fuchsia, alloy::ecs::LightType::POINT_LIGHT, 300};
+	entityManager.AddComponentData(entity1, static_cast<alloy::ecs::Component>(alloy::ecs::CoreComponent::LIGHT), reinterpret_cast<const alloy::ecs::IComponentData&>(entity1Light));
+
+	const auto entity2 = entityManager.CreateEntity();
+
+	const auto entity2Position = alloy::ecs::Position{ math::fvec2{300, 150} };
+	entityManager.AddComponentData(entity2, static_cast<alloy::ecs::Component>(alloy::ecs::CoreComponent::POSITION), reinterpret_cast<const alloy::ecs::IComponentData&>(entity2Position));
+	const auto entity2Light = alloy::ecs::Light{ alloy::Color::fuchsia, alloy::ecs::LightType::POINT_LIGHT, 300 };
+	entityManager.AddComponentData(entity2, static_cast<alloy::ecs::Component>(alloy::ecs::CoreComponent::LIGHT), reinterpret_cast<const alloy::ecs::IComponentData&>(entity2Light));
 }
 
 void WaterSimulationSystem::OnUpdate() {

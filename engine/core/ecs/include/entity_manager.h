@@ -33,7 +33,8 @@ public:
 	 * \param component 
 	 */
 	void AddComponent(EntityIndex entityIndex, Component component);
-	
+
+	//TODO Not very optimize if the need is just to set the data if the component is already added to the entity
 	/**
 	 * \brief Add a component and its data to an entity
 	 * \param entityIndex 
@@ -57,25 +58,31 @@ public:
 	 */
 	bool HasComponent(EntityIndex entityIndex, Component component) const;
 
+	//TODO Add an index to the typename T to get the correct component manager, thus removing the need of the second parameter
 	template<typename T>
-	const T& GetComponentData(const EntityIndex entityIndex, const Component component) const {
+	const T GetComponentData(const EntityIndex entityIndex, const Component component) const {
+
+		IComponentManager<T>* componentManager = nullptr;
 		switch (component) {
 			case static_cast<Component>(CoreComponent::POSITION) :
-				return positionComponentManager_.GetComponentData(entityIndex);
+				componentManager = (IComponentManager<T>*)&positionComponentManager_;
+				break;
 			case static_cast<Component>(CoreComponent::LIGHT) :
-				return lightComponentManager_.GetComponentData(entityIndex);
+				componentManager = (IComponentManager<T>*)&lightComponentManager_;
+				break;
 			default:;
 		}
+		return componentManager->GetComponentData(entityIndex);
 	}
 
-	std::vector<Entity> GetEntities(const std::vector<Component>& components) {
-		std::vector<Entity> entities;
+	std::vector<EntityIndex> GetEntities(const std::vector<Component>& components) {
+		std::vector<EntityIndex> entities;
 
 		for(size_t i = 0; i < entities_.size(); i++) {
 			//TODO Optimize
 			bool hasAllComponents = true;
 			for(int j = 0; j < components.size(); j++) {
-				if(!HasComponent(i, components[i])) {
+				if(!HasComponent(i, components[j])) {
 					hasAllComponents = false;
 					break;
 				}
