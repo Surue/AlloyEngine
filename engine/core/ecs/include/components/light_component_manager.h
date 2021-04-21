@@ -17,7 +17,7 @@ struct Light {
 	float radius = 1.0f;
 
 	static constexpr ComponentID GetComponentID() {
-		return static_cast<ComponentID>(CoreComponent::LIGHT);
+		return static_cast<ComponentID>(CoreComponentID::LIGHT);
 	}
 };
 

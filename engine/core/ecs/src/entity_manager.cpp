@@ -9,7 +9,7 @@ EntityIndex EntityManager::CreateEntity() {
 
 	//Check for next free entity
 	for (auto index = firstNonInstantiatedEntityIndex_ + 1; index < entities_.size(); index++) {
-		if (!HasComponent(index, static_cast<ComponentID>(CoreComponent::INSTANTIATED_FLAG))) {
+		if (!HasComponent(index, static_cast<ComponentID>(CoreComponentID::INSTANTIATED_FLAG))) {
 			firstNonInstantiatedEntityIndex_ = index;
 			break;
 		}
@@ -23,14 +23,14 @@ EntityIndex EntityManager::CreateEntity() {
 	}
 
 	//Set the entity as instantiated
-	AddComponent(entityIndex, static_cast<ComponentID>(CoreComponent::INSTANTIATED_FLAG));
+	AddComponent(entityIndex, static_cast<ComponentID>(CoreComponentID::INSTANTIATED_FLAG));
 
 	return entityIndex;
 }
 
 void EntityManager::DestroyEntity(const EntityIndex entityIndex) {
 	ClearEntity(entityIndex);
-	RemoveComponent(entityIndex, static_cast<ComponentID>(CoreComponent::INSTANTIATED_FLAG));
+	RemoveComponent(entityIndex, static_cast<ComponentID>(CoreComponentID::INSTANTIATED_FLAG));
 
 	//Reset first non instantiated entity index if needed
 	if (entityIndex < firstNonInstantiatedEntityIndex_) {

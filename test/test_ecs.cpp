@@ -24,11 +24,11 @@ TEST(ECS, EntityManager_DestroyEntity) {
 
 	const auto entity = entityManager.CreateEntity();
 
-	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::INSTANTIATED_FLAG)));
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::INSTANTIATED_FLAG)));
 	
 	entityManager.DestroyEntity(entity);
 
-	EXPECT_FALSE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::INSTANTIATED_FLAG)));
+	EXPECT_FALSE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::INSTANTIATED_FLAG)));
 }
 
 TEST(ECS, EntityManager_AddAndDestroyEntity) {
@@ -59,9 +59,9 @@ TEST(ECS, EntityManager_HasComponent) {
 
 	const auto entity = entityManager.CreateEntity();
 
-	entityManager.AddComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION));
+	entityManager.AddComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION));
 
-	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION)));
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION)));
 }
 
 TEST(ECS, EntityManager_AddComponent) {
@@ -71,9 +71,9 @@ TEST(ECS, EntityManager_AddComponent) {
 
 	const auto entity = entityManager.CreateEntity();
 
-	entityManager.AddComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION));
+	entityManager.AddComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION));
 
-	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION)));
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION)));
 }
 
 TEST(ECS, EntityManager_RemoveComponent) {
@@ -83,13 +83,13 @@ TEST(ECS, EntityManager_RemoveComponent) {
 
 	const auto entity = entityManager.CreateEntity();
 
-	entityManager.AddComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION));
+	entityManager.AddComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION));
 
-	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION)));
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION)));
 
-	entityManager.RemoveComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION));
+	entityManager.RemoveComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION));
 
-	EXPECT_FALSE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION)));
+	EXPECT_FALSE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION)));
 }
 
 TEST(ECS, Component_Position_SetComponent) {
@@ -106,7 +106,7 @@ TEST(ECS, Component_Position_SetComponent) {
 
 	entityManager.AddComponentData<ecs::Position>(entity, position);
 
-	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION)));
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION)));
 
 	ecs::Position pos = entityManager.GetComponentData<ecs::Position>(entity);
 
@@ -128,7 +128,7 @@ TEST(ECS, System_SetComponent) {
 
 	entityManager.AddComponentData<ecs::Position>(entity, position);
 
-	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION)));
+	EXPECT_TRUE(entityManager.HasComponent(entity, static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION)));
 
 	ecs::Position pos = entityManager.GetComponentData<ecs::Position>(entity);
 

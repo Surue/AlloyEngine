@@ -10,7 +10,7 @@ struct Position {
 	math::fvec2 position;
 
 	static constexpr ComponentID GetComponentID() {
-		return static_cast<ComponentID>(CoreComponent::POSITION);
+		return static_cast<ComponentID>(CoreComponentID::POSITION);
 	}
 };
 

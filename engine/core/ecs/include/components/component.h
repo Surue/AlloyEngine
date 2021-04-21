@@ -4,7 +4,7 @@
 namespace alloy::ecs {
 using ComponentID = uint64_t;
 
-enum class CoreComponent : ComponentID {
+enum class CoreComponentID : ComponentID {
 	INSTANTIATED_FLAG = 0,
 	POSITION,
 	LIGHT,

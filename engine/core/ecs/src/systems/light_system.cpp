@@ -14,21 +14,13 @@ void LightSystem::OnInit() {
 }
 
 void LightSystem::OnUpdate() {
-	//debug::Log("OnUpdate");
-	//auto& lightManager = ServiceLocator::Get<graphics::LightManager>();
-	/*
-	 * 1. Get all entities with LIGHT & POSITION
-	 * 2. Send them to the LightManager to draw them
-	 */
-
-	//TODO Find a solution to have READ_ONLY components => Some optimization are certainly possible
 	auto& entityManager = ServiceLocator::Get<ecs::EntityManager>();
-	auto entities = entityManager.GetEntities({ static_cast<ecs::ComponentID>(ecs::CoreComponent::POSITION), static_cast<ecs::ComponentID>(ecs::CoreComponent::LIGHT)});
+	auto entities = entityManager.GetEntities({ static_cast<ecs::ComponentID>(ecs::CoreComponentID::POSITION), static_cast<ecs::ComponentID>(ecs::CoreComponentID::LIGHT)});
 
 	std::vector<graphics::PointLight> pointsLights;
 	pointsLights.reserve(entities.size());
 	
-	for(int i = 0; i < entities.size(); i++) {
+	for(size_t i = 0; i < entities.size(); i++) {
 		const auto entityIndex = entities[i];
 
 		const auto& position = entityManager.GetComponentData<ecs::Position>(entityIndex);
@@ -42,7 +34,6 @@ void LightSystem::OnUpdate() {
 
 		pointsLights.emplace_back(spotLight);
 	}
-
 	
 	lightManager_.AddPointLightsToDraw(pointsLights);
 }

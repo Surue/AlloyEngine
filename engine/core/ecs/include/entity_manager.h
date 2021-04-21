@@ -61,11 +61,11 @@ public:
 		entities_[entityIndex].set(T::GetComponentID());
 
 		switch (T::GetComponentID()) {
-			case static_cast<ComponentID>(CoreComponent::POSITION) :
-				positionComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Position&>(componentData));
+			case static_cast<ComponentID>(CoreComponentID::POSITION) :
+				positionComponentManager_.SetComponentData(entityIndex, (const Position&)componentData);
 				break;
-			case static_cast<ComponentID>(CoreComponent::LIGHT) :
-				lightComponentManager_.SetComponentData(entityIndex, reinterpret_cast<const Light&>(componentData));
+			case static_cast<ComponentID>(CoreComponentID::LIGHT) :
+				lightComponentManager_.SetComponentData(entityIndex, (const Light&)componentData);
 				break;
 			default:;
 		}
@@ -94,10 +94,10 @@ public:
 		static_assert(HasGetComponentIndex<T>::value, "T has to define a function called GetComponentID");
 		
 		switch (T::GetComponentID()) {
-			case static_cast<ComponentID>(CoreComponent::POSITION) :
-				return (T&)positionComponentManager_.GetComponentData(entityIndex);
-			case static_cast<ComponentID>(CoreComponent::LIGHT) :
-				return (T&)lightComponentManager_.GetComponentData(entityIndex);
+			case static_cast<ComponentID>(CoreComponentID::POSITION) :
+				return (const T&)positionComponentManager_.GetComponentData(entityIndex);
+			case static_cast<ComponentID>(CoreComponentID::LIGHT) :
+				return (const T&)lightComponentManager_.GetComponentData(entityIndex);
 			default:;
 		}
 	}
