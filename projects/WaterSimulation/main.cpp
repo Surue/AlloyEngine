@@ -2,19 +2,19 @@
 
 #include <lib/Remotery.h>
 
-#include <water_simulation.h>
+#include <water_application.h>
 
 int main() {
     Remotery* rmt;
     rmt_CreateGlobalInstance(&rmt);
-    alloy::ApplicationInitSettings engineInitSettings{
+    const alloy::ApplicationInitSettings engineInitSettings{
         "Water Simulation",
         math::ivec2(600, 600)
     };
 
-    WaterApplication cellularAutomata(engineInitSettings);
+    WaterApplication app(engineInitSettings);
 
-    cellularAutomata.Start();
+    app.Start();
 
     rmt_DestroyGlobalInstance(rmt);
     return EXIT_SUCCESS;
