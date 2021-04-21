@@ -2,10 +2,17 @@
 2D engine data oriented in c++
 
 ## Exemples
+
+### Planets
+Planets and asteroids rotating around a star
+
 ### Water simulation
 Proceduraly generated 2D level using cellular automata. Updating water that fall and equalize itself with its surounding. Two lights are also present in the scene.
 
 ## Versions
+
+### V 0.3
+- New project "Planets"
 
 ### V 0.2
 - Core Engine 
