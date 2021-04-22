@@ -4,7 +4,8 @@
 #include <cstdint>
 
 namespace math {
-template <typename T> struct Vector2 {
+template <typename T>
+struct Vector2 {
 	
 	T x;
 	T y;
@@ -110,7 +111,8 @@ template <typename T> inline Vector2<T> const Vector2<T>::downLeft = down + left
 template <typename T> inline Vector2<T> const Vector2<T>::upRight = up + right;
 template <typename T> inline Vector2<T> const Vector2<T>::upLeft = up + left;
 
-template <typename T> struct Vector3 {
+template <typename T>
+struct Vector3 {
 	
 	T x;
 	T y;
