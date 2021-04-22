@@ -1,6 +1,7 @@
 #pragma once
 
 #include <application.h>
+#include <planets_system.h>
 
 class PlanetsApplication : public alloy::Application {
 public:
@@ -8,4 +9,7 @@ public:
 
 protected:
     void Init() override {}
+
+private:
+	PlanetsSystem planetsSystem_;
 };
