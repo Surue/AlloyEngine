@@ -14,6 +14,7 @@ Proceduraly generated 2D level using cellular automata. Updating water that fall
 ### V 0.3
 - New project "Planets"
 - Add RandomRange to math
+- Graphics primitive to be drawn as plain object without texture
 
 ### V 0.2
 - Core Engine 
