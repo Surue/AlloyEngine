@@ -3,6 +3,7 @@
 namespace alloy::graphics {
 
 void Tilemap::Init() {
+	//TODO magic value
 	tileSet_.Load("data/sprites/color_tileset.png");
 
 	tilesVertexArray_.setPrimitiveType(sf::Quads);

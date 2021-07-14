@@ -15,6 +15,8 @@ Proceduraly generated 2D level using cellular automata. Updating water that fall
 - New project "Planets"
 - Add RandomRange to math
 - Graphics primitive to be drawn as plain object without texture
+- New Component Renderer2D, it needs a position and a scale to be drawn correctly
+- TilemapeManager contains multiples tilemaps
 
 ### V 0.2
 - Core Engine 

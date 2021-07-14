@@ -78,4 +78,5 @@ private:
 
     std::vector<alloy::graphics::Tile> tilesToUpdate;
     alloy::graphics::TilemapManager& tilemapManager_;
+    alloy::graphics::TilemapIndex tilemapIndex_;
 };

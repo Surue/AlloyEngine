@@ -3,19 +3,16 @@
 namespace alloy::graphics {
 
 void TilemapManager::Init() {
-	tilemap_.Init();
+	
 }
 
-const Tilemap& TilemapManager::GetTilemap() const {
-	return tilemap_;
-}
-
-void TilemapManager::UpdateChunk(const std::vector<Tile>& tiles, const math::uivec2 topLeft,
-                                 const math::uivec2 bottomRight) {
-	tilemap_.UpdateChunk(tiles, topLeft, bottomRight);
+Tilemap& TilemapManager::GetTilemap(const TilemapIndex tilemapIndex) {
+	return tilemaps_[tilemapIndex];
 }
 
 void TilemapManager::Draw(sf::RenderTarget& target) const {
-	tilemap_.Draw(target);
+	for(size_t i = 0; i < tilemaps_.size(); i++) {
+		tilemaps_[i].Draw(target);
+	}
 }
 }

@@ -14,7 +14,7 @@ void GraphicsEngine::Update() {
 
 	//Draw everything
 	auto& renderTarget = window_.GetRenderTarget();
-	//tilemapManager_.Draw(renderTarget);
+	tilemapManager_.Draw(renderTarget);
 	renderer2d_.Draw(renderTarget);
 	lightManager_.Draw(renderTarget);
 
