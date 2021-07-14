@@ -6,7 +6,8 @@ Engine::Engine(const EngineInitSettings& initSettings):
 	isRunning_(false),
 	graphicsEngine_(graphics::GraphicsEngineInitSettings{initSettings.windowName, initSettings.windowSize}),
 	inputManager_(graphicsEngine_),
-	lightSystem_(graphicsEngine_.GetLightManagerRef()) {
+	lightSystem_(graphicsEngine_.GetLightManagerRef()),
+	renderer2dSystem_(graphicsEngine_.GetRenderer2DRef()){
 	ServiceLocator::Provide<inputs::InputManager>(&inputManager_);
 	ServiceLocator::Provide<ecs::EntityManager>(&entityManager_);
 
@@ -16,7 +17,9 @@ Engine::Engine(const EngineInitSettings& initSettings):
 
 	inputManager_.SetCallbackCloseWindow(graphicsEngine_.GetCallbackCloseWindow());
 
+	//TODO Automaticly register systems
 	RegisterSystem(lightSystem_);
+	RegisterSystem(renderer2dSystem_);
 }
 
 void Engine::Init() {

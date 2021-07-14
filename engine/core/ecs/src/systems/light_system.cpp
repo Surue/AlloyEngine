@@ -2,16 +2,13 @@
 
 #include <log.h>
 
-
 #include <input_manager.h>
 #include <lights/light_manager.h>
 #include <entity_manager.h>
 
 namespace alloy {
 
-void LightSystem::OnInit() {
-	//debug::Log("OnInit");
-}
+void LightSystem::OnInit() {}
 
 void LightSystem::OnUpdate() {
 	auto& entityManager = ServiceLocator::Get<ecs::EntityManager>();

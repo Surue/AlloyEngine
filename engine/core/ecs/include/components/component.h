@@ -8,6 +8,7 @@ enum class CoreComponentID : ComponentID {
 	INSTANTIATED_FLAG = 0,
 	POSITION,
 	LIGHT,
+	RENDERER_2D,
 	LENGTH
 };
 

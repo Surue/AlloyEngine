@@ -5,6 +5,7 @@ namespace alloy::graphics {
 void GraphicsEngine::Init() {
 	window_.Init();
 	tilemapManager_.Init();
+	renderer2d_.Init();
 }
 
 void GraphicsEngine::Update() {
@@ -12,8 +13,10 @@ void GraphicsEngine::Update() {
 	window_.Clear();
 
 	//Draw everything
-	tilemapManager_.Draw(window_.GetRenderTarget());
-	lightManager_.Draw(window_.GetRenderTarget());
+	auto& renderTarget = window_.GetRenderTarget();
+	//tilemapManager_.Draw(renderTarget);
+	renderer2d_.Draw(renderTarget);
+	lightManager_.Draw(renderTarget);
 
 	//Display
 	window_.Display();

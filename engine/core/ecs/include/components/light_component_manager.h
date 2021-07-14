@@ -21,7 +21,7 @@ struct Light {
 	}
 };
 
-class LightComponentManager : public IComponentManager<Light> {
+class LightComponentManager final : public IComponentManager<Light> {
 public:
 	void SetComponentData(const EntityIndex entityIndex, const Light& componentData) override {
 		while (entityIndex >= lights_.size()) {

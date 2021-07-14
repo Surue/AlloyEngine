@@ -14,7 +14,7 @@ struct Position {
 	}
 };
 
-class PositionComponentManager : public IComponentManager<Position> {
+class PositionComponentManager final : public IComponentManager<Position> {
 public:
 	void SetComponentData(const EntityIndex entityIndex, const Position& componentData) override {
 		while(entityIndex >= positions_.size()) {

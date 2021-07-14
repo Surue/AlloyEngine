@@ -9,6 +9,7 @@
 #include <vector.h>
 #include <tilemap_manager.h>
 #include <lights/light_manager.h>
+#include <renderer_2d/renderer_2d.h>
 
 namespace alloy::graphics {
 struct GraphicsEngineInitSettings {
@@ -20,7 +21,8 @@ class GraphicsEngine {
 public:
 	GraphicsEngine(const GraphicsEngineInitSettings& initSettings) :
 		window_({initSettings.windowName, initSettings.windowSize}),
-		lightManager_(LightManagerInitSettings{ initSettings.windowSize }){
+		lightManager_(LightManagerInitSettings{ initSettings.windowSize }),
+		renderer2d_(){
 	}
 
 	void Init();
@@ -46,10 +48,15 @@ public:
 	TilemapManager& GetTilemapManagerRef() {
 		return tilemapManager_;
 	}
+
+	Renderer2D& GetRenderer2DRef() {
+		return renderer2d_;
+	}
 private:
 	Window window_;
 
 	TilemapManager tilemapManager_;
 	LightManager lightManager_;
+	Renderer2D renderer2d_;
 };
 }

@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
 
-#include <components/Component.h>
+#include <service_locator.h>
+#include <components/component.h>
 #include <components/light_component_manager.h>
 #include <components/position_component_manager.h>
-#include <service_locator.h>
+#include <components/renderer_2d_component_manager.h>
 
 namespace alloy::ecs {
 	template <typename T>
@@ -67,6 +68,9 @@ public:
 			case static_cast<ComponentID>(CoreComponentID::LIGHT) :
 				lightComponentManager_.SetComponentData(entityIndex, (const Light&)componentData);
 				break;
+			case static_cast<ComponentID>(CoreComponentID::RENDERER_2D) :
+				render2dComponentManager_.SetComponentData(entityIndex, (const Renderer2D&)componentData);
+				break;
 			default:;
 		}
 
@@ -98,6 +102,8 @@ public:
 				return (const T&)positionComponentManager_.GetComponentData(entityIndex);
 			case static_cast<ComponentID>(CoreComponentID::LIGHT) :
 				return (const T&)lightComponentManager_.GetComponentData(entityIndex);
+			case static_cast<ComponentID>(CoreComponentID::RENDERER_2D) :
+				return (const T&)render2dComponentManager_.GetComponentData(entityIndex);
 			default:;
 		}
 	}
@@ -135,5 +141,6 @@ private:
 
 	PositionComponentManager positionComponentManager_;
 	LightComponentManager lightComponentManager_;
+	Renderer2DComponentManager render2dComponentManager_;
 };
 } // namespace alloy::ecs

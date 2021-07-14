@@ -14,6 +14,7 @@ void Circle::Draw(sf::RenderTarget& target) const {
 	shape.setRadius(radius_);
 	shape.setFillColor(ColorToSfColor(color_));
 	shape.setPosition(position_.x, position_.y);
+	shape.setPointCount(64);
 
 	target.draw(shape);
 }

@@ -42,7 +42,7 @@ public:
 private:
 	sf::RenderTexture lightMap_;
 
-	AmbientLight ambientLight_{Color::black};
+	AmbientLight ambientLight_{Color::white};
 
 	sf::Shader lightShader_;
 

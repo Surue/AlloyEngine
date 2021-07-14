@@ -8,6 +8,7 @@
 #include <entity_manager.h>
 #include <systems/system.h>
 #include <systems/light_system.h>
+#include <systems/renderer_2d_system.h>
 
 namespace alloy {
 
@@ -77,6 +78,7 @@ private:
 	
 	//Core systems //TODO Move it into a specific class
 	LightSystem lightSystem_;
+	Renderer2DSystem renderer2dSystem_;
 
 	std::array<std::vector<std::function<void()>>, static_cast<size_t>(ecs::SystemExecutionFlags::LENGTH)> callbackContainer_;
 };

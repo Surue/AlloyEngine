@@ -12,4 +12,6 @@ public:
 	void OnUpdate() override;
 
 private:
+
+	const int nbPlanets_ = 500;
 };
